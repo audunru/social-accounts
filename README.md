@@ -1,14 +1,14 @@
-[![Build Status](https://travis-ci.org/audunru/social-accounts.svg?branch=master)](https://travis-ci.org/audunru/social-accounts)
-
 # Social Accounts for Laravel
 
-This package adds social login (Google, Facebook, and others) to your Laravel app.
+[![Build Status](https://travis-ci.org/audunru/social-accounts.svg?branch=master)](https://travis-ci.org/audunru/social-accounts)
 
-It uses [Laravel Socialite](https://github.com/laravel/socialite) to authenticate users, and takes care of storing the provider (eg. Google) and provider user ID (eg. 123456789) as a related model of the User model.
+Add social login (Google, Facebook, and others) to your Laravel app.
 
-This means that your users can add one or more social login to their account. It's up to you if you want them to sign up with a normal username and password first, or if they can create an account using only something like Google.
+This package uses [Laravel Socialite](https://github.com/laravel/socialite) to authenticate users, and takes care of storing and retrieving the provider (eg. Google) and provider user ID (eg. 123456789) as a SocialAccount (a related model of the User model).
 
-The package also provides a JSON API so you can display which social accounts a user has authenticated with, and allow them to remove them.
+Your users can add one or more social logins to their account. It's up to you if you want them to sign up with a normal username and password first, or if they can sign up just by signing in with a provider.
+
+The package also has a JSON API so you can display which social accounts a user has logged in with, and allow them to remove them.
 
 # Installation
 
@@ -30,18 +30,16 @@ class User extends Authenticatable
 {
     use HasSocialAccounts;
     /**
-     * With this trait, you can do things like:
+     * Get user who has logged in with Google account ID 123456789
+     * $user = User::findBySocialAccount('google', '123456789')
      *
-     * User::findBySocialAccount('google', '123456789')
-     * (returns the user with that Google login)
-     *
-     * User::find(1)->socialAccounts
-     * (returns all social accounts belonging to $user)
+     * Retrieve all social accounts belonging to $user
+     * $user->socialAccounts
      */
 }
 ```
 
-Second, you need to specify which social login providers you are going to support. Publish the configuration, and open up `config/social-accounts.php` and add them to the array.
+Second, you need to specify which providers you are going to support. Publish the configuration, and open up `config/social-accounts.php` and add them to the array.
 
 ```bash
 php artisan vendor:publish --provider="audunru\SocialAccounts\SocialAccountsServiceProvider" --tag=config
@@ -95,7 +93,7 @@ class AuthServiceProvider extends ServiceProvider
 }
 ```
 
-Optionally, you may add just the web routes with:
+Optional: You can add web and API routes in separate steps.
 
 ```php
 SocialAccounts::routes(
@@ -103,11 +101,6 @@ SocialAccounts::routes(
         $router->forWeb();
     }
 );
-```
-
-API routes can be added with:
-
-```php
 SocialAccounts::routes(
     function ($router) {
         $router->forApi();
@@ -117,15 +110,15 @@ SocialAccounts::routes(
 
 ## Step 3: Configuration and customization
 
-You can change the configuration in `config/social-accounts.php`. Socialite´s configuration is in `config/services.php`.
+You can find the configuration in `config/social-accounts.php`. Socialite's configuration is in `config/services.php`.
 
-Before running the migrations, you can publish them with this command (optional):
+## Step 4: Run migrations
+
+Optional: Before running the migrations, you can publish them with this command:
 
 ```bash
 php artisan vendor:publish --provider="audunru\SocialAccounts\SocialAccountsServiceProvider" --tag=migrations
 ```
-
-## Step 4: Run migrations
 
 Run migrations with this command:
 
@@ -133,13 +126,15 @@ Run migrations with this command:
 php artisan migrate
 ```
 
-The migrations will create a `social_accounts` table, which will hold all added social accounts. They will also make the `email` and `password` columns in your `users` table nullable, because not all providers require users to have an email address. The `password` column must be nullable in case someone signs up for your app with this package, in which case they won't have a password.
+The migrations will create a `social_accounts` table, which will hold all added social accounts.
+
+If you set the "automatically_create_users" option in `config/social-accounts.php` to `true`, the `email` and `password` columns in your `users` table will be made nullable. Not all providers require users to have an email address, and the `password` column must be nullable because users who sign up this way won't have password.
 
 # Usage
 
 ## Adding social login to existing users
 
-If you want to allow your existing users to log in with Google, provide them with a link to `/social/login/google` somewhere in your application:
+If you want to allow your existing users to log in with Google, add a link to `/social/login/google` somewhere in your application:
 
 ```html
 @auth
@@ -151,13 +146,19 @@ After clicking on this link, the user will be redirected to Google, where they m
 
 ## Signing up users
 
-If you want to allow users to sign up with this package, you must first publish the configuration file and then set `automatically_create_users` to `true`:
+If you want to allow users to sign up with this package, you must first publish the configuration file and then set `automatically_create_users` to `true`.
 
 ```php
 'automatically_create_users' => true,
 ```
 
-Then provide them with a link to `/social/login/google`:
+Then, run the migrations so that the email and password columns are made nullable.
+
+```bash
+php artisan migrate
+```
+
+Then add a link to `/social/login/google`:
 
 ```html
 <a href="/social/login/google">Sign up with Google</a>
