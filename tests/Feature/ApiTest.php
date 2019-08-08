@@ -32,6 +32,14 @@ class ApiTest extends TestCase
         ];
     }
 
+    public function test_it_fails_to_get_social_accounts_when_unauthenticated()
+    {
+        $response = $this->json('GET', '/social/social-accounts');
+
+        $response
+            ->assertStatus(401);
+    }
+
     public function test_it_gets_social_accounts()
     {
         $response = $this->actingAs($this->user, 'api')->json('GET', '/social/social-accounts');
