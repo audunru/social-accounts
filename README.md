@@ -4,7 +4,7 @@
 
 Add social login (Google, Facebook, and others) to your Laravel app.
 
-This package uses [Laravel Socialite](https://github.com/laravel/socialite) to authenticate users, and takes care of storing and retrieving the provider (eg. Google) and provider user ID (eg. 123456789) as a SocialAccount (a related model of the User model).
+This package uses [Laravel Socialite](https://github.com/laravel/socialite) to authenticate users, and takes care of storing the provider (eg. Google) and provider user ID (eg. 123456789) as a SocialAccount (a related model of the User model).
 
 Your users can add one or more social logins to their account. It's up to you if you want them to sign up with a normal username and password first, or if they can sign up just by signing in with a provider.
 
