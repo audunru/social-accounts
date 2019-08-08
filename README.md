@@ -14,19 +14,6 @@ The package also provides a JSON API so you can display which social accounts a 
 
 ## Step 1: Install with Composer
 
-The package is not published on packagist.org yet, so for now you need to add the following to your `composer.json` before you can install it:
-
-```json
-"repositories": [
-    {
-        "url": "https://github.com/audunru/social-accounts.git",
-        "type": "git"
-    }
-]
-```
-
-Afterwards, run this command:
-
 ```bash
 composer require audunru/social-accounts
 ```
