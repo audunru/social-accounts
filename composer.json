@@ -1,0 +1,61 @@
+{
+  "name": "audunru/social-accounts",
+  "description": "Add social login to your Laravel app",
+  "keywords": [
+    "socialite",
+    "laravel",
+    "oauth"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Audun Rundberg",
+      "email": "audun@rundberg.no"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "doctrine/dbal": "^2.9",
+    "illuminate/auth": "^5.5.0|^5.6.0|^5.7.0|^5.8.0",
+    "illuminate/contracts": "^5.5.0|^5.6.0|^5.7.0|^5.8.0",
+    "illuminate/database": "^5.5.0|^5.6.0|^5.7.0|^5.8.0",
+    "illuminate/http": "^5.5.0|^5.6.0|^5.7.0|^5.8.0",
+    "illuminate/support": "^5.5.0|^5.6.0|^5.7.0|^5.8.0",
+    "laravel/socialite": "^3.0|^4.0"
+  },
+  "require-dev": {
+    "fzaninotto/faker": "^1.8",
+    "mockery/mockery": "^1.2",
+    "orchestra/testbench": "^3.5.0|^3.6.0|^3.7.0|^3.8.0",
+    "orchestra/database": "^3.5.0|^3.6.0|^3.7.0|^3.8.0",
+    "phpunit/phpunit": "^6.5.0|^7.5.0|^8.3.0"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "audunru\\SocialAccounts\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "audunru\\SocialAccounts\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "audunru\\SocialAccounts\\SocialAccountsServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": [
+      "vendor/bin/phpunit"
+    ]
+  }
+}

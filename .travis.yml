@@ -1,0 +1,42 @@
+language: php
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/.composer/cache/files
+
+php:
+  - 7.1
+  - 7.2
+  - 7.3
+
+env:
+  - ILLUMINATE_VERSION=5.5.* SOCIALITE_VERSION=^3.0 PHPUNIT_VERSION=^6.5.0 TESTBENCH_VERSION=^3.5.0
+  - ILLUMINATE_VERSION=5.6.* SOCIALITE_VERSION=^3.0 PHPUNIT_VERSION=^7.5.0 TESTBENCH_VERSION=^3.6.0
+  - ILLUMINATE_VERSION=5.7.* SOCIALITE_VERSION=^4.0 PHPUNIT_VERSION=^7.5.0 TESTBENCH_VERSION=^3.7.0
+  - ILLUMINATE_VERSION=5.8.* SOCIALITE_VERSION=^4.0 PHPUNIT_VERSION=^7.5.0 TESTBENCH_VERSION=^3.8.0 COVERAGE=true
+
+before_install:
+  - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - cp ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ~/xdebug.ini
+  - phpenv config-rm xdebug.ini
+  - composer require "illuminate/auth:${ILLUMINATE_VERSION}" --no-update --prefer-dist
+  - composer require "illuminate/contracts:${ILLUMINATE_VERSION}" --no-update --prefer-dist
+  - composer require "illuminate/database:${ILLUMINATE_VERSION}" --no-update --prefer-dist
+  - composer require "illuminate/http:${ILLUMINATE_VERSION}" --no-update --prefer-dist
+  - composer require "illuminate/support:${ILLUMINATE_VERSION}" --no-update --prefer-dist
+  - composer require "laravel/socialite:${SOCIALITE_VERSION}" --no-update --prefer-dist
+  - composer require "orchestra/testbench:${TESTBENCH_VERSION}" --no-update --prefer-dist
+  - composer require "orchestra/database:${TESTBENCH_VERSION}" --no-update --prefer-dist
+  - composer require "phpunit/phpunit:${PHPUNIT_VERSION}" --no-update --prefer-dist
+
+install: travis_retry composer install --no-interaction --prefer-dist
+
+before_script: phpenv config-add ~/xdebug.ini
+
+script: composer test
+
+after_success: sh -c "if [ ! -z ${COVERAGE+x} ]; then travis_retry php vendor/bin/php-coveralls; fi"
+
+notifications:
+  email: false
