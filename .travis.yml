@@ -36,7 +36,7 @@ before_script: phpenv config-add ~/xdebug.ini
 
 script: composer test
 
-after_success: sh -c "if [ ! -z ${COVERAGE+x} ]; then travis_retry php vendor/bin/php-coveralls; fi"
+after_success: travis_retry php vendor/bin/php-coveralls
 
 notifications:
   email: false
