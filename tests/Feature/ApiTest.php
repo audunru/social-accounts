@@ -132,7 +132,7 @@ class ApiTest extends TestCase
     public function test_it_fails_to_update_a_social_account()
     {
         $response = $this->actingAs($this->user, 'api')->json('PATCH', "/{$this->prefix}/{$this->socialAccount->id}", [
-          'provider' => 'vandelay-industries',
+            'provider' => 'vandelay-industries',
         ]);
 
         $response

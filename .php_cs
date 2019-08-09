@@ -15,6 +15,7 @@ return PhpCsFixer\Config::create()
         '@Symfony' => true,
         'binary_operator_spaces' => ['operators' => ['=>' => 'align']],
         'array_syntax' => ['syntax' => 'short'],
+        'array_indentation' => true,
         'linebreak_after_opening_tag' => true,
         'ordered_imports' => true,
         'phpdoc_order' => true,
