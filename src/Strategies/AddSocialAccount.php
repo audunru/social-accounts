@@ -2,10 +2,10 @@
 
 namespace audunru\SocialAccounts\Strategies;
 
-use audunru\SocialAccounts\Interfaces\Strategy;
-use audunru\SocialAccounts\Traits\MakesSocialAccounts;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\User;
+use audunru\SocialAccounts\Interfaces\Strategy;
+use audunru\SocialAccounts\Traits\MakesSocialAccounts;
 
 class AddSocialAccount implements Strategy
 {

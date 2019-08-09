@@ -2,10 +2,10 @@
 
 namespace audunru\SocialAccounts\Tests\Unit;
 
-use audunru\SocialAccounts\Models\SocialAccount;
-use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Database\Eloquent\Collection;
+use audunru\SocialAccounts\Tests\Models\User;
+use audunru\SocialAccounts\Models\SocialAccount;
 
 class HasSocialAccountsTest extends TestCase
 {

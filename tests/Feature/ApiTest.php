@@ -2,12 +2,12 @@
 
 namespace audunru\SocialAccounts\Tests\Feature;
 
-use audunru\SocialAccounts\Events\SocialAccountAdded;
-use audunru\SocialAccounts\Facades\SocialAccounts;
-use audunru\SocialAccounts\Models\SocialAccount;
-use audunru\SocialAccounts\Tests\Models\User;
-use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
+use audunru\SocialAccounts\Tests\TestCase;
+use audunru\SocialAccounts\Tests\Models\User;
+use audunru\SocialAccounts\Models\SocialAccount;
+use audunru\SocialAccounts\Facades\SocialAccounts;
+use audunru\SocialAccounts\Events\SocialAccountAdded;
 
 class ApiTest extends TestCase
 {

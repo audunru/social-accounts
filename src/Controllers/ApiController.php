@@ -2,12 +2,12 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
-use audunru\SocialAccounts\Models\SocialAccount;
-use audunru\SocialAccounts\Resources\SocialAccount as SocialAccountResource;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use audunru\SocialAccounts\Models\SocialAccount;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use audunru\SocialAccounts\Resources\SocialAccount as SocialAccountResource;
 
 class ApiController extends Controller
 {

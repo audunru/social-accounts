@@ -2,9 +2,9 @@
 
 namespace audunru\SocialAccounts\Strategies;
 
+use Laravel\Socialite\Contracts\User;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Traits\FindsAndCreatesUsers;
-use Laravel\Socialite\Contracts\User;
 
 class FindUser implements Strategy
 {

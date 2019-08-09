@@ -2,9 +2,9 @@
 
 namespace audunru\SocialAccounts\Policies;
 
+use Illuminate\Foundation\Auth\User;
 use audunru\SocialAccounts\Models\SocialAccount;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Foundation\Auth\User;
 
 class SocialAccountPolicy
 {

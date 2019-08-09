@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use audunru\SocialAccounts\Models\SocialAccount;
-use audunru\SocialAccounts\Tests\Models\User;
-use audunru\SocialAccounts\Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Mockery;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-use Mockery;
+use audunru\SocialAccounts\Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use audunru\SocialAccounts\Tests\Models\User;
+use audunru\SocialAccounts\Models\SocialAccount;
 
 class ProviderTest extends TestCase
 {

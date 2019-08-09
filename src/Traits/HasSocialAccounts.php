@@ -2,10 +2,10 @@
 
 namespace audunru\SocialAccounts\Traits;
 
-use audunru\SocialAccounts\Events\SocialAccountAdded;
-use audunru\SocialAccounts\Models\SocialAccount;
 use Illuminate\Database\Eloquent\Builder;
+use audunru\SocialAccounts\Models\SocialAccount;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use audunru\SocialAccounts\Events\SocialAccountAdded;
 
 trait HasSocialAccounts
 {

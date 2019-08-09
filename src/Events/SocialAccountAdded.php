@@ -2,9 +2,9 @@
 
 namespace audunru\SocialAccounts\Events;
 
-use audunru\SocialAccounts\Models\SocialAccount;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Queue\SerializesModels;
+use audunru\SocialAccounts\Models\SocialAccount;
 
 class SocialAccountAdded
 {

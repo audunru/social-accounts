@@ -1,8 +1,8 @@
 <?php
 
-use audunru\SocialAccounts\Models\SocialAccount;
-use Faker\Generator as Faker;
 use Illuminate\Support\Arr;
+use Faker\Generator as Faker;
+use audunru\SocialAccounts\Models\SocialAccount;
 
 $factory->define(SocialAccount::class, function (Faker $faker) {
     return [
