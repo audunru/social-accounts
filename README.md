@@ -184,6 +184,10 @@ To delete a social account, make a DELETE request to `/social-accounts/social-ac
 
 Users can't update social accounts through the API, they will have to delete them first and then authorize again.
 
+## Events
+
+When a social account is added to a user, a `SocialAccountAdded` event is dispatched. The event receives the User and SocialAccount model.
+
 # Alternatives
 
 [Easy Socialite](https://github.com/MiloudiMohamed/easy-socialite)
