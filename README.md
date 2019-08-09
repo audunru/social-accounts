@@ -1,6 +1,7 @@
 # Social Accounts for Laravel
 
 [![Build Status](https://travis-ci.org/audunru/social-accounts.svg?branch=master)](https://travis-ci.org/audunru/social-accounts)
+[![StyleCI](https://github.styleci.io/repos/200706096/shield?branch=master)](https://github.styleci.io/repos/200706096)
 
 Add social login (Google, Facebook, and others) to your Laravel app.
 
