@@ -19,9 +19,11 @@ class SocialAccountsServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/social-accounts.php', 'social-accounts'
-        );
+        if (! $this->app->configurationIsCached()) {
+            $this->mergeConfigFrom(
+                 __DIR__.'/../config/social-accounts.php', 'social-accounts'
+             );
+        }
 
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
