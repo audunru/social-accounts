@@ -2,12 +2,18 @@
 
 namespace audunru\SocialAccounts;
 
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Policies\SocialAccountPolicy;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class SocialAccountsServiceProvider extends ServiceProvider
 {
+    /*
+     * The policy mappings for the application.
+     *
+     * @var array
+     */
     protected $policies = [
         SocialAccount::class => SocialAccountPolicy::class,
     ];
@@ -44,5 +50,25 @@ class SocialAccountsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('social-accounts', SocialAccounts::class);
+    }
+
+    /**
+     * Register the application's policies.
+     */
+    public function registerPolicies()
+    {
+        foreach ($this->policies as $key => $value) {
+            Gate::policy($key, $value);
+        }
+    }
+
+    /**
+     * Get the policies defined on the provider.
+     *
+     * @return array
+     */
+    public function policies()
+    {
+        return $this->policies;
     }
 }
