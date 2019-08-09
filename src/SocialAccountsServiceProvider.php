@@ -38,7 +38,6 @@ class SocialAccountsServiceProvider extends ServiceProvider
         // Also, add the package's routes which otherwise must be added manually
         if ('testing' === env('APP_ENV')) {
             config(['social-accounts.models.user' => Tests\Models\User::class]);
-            SocialAccounts::routes();
         }
     }
 

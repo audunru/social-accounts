@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Tests;
 
+use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\SocialAccountsServiceProvider;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteServiceProvider;
@@ -37,6 +38,7 @@ abstract class TestCase extends BaseTestCase
         $this->withFactories(__DIR__.'/../tests/database/factories');
         $this->loadMigrationsFrom(__DIR__.'/../tests/database/migrations');
         $this->artisan('migrate');
+        SocialAccounts::routes();
     }
 
     public function enableUserCreation()
