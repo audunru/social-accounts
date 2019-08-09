@@ -57,6 +57,9 @@
   "scripts": {
     "test": [
       "vendor/bin/phpunit"
+    ],
+    "test-with-coverage": [
+      "vendor/bin/phpunit --coverage-clover build/logs/clover.xml"
     ]
   }
 }
