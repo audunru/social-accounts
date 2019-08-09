@@ -36,7 +36,7 @@ class SocialAccountTest extends TestCase
         $updated = factory(SocialAccount::class)->make();
 
         $data = [
-            'provider' => $updated->provider,
+            'provider'         => $updated->provider,
             'provider_user_id' => $updated->provider_user_id,
         ];
 

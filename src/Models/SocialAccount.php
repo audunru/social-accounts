@@ -13,7 +13,7 @@ class SocialAccount extends Model
     ];
 
     protected $casts = [
-        'provider' => 'string',
+        'provider'         => 'string',
         'provider_user_id' => 'string',
     ];
 

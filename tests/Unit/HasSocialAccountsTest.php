@@ -29,7 +29,7 @@ class HasSocialAccountsTest extends TestCase
         $socialAccount = factory(SocialAccount::class)->make();
 
         $data = [
-            'provider' => $socialAccount->provider,
+            'provider'         => $socialAccount->provider,
             'provider_user_id' => $socialAccount->provider_user_id,
         ];
 

@@ -19,7 +19,7 @@ class SocialAccountsServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        if (! $this->app->configurationIsCached()) {
+        if (!$this->app->configurationIsCached()) {
             $this->mergeConfigFrom(
                  __DIR__.'/../config/social-accounts.php', 'social-accounts'
              );

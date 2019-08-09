@@ -13,10 +13,9 @@ return PhpCsFixer\Config::create()
     ->setIndent('    ')
     ->setRules([
         '@Symfony' => true,
-        'binary_operator_spaces' => ['operators' => ['=>' => null]],
+        'binary_operator_spaces' => ['operators' => ['=>' => 'align']],
         'array_syntax' => ['syntax' => 'short'],
         'linebreak_after_opening_tag' => true,
-        'not_operator_with_successor_space' => true,
         'ordered_imports' => true,
         'phpdoc_order' => true,
     ])

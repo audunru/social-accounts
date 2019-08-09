@@ -71,8 +71,8 @@ class ApiTest extends TestCase
             ->assertStatus(200)
             ->assertJsonStructure(['data' => $this->socialAccountStructure])
             ->assertJson(['data' => [
-                'id' => $this->socialAccount->id,
-                'provider' => $this->socialAccount->provider,
+                'id'               => $this->socialAccount->id,
+                'provider'         => $this->socialAccount->provider,
                 'provider_user_id' => $this->socialAccount->provider_user_id,
             ]]);
     }
@@ -88,8 +88,8 @@ class ApiTest extends TestCase
             ->assertStatus(200)
             ->assertJsonStructure(['data' => $this->socialAccountStructure])
             ->assertJson(['data' => [
-                'id' => $this->socialAccount->id,
-                'provider' => $this->socialAccount->provider,
+                'id'               => $this->socialAccount->id,
+                'provider'         => $this->socialAccount->provider,
                 'provider_user_id' => $this->socialAccount->provider_user_id,
             ]]);
     }

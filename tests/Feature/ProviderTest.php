@@ -82,7 +82,7 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->email, Auth::user()->email);
         $this->assertDatabaseHas('users', [
             'email' => $user->email,
-            'name' => $user->name,
+            'name'  => $user->name,
         ]);
     }
 
@@ -104,7 +104,7 @@ class ProviderTest extends TestCase
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseHas('social_accounts', [
-            'provider' => $this->provider,
+            'provider'         => $this->provider,
             'provider_user_id' => $provider_user_id,
         ]);
     }
@@ -124,7 +124,7 @@ class ProviderTest extends TestCase
         $response
             ->assertStatus(403);
         $this->assertDatabaseMissing('social_accounts', [
-            'provider' => $this->provider,
+            'provider'         => $this->provider,
             'provider_user_id' => $provider_user_id,
         ]);
     }
@@ -148,7 +148,7 @@ class ProviderTest extends TestCase
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseMissing('social_accounts', [
-            'provider' => $this->provider,
+            'provider'         => $this->provider,
             'provider_user_id' => $provider_user_id,
         ]);
     }

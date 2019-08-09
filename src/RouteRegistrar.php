@@ -63,7 +63,7 @@ class RouteRegistrar
                 ->prefix($this->prefix)
                 ->get("login/{$provider}", [
                     'uses'=> 'ProviderController@redirectToProvider',
-                    'as' => "social-accounts.login.{$provider}",
+                    'as'  => "social-accounts.login.{$provider}",
                 ])
                 ->defaults('provider', $provider);
             $router
