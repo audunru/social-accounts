@@ -2,8 +2,8 @@
 
 namespace audunru\SocialAccounts\Events;
 
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Database\Eloquent\Model as User;
 use audunru\SocialAccounts\Models\SocialAccount;
 
 class SocialAccountAdded

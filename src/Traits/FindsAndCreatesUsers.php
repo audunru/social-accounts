@@ -2,7 +2,7 @@
 
 namespace audunru\SocialAccounts\Traits;
 
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Database\Eloquent\Model as User;
 
 trait FindsAndCreatesUsers
 {
