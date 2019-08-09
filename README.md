@@ -110,7 +110,7 @@ SocialAccounts::routes(
 
 ## Step 3: Configuration and customization
 
-You can find the configuration in `config/social-accounts.php`. Socialite's configuration is in `config/services.php`.
+You can find the configuration and documentation of all options in [config/social-accounts.php](config/social-accounts.php).
 
 ## Step 4: Run migrations
 
