@@ -65,7 +65,7 @@ Third, you need to add credentials for your supported social login providers to 
 'google' => [
     'client_id' => env('GOOGLE_CLIENT_ID'), // Get your client ID and secret from https://console.developers.google.com
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-    'redirect' => '/social/login/google/callback',  // This route is registered by the package and should not be changed
+    'redirect' => '/social-accounts/login/google/callback',  // This route is registered by the package and should not be changed
 ],
 ```
 
@@ -134,11 +134,11 @@ If you set the "automatically_create_users" option in `config/social-accounts.ph
 
 ## Adding social login to existing users
 
-If you want to allow your existing users to log in with Google, add a link to `/social/login/google` somewhere in your application:
+If you want to allow your existing users to log in with Google, add a link to `/social-accounts/login/google` somewhere in your application:
 
 ```html
 @auth
-<a href="/social/login/google">Add Google login to my account</a>
+<a href="/social-accounts/login/google">Add Google login to my account</a>
 @endauth
 ```
 
@@ -158,29 +158,29 @@ Then, run the migrations so that the email and password columns are made nullabl
 php artisan migrate
 ```
 
-Then add a link to `/social/login/google`:
+Then add a link to `/social-accounts/login/google`:
 
 ```html
-<a href="/social/login/google">Sign up with Google</a>
+<a href="/social-accounts/login/google">Sign up with Google</a>
 ```
 
 ## Logging in
 
-For users who are not signed in, simply add a link to `/social/login/google`:
+For users who are not signed in, simply add a link to `/social-accounts/login/google`:
 
 ```html
-<a href="/social/login/google">Sign in with Google</a>
+<a href="/social-accounts/login/google">Sign in with Google</a>
 ```
 
 ## API
 
-The JSON API, which by default is accessible at `/social/social-accounts`, allows authenticated users to retrieve their social accounts and remove them.
+The JSON API, which by default is accessible at `/social-accounts/social-accounts`, allows authenticated users to retrieve their social accounts and remove them.
 
-To retrieve an array of social accounts, make a GET request to `/social/social-accounts`.
+To retrieve an array of social accounts, make a GET request to `/social-accounts/social-accounts`.
 
-To retrieve a single social account, make a GET request to `/social/social-accounts/123`, where 123 is the ID of the account.
+To retrieve a single social account, make a GET request to `/social-accounts/social-accounts/123`, where 123 is the ID of the account.
 
-To delete a social account, make a DELETE request to `/social/social-accounts/123`.
+To delete a social account, make a DELETE request to `/social-accounts/social-accounts/123`.
 
 Users can't update social accounts through the API, they will have to delete them first and then authorize again.
 

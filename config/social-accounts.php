@@ -2,6 +2,10 @@
 
 return [
     /*
+     * Routes start with a prefix.
+     */
+    'route_prefix' => 'social-accounts',
+    /*
      * Enable the providers you want, and then configure credentials for each of them in config/services.php according to the Socialite documentation.
      */
     'providers' => [

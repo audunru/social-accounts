@@ -15,6 +15,7 @@ class ProviderTest extends TestCase
     use WithFaker;
 
     protected $provider = 'google';
+    protected $prefix = 'social-accounts';
     protected $redirectTo = 'http://localhost';
 
     public function test_it_fails_to_log_in_when_automatically_create_users_is_false()
@@ -23,7 +24,7 @@ class ProviderTest extends TestCase
 
         $this->mockSocialiteCallback();
 
-        $response = $this->get("/social/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(401);
         $this->assertFalse(Auth::check());
@@ -37,7 +38,7 @@ class ProviderTest extends TestCase
 
         $this->mockSocialiteCallback($user->email, $user->name, $socialAccount->provider_user_id);
 
-        $response = $this->get("/social/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(302);
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
@@ -58,7 +59,7 @@ class ProviderTest extends TestCase
 
         $this->mockSocialiteCallback($anotherUser->email, $anotherUser->name, $socialAccount->provider_user_id);
 
-        $response = $this->get("/social/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(302);
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
@@ -73,7 +74,7 @@ class ProviderTest extends TestCase
         $user = factory(User::class)->make();
         $this->mockSocialiteCallback($user->email, $user->name, $this->faker->uuid);
 
-        $response = $this->get("/social/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(302);
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
@@ -96,7 +97,7 @@ class ProviderTest extends TestCase
         $provider_user_id = $this->faker->uuid;
         $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
 
-        $response = $this->get("/social/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(302);
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
@@ -119,7 +120,7 @@ class ProviderTest extends TestCase
         $provider_user_id = $this->faker->uuid;
         $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
 
-        $response = $this->get("/social/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response
             ->assertStatus(403);
         $this->assertDatabaseMissing('social_accounts', [
@@ -141,7 +142,7 @@ class ProviderTest extends TestCase
         $provider_user_id = $this->faker->uuid;
         $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
 
-        $response = $this->get("/social/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(409);
         $this->assertTrue(Auth::check());

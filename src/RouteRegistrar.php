@@ -14,6 +14,13 @@ class RouteRegistrar
     protected $router;
 
     /**
+     * The route prefix.
+     *
+     * @var string
+     */
+    protected $prefix;
+
+    /**
      * Create a new route registrar instance.
      *
      * @param Router $router
@@ -21,6 +28,8 @@ class RouteRegistrar
     public function __construct(Router $router)
     {
         $this->router = $router;
+
+        $this->prefix = config('social-accounts.route_prefix');
     }
 
     /**
@@ -51,12 +60,14 @@ class RouteRegistrar
     {
         $this->router->group(['middleware' => ['web']], function ($router) use ($provider) {
             $router
+                ->prefix($this->prefix)
                 ->get("login/{$provider}", [
                     'uses'=> 'ProviderController@redirectToProvider',
                     'as' => "social-accounts.login.{$provider}",
                 ])
                 ->defaults('provider', $provider);
             $router
+                ->prefix($this->prefix)
                 ->get("login/{$provider}/callback", 'ProviderController@handleProviderCallback')
                 ->defaults('provider', $provider);
         });
@@ -68,9 +79,13 @@ class RouteRegistrar
     public function forApi()
     {
         $this->router->group(['middleware' => ['api']], function ($router) {
-            $router->apiResource('social-accounts', 'ApiController')->only([
-                'index', 'show', 'destroy',
-            ]);
+            $router->apiResource($this->prefix, 'ApiController')
+                ->only([
+                    'index', 'show', 'destroy',
+                ])
+                ->parameters([
+                    $this->prefix => 'social_account',
+                ]);
         });
     }
 }

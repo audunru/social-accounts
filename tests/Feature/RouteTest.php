@@ -10,10 +10,11 @@ class RouteTest extends TestCase
     use WithFaker;
 
     protected $provider = 'google';
+    protected $prefix = 'social-accounts';
 
     public function test_disabled_provider_has_no_route()
     {
-        $this->get('/social/login/twitter')
+        $this->get("/{$this->prefix}/login/twitter")
           ->assertStatus(404);
     }
 
@@ -23,7 +24,7 @@ class RouteTest extends TestCase
         config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
         config(["services.{$this->provider}.redirect" => $this->faker->url]);
 
-        $response = $this->get("/social/login/{$this->provider}");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
         $response->assertStatus(302);
         $this->assertStringStartsWith('https://accounts.google.com/o/oauth2/auth', $response->getTargetUrl());

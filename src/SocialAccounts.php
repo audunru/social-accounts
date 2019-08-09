@@ -18,7 +18,6 @@ class SocialAccounts
             $router->all();
         };
         $defaultOptions = [
-            'prefix' => 'social',
             'namespace' => '\audunru\SocialAccounts\Controllers',
         ];
         $options = array_merge($defaultOptions, $options);
