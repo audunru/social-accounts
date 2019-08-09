@@ -151,4 +151,18 @@ class ApiTest extends TestCase
             return $event->user->is($user) && $event->socialAccount->is($socialAccount);
         });
     }
+
+    public function test_it_returns_a_server_error_when_existing_account_cant_be_deleted()
+    {
+        $this->mock(SocialAccount::class, function ($mock) {
+            $mock
+                ->shouldReceive('delete')
+                ->andReturn(false);
+        });
+
+        $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$this->socialAccount->id}");
+
+        $response
+            ->assertStatus(500);
+    }
 }

@@ -58,5 +58,6 @@ class ApiController extends Controller
                 'message' => 'Deleted',
             ]);
         }
+        abort(500);
     }
 }
