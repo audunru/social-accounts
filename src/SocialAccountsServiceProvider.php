@@ -34,11 +34,6 @@ class SocialAccountsServiceProvider extends ServiceProvider
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'migrations');
         }
-        // When running tests, use the included dummy User model
-        // Also, add the package's routes which otherwise must be added manually
-        if ('testing' === env('APP_ENV')) {
-            config(['social-accounts.models.user' => Tests\Models\User::class]);
-        }
     }
 
     /**

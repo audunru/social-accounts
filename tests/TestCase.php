@@ -4,6 +4,7 @@ namespace audunru\SocialAccounts\Tests;
 
 use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\SocialAccountsServiceProvider;
+use audunru\SocialAccounts\Tests\Models\User;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteServiceProvider;
 use Orchestra\Database\ConsoleServiceProvider;
@@ -38,6 +39,7 @@ abstract class TestCase extends BaseTestCase
         $this->withFactories(__DIR__.'/../tests/database/factories');
         $this->loadMigrationsFrom(__DIR__.'/../tests/database/migrations');
         $this->artisan('migrate');
+        config(['social-accounts.models.user' => User::class]);
         SocialAccounts::routes();
     }
 
