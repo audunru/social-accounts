@@ -45,6 +45,23 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
+    public function test_it_logs_in_a_user_while_automatically_create_users_is_on()
+    {
+        $this->enableUserCreation();
+
+        $user = factory(User::class)->create();
+        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialiteCallback($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $this->assertEquals($this->redirectTo, $response->getTargetUrl());
+        $this->assertEquals($user->id, Auth::id());
+    }
+
     public function test_user_is_authenticated_but_logs_in_as_someone_else()
     {
         $this->enableSocialAccountCreation();
