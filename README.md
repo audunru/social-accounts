@@ -175,13 +175,13 @@ For users who are not signed in, simply add a link to `/social-accounts/login/go
 
 ## API
 
-The JSON API, which by default is accessible at `/social-accounts/social-accounts`, allows authenticated users to retrieve their social accounts and remove them.
+The JSON API, which by default is accessible at `/social-accounts`, allows authenticated users to retrieve their social accounts and remove them.
 
-To retrieve an array of social accounts, make a GET request to `/social-accounts/social-accounts`.
+To retrieve an array of social accounts, make a GET request to `/social-accounts`.
 
-To retrieve a single social account, make a GET request to `/social-accounts/social-accounts/123`, where 123 is the ID of the account.
+To retrieve a single social account, make a GET request to `/social-accounts/123`, where 123 is the ID of the account.
 
-To delete a social account, make a DELETE request to `/social-accounts/social-accounts/123`.
+To delete a social account, make a DELETE request to `/social-accounts/123`.
 
 Users can't update social accounts through the API, they will have to delete them first and then authorize again.
 
