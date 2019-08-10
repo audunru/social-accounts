@@ -37,7 +37,7 @@ class RouteTest extends TestCase
         config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
         config(["services.{$this->provider}.redirect" => $this->faker->url]);
 
-        SocialAccounts::registerProviderSetting('google', 'with', ['hd' => 'seinfeld.com']);
+        SocialAccounts::registerProviderSettings('google', 'with', ['hd' => 'seinfeld.com']);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
@@ -51,7 +51,7 @@ class RouteTest extends TestCase
         config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
         config(["services.{$this->provider}.redirect" => $this->faker->url]);
 
-        SocialAccounts::registerProviderSetting('google', 'scopes', ['amazing-scope']);
+        SocialAccounts::registerProviderSettings('google', 'scopes', ['amazing-scope']);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
@@ -65,7 +65,7 @@ class RouteTest extends TestCase
         config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
         config(["services.{$this->provider}.redirect" => $this->faker->url]);
 
-        SocialAccounts::registerProviderSetting('google', 'setScopes', ['just-this-scope']);
+        SocialAccounts::registerProviderSettings('google', 'setScopes', ['just-this-scope']);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
