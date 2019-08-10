@@ -52,18 +52,6 @@ trait HasSocialAccounts
     }
 
     /**
-     * Is the user allowed to add social accounts?
-     *
-     * @param string $provider
-     *
-     * @return bool
-     */
-    public function getCanAddSocialAccountAttribute(): bool
-    {
-        return true === config('social-accounts.users_can_add_social_accounts');
-    }
-
-    /**
      * Check if user already has social account with this provider.
      *
      * @param string $provider

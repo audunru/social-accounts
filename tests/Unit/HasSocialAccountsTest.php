@@ -57,20 +57,6 @@ class HasSocialAccountsTest extends TestCase
         $this->assertEquals($this->user->id, $user->id);
     }
 
-    public function test_user_can_add_social_account()
-    {
-        $this->enableSocialAccountCreation();
-
-        $this->assertTrue($this->user->can_add_social_account);
-    }
-
-    public function test_user_can_not_add_social_account()
-    {
-        $this->disableSocialAccountCreation();
-
-        $this->assertFalse($this->user->can_add_social_account);
-    }
-
     public function test_user_has_provider()
     {
         $this->assertTrue($this->user->hasProvider($this->socialAccount->provider));

@@ -204,7 +204,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        // If your company uses G Suite and you want to ensure that only employees can log in, you could define the "login-with-provider" gate like this:
+        /*
+         * If your company uses G Suite and you want to ensure that only employees can log in, you can define a "login-with-provider" gate.
+         *
+         * If you don't define this gate, any ProviderUser is allowed to pass through.
+         */
         Gate::define('login-with-provider', function (?User $user, ProviderUser $providerUser) {
             /*
              * $providerUser->user['hd'] contains the domain name the Google account belongs to.
@@ -212,6 +216,19 @@ class AuthServiceProvider extends ServiceProvider
              * It's good practice to verify that the account does in fact belong to your company after the user has authorized with Google and returned to your application.
              */
             return 'company.com' === $providerUser->user['hd'];
+        });
+        /*
+         * If you want to restrict who can add social accounts, you can define a "add-social-account" gate.
+         *
+         * If you don't define this gate, any authenticated user can add a social account.
+         */
+        Gate::define('add-social-account', function (User $user, ProviderUser $providerUser) {
+            /*
+             * isAdmin() is a hypothetical method you could define on your User model.
+             *
+             * In this case, only administrators would be allowed to add social accounts.
+             */
+            return $user->isAdmin();
         });
         SocialAccounts::routes();
     }

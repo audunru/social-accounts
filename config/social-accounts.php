@@ -25,8 +25,18 @@ return [
     'gates' => [
         /*
          * The "login-with-provider" gate check is run after a user has authorized with a provider, but before they are logged in or we have created an account for them.
+         *
+         * The gate receives the current user (or "null" if unauthenticated, which would typically be the case) as its first argument, and a ProviderUser instance as its second.
+         *
+         * Guest User Gates are only available in Laravel 5.7 and up.
          */
         'login-with-provider' => 'login-with-provider',
+        /*
+         * The "add-social-account" gate check is run before a social account is added to a user.
+         *
+         * The gate receives the current user as its first argument, and a ProviderUser instance as its second.
+         */
+        'add-social-account' => 'add-social-account',
     ],
     'models' => [
         /*
@@ -59,10 +69,6 @@ return [
          */
         'primary_key' => 'id',
     ],
-    /*
-    * If a user is logged in, and then logs in with Socialite, should that account be added to their social accounts?
-    */
-    'users_can_add_social_accounts' => true,
     /*
      * If someone logs in succesfully with a provider, but they don't have a Laravel user already, should we create one?
      *

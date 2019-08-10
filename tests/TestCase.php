@@ -2,12 +2,14 @@
 
 namespace audunru\SocialAccounts\Tests;
 
+use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Facades\Socialite;
 use audunru\SocialAccounts\Tests\Models\User;
 use Orchestra\Database\ConsoleServiceProvider;
 use Laravel\Socialite\SocialiteServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use audunru\SocialAccounts\Facades\SocialAccounts;
+use Laravel\Socialite\Contracts\User as ProviderUser;
 use audunru\SocialAccounts\SocialAccountsServiceProvider;
 
 abstract class TestCase extends BaseTestCase
@@ -55,11 +57,15 @@ abstract class TestCase extends BaseTestCase
 
     public function enableSocialAccountCreation()
     {
-        config(['social-accounts.users_can_add_social_accounts' => true]);
+        Gate::define('add-social-account', function (User $user, ProviderUser $providerUser) {
+            return true;
+        });
     }
 
     public function disableSocialAccountCreation()
     {
-        config(['social-accounts.users_can_add_social_accounts' => false]);
+        Gate::define('add-social-account', function (User $user, ProviderUser $providerUser) {
+            return false;
+        });
     }
 }

@@ -82,7 +82,8 @@ class ProviderController extends Controller
         }
 
         abort_if(Auth::user()->hasProvider($this->provider), 409, "You already have a social login with this provider: {$this->provider}.");
-        abort_unless(Auth::user()->can_add_social_account, 403, 'You are not allowed to add social logins.');
+        abort_if(Gate::has(config('social-accounts.gates.add-social-account')) &&
+            Gate::denies('add-social-account', $this->providerUser), 403, 'You are not allowed to add social logins.');
 
         return new AddSocialAccount();
     }
