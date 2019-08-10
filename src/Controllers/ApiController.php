@@ -52,12 +52,10 @@ class ApiController extends Controller
     public function destroy(SocialAccount $socialAccount): JsonResponse
     {
         abort_unless(Auth::check(), 401);
+        abort_unless($socialAccount->delete(), 500);
 
-        if ($socialAccount->delete()) {
-            return response()->json([
-                'message' => 'Deleted',
-            ]);
-        }
-        abort(500);
+        return response()->json([
+            'message' => 'Deleted',
+        ]);
     }
 }
