@@ -34,7 +34,7 @@ class ProviderTest extends TestCase
     public function test_it_fails_to_create_account_when_gate_only_allows_a_certain_email_address()
     {
         // Guest User Gates are only available in Laravel 5.7 and up.
-        if ('5.5' === env('ILLUMINATE_VERSION') || '5.6' === env('ILLUMINATE_VERSION')) {
+        if ('5.5.*' === env('ILLUMINATE_VERSION') || '5.6.*' === env('ILLUMINATE_VERSION')) {
             return;
         }
         $this->enableUserCreation();
@@ -57,7 +57,7 @@ class ProviderTest extends TestCase
     public function test_it_creates_account_when_gate_only_allows_a_certain_email_address()
     {
         // Guest User Gates are only available in Laravel 5.7 and up.
-        if ('5.5' === env('ILLUMINATE_VERSION') || '5.6' === env('ILLUMINATE_VERSION')) {
+        if ('5.5.*' === env('ILLUMINATE_VERSION') || '5.6.*' === env('ILLUMINATE_VERSION')) {
             return;
         }
         $this->enableUserCreation();
