@@ -61,14 +61,4 @@ class SocialAccountsServiceProvider extends ServiceProvider
             Gate::policy($key, $value);
         }
     }
-
-    /**
-     * Get the policies defined on the provider.
-     *
-     * @return array
-     */
-    public function policies()
-    {
-        return $this->policies;
-    }
 }
