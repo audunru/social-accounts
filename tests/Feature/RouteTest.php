@@ -42,7 +42,7 @@ class RouteTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
         $response->assertStatus(302);
-        $this->assertStringContainsString('hd=seinfeld.com', $response->getTargetUrl());
+        $this->assertRegExp('/'.preg_quote('hd=seinfeld.com').'/', $response->getTargetUrl());
     }
 
     public function test_it_adds_a_scope()
@@ -56,7 +56,7 @@ class RouteTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
         $response->assertStatus(302);
-        $this->assertStringContainsString('scope=openid+profile+email+amazing-scope', $response->getTargetUrl());
+        $this->assertRegExp('/'.preg_quote('scope=openid+profile+email+amazing-scope').'/', $response->getTargetUrl());
     }
 
     public function test_it_overwrites_scopes()
@@ -70,6 +70,6 @@ class RouteTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
         $response->assertStatus(302);
-        $this->assertStringContainsString('scope=just-this-scope', $response->getTargetUrl());
+        $this->assertRegExp('/'.preg_quote('scope=just-this-scope').'/', $response->getTargetUrl());
     }
 }
