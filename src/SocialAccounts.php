@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Route;
 class SocialAccounts
 {
     /**
+     * Holds (optional) provider settings.
+     *
+     * @var array
+     */
+    protected static $providerSettings = [];
+
+    /**
      * Binds the SocialAccounts routes into the controller.
      *
      * @param callable|null $callback
@@ -24,5 +31,35 @@ class SocialAccounts
         Route::group($options, function ($router) use ($callback) {
             $callback(new RouteRegistrar($router));
         });
+    }
+
+    /**
+     * Register settings for a provider.
+     *
+     * @param string $provider
+     * @param string $methodName
+     * @param array  $parameters
+     */
+    public static function registerProviderSettings(string $provider, string $methodName, array $parameters = null): void
+    {
+        array_push(self::$providerSettings, compact('provider', 'methodName', 'parameters'));
+    }
+
+    /**
+     * Return settings for all providers.
+     *
+     * @return array
+     */
+    public static function getProviderSettings(): array
+    {
+        return self::$providerSettings;
+    }
+
+    /**
+     * Empty provider settings.
+     */
+    public static function emptyProviderSettings(): void
+    {
+        self::$providerSettings = [];
     }
 }

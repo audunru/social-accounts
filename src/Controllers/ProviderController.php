@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\FindUser;
+use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
 use audunru\SocialAccounts\Strategies\FindOrCreateUser;
 
@@ -40,7 +41,9 @@ class ProviderController extends Controller
      */
     public function redirectToProvider(Socialite $socialite): RedirectResponse
     {
-        return $socialite::driver($this->provider)->redirect();  // TODO: Can the callback be set here instead of in services?
+        $this->applySettingsToProvider($socialite);
+
+        return $socialite::driver($this->provider)->redirect();  // TODO: Can the callback URL be set here instead of in services?
     }
 
     /**
@@ -95,5 +98,17 @@ class ProviderController extends Controller
         }
 
         return new FindUser();
+    }
+
+    private function applySettingsToProvider(Socialite $socialite): void
+    {
+        collect(SocialAccounts::getProviderSettings())
+            ->filter(function (array $settings) {
+                return $settings['provider'] === $this->provider;
+            })
+            ->each(function (array $settings) use ($socialite) {
+                extract($settings);
+                call_user_func_array([$socialite::driver($provider), $methodName], [$parameters]);
+            });
     }
 }

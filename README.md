@@ -184,6 +184,18 @@ To delete a social account, make a DELETE request to `/social-accounts/123`.
 
 Users can't update social accounts through the API, they will have to delete them first and then authorize again.
 
+## Optional Parameters, Access Scopes and Stateless Authentication
+
+To include optional parameters in the request, call the `registerProviderSettings` method on the facade. The method takes three parameters, the provider name, the name of the method to call on the provider object, and an array of parameters.
+
+For example, you can use this to limit the domains a Google user can choose to sign in with to just one:
+
+```php
+SocialAccounts::registerProviderSettings('google', 'with', ['hd' => 'seinfeld.com']);
+```
+
+[See Socialite's documentation for more info on Optional Parameters, Access Scopes and Stateless Authentication](https://laravel.com/docs/5.8/socialite#optional-parameters)
+
 ## Gates
 
 You can use [gates](https://laravel.com/docs/5.8/authorization#gates) to allow or deny certain actions. Gates should be defined within the boot method of your AuthServiceProvider.

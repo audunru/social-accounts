@@ -4,6 +4,7 @@ namespace audunru\SocialAccounts\Tests\Feature;
 
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use audunru\SocialAccounts\Facades\SocialAccounts;
 
 class RouteTest extends TestCase
 {
@@ -28,5 +29,47 @@ class RouteTest extends TestCase
 
         $response->assertStatus(302);
         $this->assertStringStartsWith('https://accounts.google.com/o/oauth2/auth', $response->getTargetUrl());
+    }
+
+    public function test_it_adds_options_to_redirect()
+    {
+        config(["services.{$this->provider}.client_id" => $this->faker->uuid]);
+        config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
+        config(["services.{$this->provider}.redirect" => $this->faker->url]);
+
+        SocialAccounts::registerProviderSetting('google', 'with', ['hd' => 'seinfeld.com']);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}");
+
+        $response->assertStatus(302);
+        $this->assertStringContainsString('hd=seinfeld.com', $response->getTargetUrl());
+    }
+
+    public function test_it_adds_a_scope()
+    {
+        config(["services.{$this->provider}.client_id" => $this->faker->uuid]);
+        config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
+        config(["services.{$this->provider}.redirect" => $this->faker->url]);
+
+        SocialAccounts::registerProviderSetting('google', 'scopes', ['amazing-scope']);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}");
+
+        $response->assertStatus(302);
+        $this->assertStringContainsString('scope=openid+profile+email+amazing-scope', $response->getTargetUrl());
+    }
+
+    public function test_it_overwrites_scopes()
+    {
+        config(["services.{$this->provider}.client_id" => $this->faker->uuid]);
+        config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
+        config(["services.{$this->provider}.redirect" => $this->faker->url]);
+
+        SocialAccounts::registerProviderSetting('google', 'setScopes', ['just-this-scope']);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}");
+
+        $response->assertStatus(302);
+        $this->assertStringContainsString('scope=just-this-scope', $response->getTargetUrl());
     }
 }
