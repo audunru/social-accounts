@@ -57,7 +57,7 @@ class ProviderTest extends TestCase
 
         Auth::login($anotherUser);
 
-        $this->mockSocialiteCallback($anotherUser->email, $anotherUser->name, $socialAccount->provider_user_id);
+        $this->mockSocialiteCallback($user->email, $user->name, $socialAccount->provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
