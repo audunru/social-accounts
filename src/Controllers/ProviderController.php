@@ -5,6 +5,7 @@ namespace audunru\SocialAccounts\Controllers;
 use Socialite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\FindUser;
@@ -50,6 +51,9 @@ class ProviderController extends Controller
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
         $this->providerUser = $socialite::driver($this->provider)->user();
+
+        abort_if(Gate::has(config('social-accounts.gates.login-with-provider')) &&
+            Gate::denies('login-with-provider', $this->providerUser), 403);
 
         $user = $this->getUserStrategy()->handle($this->provider, $this->providerUser);
 

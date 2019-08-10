@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use Mockery;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Facades\Socialite;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Models\SocialAccount;
+use Laravel\Socialite\Contracts\User as ProviderUser;
 
 class ProviderTest extends TestCase
 {
@@ -25,9 +27,46 @@ class ProviderTest extends TestCase
         $this->mockSocialiteCallback();
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
-
         $response->assertStatus(401);
         $this->assertFalse(Auth::check());
+    }
+
+    public function test_it_fails_to_create_account_when_gate_only_allows_a_certain_email_address()
+    {
+        $this->enableUserCreation();
+
+        Gate::define('login-with-provider', function (?User $user, ProviderUser $providerUser) {
+            return 'jerry@seinfeld.com' === $providerUser->getEmail();
+        });
+
+        $this->mockSocialiteCallback('newman@seinfeld.com');
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(403);
+        $this->assertFalse(Auth::check());
+        $this->assertDatabaseMissing('users', [
+            'email' => 'newman@seinfeld.com',
+        ]);
+    }
+
+    public function test_it_creates_account_when_gate_only_allows_a_certain_email_address()
+    {
+        $this->enableUserCreation();
+
+        Gate::define('login-with-provider', function (?User $user, ProviderUser $providerUser) {
+            return 'jerry@seinfeld.com' === $providerUser->getEmail();
+        });
+
+        $this->mockSocialiteCallback('jerry@seinfeld.com');
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $this->assertTrue(Auth::check());
+        $this->assertDatabaseHas('users', [
+            'email' => 'jerry@seinfeld.com',
+        ]);
     }
 
     public function test_it_logs_in_a_user()

@@ -17,6 +17,17 @@ return [
         // 'linkedin',
         // 'twitter',
     ],
+    /*
+     * Gates are used to allow or deny actions.
+     *
+     * You can rename them if you would like to use a different name.
+     */
+    'gates' => [
+        /*
+         * The "login-with-provider" gate check is run after a user has authorized with a provider, but before they are logged in or we have created an account for them.
+         */
+        'login-with-provider' => 'login-with-provider',
+    ],
     'models' => [
         /*
          * When using the "HasSocialAccounts" trait from this package, we need to know which Eloquent model should be used to retrieve your social accounts.

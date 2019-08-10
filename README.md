@@ -74,8 +74,6 @@ Third, you need to add credentials for your supported social login providers to 
 Fourth, you should call the `SocialAccounts::routes` method within the boot method of your AuthServiceProvider. This method will register the routes necessary to login with your configured providers. It will also register the API routes necessary for a user to retrieve their social accounts and remove them.
 
 ```php
-<?php
-
 namespace App\Providers;
 
 use audunru\SocialAccounts\SocialAccounts;
@@ -185,6 +183,41 @@ To retrieve a single social account, make a GET request to `/social-accounts/123
 To delete a social account, make a DELETE request to `/social-accounts/123`.
 
 Users can't update social accounts through the API, they will have to delete them first and then authorize again.
+
+## Gates
+
+You can use [gates](https://laravel.com/docs/5.8/authorization#gates) to allow or deny certain actions. Gates should be defined within the boot method of your AuthServiceProvider.
+
+```php
+namespace App\Providers;
+
+use App\User;
+use audunru\SocialAccounts\SocialAccounts;
+use Laravel\Socialite\Contracts\User as ProviderUser;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any authentication / authorization services.
+     */
+    public function boot()
+    {
+        $this->registerPolicies();
+        // If your company uses G Suite and you want to ensure that only employees can log in, you could define the "login-with-provider" gate like this:
+        Gate::define('login-with-provider', function (?User $user, ProviderUser $providerUser) {
+            /*
+             * $providerUser->user['hd'] contains the domain name the Google account belongs to.
+             *
+             * It's good practice to verify that the account does in fact belong to your company after the user has authorized with Google and returned to your application.
+             */
+            return 'company.com' === $providerUser->user['hd'];
+        });
+        SocialAccounts::routes();
+    }
+}
+
+```
 
 ## Events
 
