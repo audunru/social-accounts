@@ -51,7 +51,10 @@
     "laravel": {
       "providers": [
         "audunru\\SocialAccounts\\SocialAccountsServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "SocialAccounts": "audunru\\SocialAccounts\\Facades\\SocialAccounts"
+      }
     }
   },
   "scripts": {

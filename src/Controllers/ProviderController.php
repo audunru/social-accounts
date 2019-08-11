@@ -3,13 +3,13 @@
 namespace audunru\SocialAccounts\Controllers;
 
 use Socialite;
+use SocialAccounts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\FindUser;
-use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
 use audunru\SocialAccounts\Strategies\FindOrCreateUser;
 

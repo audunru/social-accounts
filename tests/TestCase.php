@@ -29,7 +29,8 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageAliases($app)
     {
         return [
-            'Socialite' => Socialite::class,
+            'Socialite'      => Socialite::class,
+            'SocialAccounts' => SocialAccounts::class,
         ];
     }
 

@@ -3,10 +3,10 @@
 namespace audunru\SocialAccounts\Tests\Feature;
 
 use Mockery;
+use SocialAccounts;
 use audunru\SocialAccounts\Tests\TestCase;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Models\SocialAccount;
-use audunru\SocialAccounts\Facades\SocialAccounts;
 
 class ApiTest extends TestCase
 {
