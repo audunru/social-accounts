@@ -74,6 +74,8 @@ Third, you need to add credentials for your supported social login providers to 
 Fourth, you should call the `SocialAccounts::routes` method within the boot method of your AuthServiceProvider. This method will register the routes necessary to login with your configured providers. It will also register the API routes necessary for a user to retrieve their social accounts and remove them.
 
 ```php
+<?php
+
 namespace App\Providers;
 
 use audunru\SocialAccounts\SocialAccounts;
@@ -201,6 +203,8 @@ SocialAccounts::registerProviderSettings('google', 'with', ['hd' => 'seinfeld.co
 You can use [gates](https://laravel.com/docs/5.8/authorization#gates) to allow or deny certain actions. Gates should be defined within the boot method of your AuthServiceProvider.
 
 ```php
+<?php
+
 namespace App\Providers;
 
 use App\User;
@@ -250,7 +254,40 @@ class AuthServiceProvider extends ServiceProvider
 
 ## Events
 
-When a social account is added to a user, a `SocialAccountAdded` event is dispatched. The event receives the User and SocialAccount model.
+When a user is created after authenticating with a provider, a `SocialUserCreated` event is dispatched. The event receives the User, SocialAccount and ProviderUser model.
+
+When a social account is added to an existing user, a `SocialAccountAdded` event is dispatched. The event receives the User, SocialAccount and ProviderUser model.
+
+For instance, you could listen for an event and grab more [details about the user](https://laravel.com/docs/5.8/socialite#retrieving-user-details).
+
+```php
+<?php
+
+namespace App\Listeners;
+
+use audunru\SocialAccounts\Events\SocialUserCreated;
+
+class AddUserAvatar
+{
+    /**
+     * Handle the event.
+     *
+     * @param  SocialUserCreated  $event
+     * @return void
+     */
+    public function handle(SocialUserCreated $event)
+    {
+        /*
+         * The package only saves the user's name and email when creating a new user.
+         *
+         * By listening for the event, we can grab more details about the user.
+         */
+        $event->user->update([
+            'avatar' => $event->providerUser->getAvatar();
+        ]);
+    }
+}
+```
 
 # Alternatives
 

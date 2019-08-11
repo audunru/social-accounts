@@ -3,6 +3,8 @@
 namespace audunru\SocialAccounts\Traits;
 
 use Illuminate\Database\Eloquent\Model as User;
+use audunru\SocialAccounts\Events\SocialUserCreated;
+use Laravel\Socialite\Contracts\User as ProviderUser;
 
 trait FindsAndCreatesUsers
 {
@@ -11,36 +13,34 @@ trait FindsAndCreatesUsers
     /**
      * Find a user with a social account.
      *
-     * @param string $provider
-     * @param string $provider_user_id
+     * @param string       $provider
+     * @param ProviderUser $providerUser
      *
      * @return User|null
      */
-    private function findUser(string $provider, string $provider_user_id): ?User
+    private function findUser(string $provider, ProviderUser $providerUser): ?User
     {
-        return config('social-accounts.models.user')::findBySocialAccount($provider, $provider_user_id);
+        return config('social-accounts.models.user')::findBySocialAccount($provider, $providerUser->getId());
     }
 
     /**
      * Create a new user with a social account.
      *
-     * @param string $provider
-     * @param string $email
-     * @param string $name
-     * @param string $provider_user_id
+     * @param string       $provider
+     * @param ProviderUser $providerUser
      *
      * @return User
      */
-    private function createUser(string $provider, string $email, string $name, string $provider_user_id): User
+    private function createUser(string $provider, ProviderUser $providerUser): User
     {
         $user = config('social-accounts.models.user')::create([
-            'email'    => $email,
-            'name'     => $name,
+            'email'    => $providerUser->getEmail(),
+            'name'     => $providerUser->getName(),
         ]);
-
-        $socialAccount = $this->makeSocialAccount($provider, $provider_user_id);
-
+        $socialAccount = $this->makeSocialAccount($provider, $providerUser->getId());
         $user->addSocialAccount($socialAccount);
+
+        event(new SocialUserCreated($user, $socialAccount, $providerUser));
 
         return $user;
     }
@@ -48,19 +48,17 @@ trait FindsAndCreatesUsers
     /**
      * Find a user, or create a new one.
      *
-     * @param string $provider
-     * @param string $email
-     * @param string $name
-     * @param string $provider_user_id
+     * @param string       $provider
+     * @param ProviderUser $providerUser
      *
      * @return User
      */
-    private function findOrCreateUser(string $provider, string $email, string $name, string $provider_user_id): User
+    private function findOrCreateUser(string $provider, ProviderUser $providerUser): User
     {
-        if ($user = $this->findUser($provider, $provider_user_id)) {
+        if ($user = $this->findUser($provider, $providerUser)) {
             return $user;
         }
 
-        return $this->createUser($provider, $email, $name, $provider_user_id);
+        return $this->createUser($provider, $providerUser);
     }
 }

@@ -5,7 +5,6 @@ namespace audunru\SocialAccounts\Traits;
 use Illuminate\Database\Eloquent\Builder;
 use audunru\SocialAccounts\Models\SocialAccount;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use audunru\SocialAccounts\Events\SocialAccountAdded;
 
 trait HasSocialAccounts
 {
@@ -30,8 +29,6 @@ trait HasSocialAccounts
      */
     public function addSocialAccount(SocialAccount $socialAccount): SocialAccount
     {
-        event(new SocialAccountAdded($this, $socialAccount));
-
         return $this->socialAccounts()->save($socialAccount);
     }
 

@@ -3,12 +3,10 @@
 namespace audunru\SocialAccounts\Tests\Feature;
 
 use Mockery;
-use Illuminate\Support\Facades\Event;
 use audunru\SocialAccounts\Tests\TestCase;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Facades\SocialAccounts;
-use audunru\SocialAccounts\Events\SocialAccountAdded;
 
 class ApiTest extends TestCase
 {
@@ -138,19 +136,6 @@ class ApiTest extends TestCase
 
         $response
             ->assertStatus(405);
-    }
-
-    public function test_an_event_is_dispatched_when_social_account_is_added()
-    {
-        Event::fake();
-
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make();
-        $user->addSocialAccount($socialAccount);
-
-        Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $socialAccount) {
-            return $event->user->is($user) && $event->socialAccount->is($socialAccount);
-        });
     }
 
     public function test_it_returns_a_server_error_when_existing_account_cant_be_deleted()

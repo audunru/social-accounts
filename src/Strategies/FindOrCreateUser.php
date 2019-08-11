@@ -12,6 +12,6 @@ class FindOrCreateUser implements Strategy
 
     public function handle(string $provider, User $providerUser)
     {
-        return $this->findOrCreateUser($provider, $providerUser->getEmail(), $providerUser->getName(), $providerUser->getId());
+        return $this->findOrCreateUser($provider, $providerUser);
     }
 }

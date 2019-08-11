@@ -12,6 +12,6 @@ class FindUser implements Strategy
 
     public function handle(string $provider, User $providerUser)
     {
-        return $this->findUser($provider, $providerUser->getId());
+        return $this->findUser($provider, $providerUser);
     }
 }

@@ -5,11 +5,14 @@ namespace Tests\Feature;
 use Mockery;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Event;
 use Laravel\Socialite\Facades\Socialite;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Models\SocialAccount;
+use audunru\SocialAccounts\Events\SocialUserCreated;
+use audunru\SocialAccounts\Events\SocialAccountAdded;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 class ProviderTest extends TestCase
@@ -215,6 +218,50 @@ class ProviderTest extends TestCase
             'provider'         => $this->provider,
             'provider_user_id' => $provider_user_id,
         ]);
+    }
+
+    public function test_an_event_is_dispatched_when_user_is_created()
+    {
+        Event::fake();
+
+        $this->enableUserCreation();
+
+        $user = factory(User::class)->make();
+        $provider_user_id = $this->faker->uuid;
+
+        $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        Event::assertDispatched(SocialUserCreated::class, function ($event) use ($user, $provider_user_id) {
+            return $event->user->name === $user->name &&
+                $event->user->email === $user->email &&
+                $event->socialAccount->provider_user_id === $provider_user_id &&
+                $event->providerUser->getId() === $provider_user_id;
+        });
+    }
+
+    public function test_an_event_is_dispatched_when_social_account_is_added()
+    {
+        Event::fake();
+
+        $this->enableSocialAccountCreation();
+
+        $user = factory(User::class)->create();
+
+        Auth::login($user);
+
+        $provider_user_id = $this->faker->uuid;
+        $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $provider_user_id) {
+            return $event->user->is($user) &&
+                $event->socialAccount->user_id === $user->id &&
+                $event->socialAccount->provider_user_id === $provider_user_id &&
+                $event->providerUser->getId() === $provider_user_id;
+        });
     }
 
     private function mockSocialiteCallback(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $provider_user_id = 'amazing-id')
