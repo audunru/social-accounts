@@ -276,7 +276,9 @@ class ProviderTest extends TestCase
         $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');
         $provider
             ->shouldReceive('user')
-            ->andReturn($providerUser);
+            ->andReturn($providerUser)
+            ->shouldReceive('redirect')
+            ->andReturn('Redirecting...');
 
         // Mock Socialite
         Socialite::shouldReceive('driver')
