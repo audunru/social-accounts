@@ -28,7 +28,7 @@ class SocialAccountAdded
     /**
      * The user returned by the Socialite provider.
      *
-     * @var ProviderUser
+     * @var \Laravel\Socialite\Contracts\User
      */
     public $providerUser;
 
