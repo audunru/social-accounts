@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Tests;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Facades\Socialite;
 use audunru\SocialAccounts\Tests\Models\User;
@@ -74,5 +75,13 @@ abstract class TestCase extends BaseTestCase
         Gate::define('add-social-account', function (User $user, ProviderUser $providerUser) {
             return false;
         });
+    }
+
+    public function requireLaravelVersion(string $version)
+    {
+        $laravelVersion = App::version();
+        if (! version_compare($laravelVersion, $version, '>=')) {
+            $this->markTestSkipped("Test requires at least Laravel {$version}, but current version is {$laravelVersion}");
+        }
     }
 }
