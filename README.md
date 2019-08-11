@@ -67,7 +67,8 @@ Third, you need to add credentials for your supported social login providers to 
 'google' => [
     'client_id' => env('GOOGLE_CLIENT_ID'), // Get your client ID and secret from https://console.developers.google.com
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-    'redirect' => '/social-accounts/login/google/callback',  // This route is registered by the package and should not be changed
+    // Note: The "redirect" setting will be configured automatically. You are not required to add it to services.php yourself. If you don't want to use this package's default routes, you will need to configure it. If so, the package will use the value from services.php.
+    // 'redirect' => '/social-accounts/login/google/callback',
 ],
 ```
 

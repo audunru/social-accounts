@@ -21,7 +21,6 @@ class RouteTest extends TestCase
         parent::setUp();
         config(["services.{$this->provider}.client_id" => $this->faker->uuid]);
         config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
-        config(["services.{$this->provider}.redirect" => $this->faker->url]);
     }
 
     public function test_disabled_provider_has_no_route()
@@ -66,5 +65,23 @@ class RouteTest extends TestCase
 
         $response->assertStatus(302);
         $this->assertRegExp('/'.preg_quote('scope=just-this-scope').'/', $response->getTargetUrl());
+    }
+
+    public function test_redirect_url_is_set_automatically()
+    {
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}");
+
+        $response->assertStatus(302);
+        $this->assertTrue(false !== strpos($response->getTargetUrl(), urlencode("/login/{$this->provider}/callback")));
+    }
+
+    public function test_redirect_url_can_be_set_manually()
+    {
+        config(["services.{$this->provider}.redirect" => '/forbidden-city-redirect']);
+
+        $response = $this->get("/$this->prefix/login/{$this->provider}");
+
+        $response->assertStatus(302);
+        $this->assertRegExp('/'.preg_quote('forbidden-city-redirect').'/', $response->getTargetUrl());
     }
 }

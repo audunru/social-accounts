@@ -62,13 +62,16 @@ class RouteRegistrar
             $router
                 ->prefix($this->prefix)
                 ->get("login/{$provider}", [
-                    'uses'=> 'ProviderController@redirectToProvider',
-                    'as'  => "social-accounts.login.{$provider}",
+                    'uses' => 'ProviderController@redirectToProvider',
+                    'as'   => "social-accounts.login.{$provider}",
                 ])
                 ->defaults('provider', $provider);
             $router
                 ->prefix($this->prefix)
-                ->get("login/{$provider}/callback", 'ProviderController@handleProviderCallback')
+                ->get("login/{$provider}/callback", [
+                    'uses' => 'ProviderController@handleProviderCallback',
+                    'as'   => "social-accounts.callback.{$provider}",
+                ])
                 ->defaults('provider', $provider);
         });
     }
