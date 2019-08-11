@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use Mockery;
+use Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Event;
-use Laravel\Socialite\Facades\Socialite;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use audunru\SocialAccounts\Tests\Models\User;
