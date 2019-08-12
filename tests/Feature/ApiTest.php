@@ -11,9 +11,9 @@ use audunru\SocialAccounts\Models\SocialAccount;
 class ApiTest extends TestCase
 {
     protected $prefix = 'social-accounts';
-    private $user;
-    private $socialAccount;
-    private $socialAccountStructure;
+    protected $user;
+    protected $socialAccount;
+    protected $socialAccountStructure;
 
     /**
      * Setup the test environment.
