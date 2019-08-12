@@ -126,13 +126,13 @@ class ProviderTest extends TestCase
         $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
-        $anotherUser = factory(User::class)->create();
-
-        Auth::login($anotherUser);
-
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
-        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+        $anotherUser = factory(User::class)->create();
+
+        $response = $this
+            ->actingAs($anotherUser)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(302);
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
@@ -165,12 +165,12 @@ class ProviderTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        Auth::login($user);
-
         $provider_user_id = $this->faker->uuid;
         $this->mockSocialite($user->email, $user->name, $provider_user_id);
 
-        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+        $response = $this
+            ->actingAs($user)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(302);
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
@@ -188,12 +188,12 @@ class ProviderTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        Auth::login($user);
-
         $provider_user_id = $this->faker->uuid;
         $this->mockSocialite($user->email, $user->name, $provider_user_id);
 
-        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+        $response = $this
+                ->actingAs($user)
+                ->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response
             ->assertStatus(403);
         $this->assertDatabaseMissing('social_accounts', [
@@ -210,12 +210,12 @@ class ProviderTest extends TestCase
         $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
-        Auth::login($user);
-
         $provider_user_id = $this->faker->uuid;
         $this->mockSocialite($user->email, $user->name, $provider_user_id);
 
-        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+        $response = $this
+            ->actingAs($user)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(409);
         $this->assertTrue(Auth::check());
@@ -255,10 +255,10 @@ class ProviderTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        Auth::login($user);
-
         $provider_user_id = $this->faker->uuid;
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $this
+            ->actingAs($user)
+            ->mockSocialite($user->email, $user->name, $provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
