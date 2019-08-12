@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Tests;
 
+use Mockery;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Facades\Socialite;
@@ -84,5 +85,31 @@ abstract class TestCase extends BaseTestCase
         if (! version_compare($laravelVersion, $version, '>=')) {
             $this->markTestSkipped("Test requires at least Laravel {$version}, but current version is {$laravelVersion}");
         }
+    }
+
+    public function mockSocialite(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $provider_user_id = 'amazing-id')
+    {
+        // Mock a user which the provider will return
+        $providerUser = Mockery::mock('Laravel\Socialite\Contracts\User');
+
+        $providerUser
+            ->shouldReceive('getEmail')
+            ->andReturn($email)
+            ->shouldReceive('getName')
+            ->andReturn($name)
+            ->shouldReceive('getId')
+            ->andReturn($provider_user_id);
+
+        // Mock a provider which Socialite will return
+        $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');
+        $provider
+            ->shouldReceive('user')
+            ->andReturn($providerUser)
+            ->shouldReceive('redirect')
+            ->andReturn('Redirecting...');
+
+        // Mock Socialite
+        Socialite::shouldReceive('driver')
+            ->andReturn($provider);
     }
 }

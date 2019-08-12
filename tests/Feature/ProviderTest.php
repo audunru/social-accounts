@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Mockery;
-use Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Event;
@@ -27,7 +25,7 @@ class ProviderTest extends TestCase
     {
         $this->disableUserCreation();
 
-        $this->mockSocialiteCallback();
+        $this->mockSocialite();
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response->assertStatus(401);
@@ -43,7 +41,7 @@ class ProviderTest extends TestCase
             return 'jerry@seinfeld.com' === $providerUser->getEmail();
         });
 
-        $this->mockSocialiteCallback('newman@seinfeld.com');
+        $this->mockSocialite('newman@seinfeld.com');
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -64,7 +62,7 @@ class ProviderTest extends TestCase
             return 'jerry@seinfeld.com' === $providerUser->getEmail();
         });
 
-        $this->mockSocialiteCallback('jerry@seinfeld.com');
+        $this->mockSocialite('jerry@seinfeld.com');
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -81,7 +79,7 @@ class ProviderTest extends TestCase
         $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
-        $this->mockSocialiteCallback($user->email, $user->name, $socialAccount->provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -96,7 +94,7 @@ class ProviderTest extends TestCase
         $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
-        $this->mockSocialiteCallback($user->email, $user->name, $socialAccount->provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}?remember");
 
@@ -111,7 +109,7 @@ class ProviderTest extends TestCase
         $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
-        $this->mockSocialiteCallback($user->email, $user->name, $socialAccount->provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -132,7 +130,7 @@ class ProviderTest extends TestCase
 
         Auth::login($anotherUser);
 
-        $this->mockSocialiteCallback($user->email, $user->name, $socialAccount->provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -147,7 +145,7 @@ class ProviderTest extends TestCase
         $this->enableUserCreation();
 
         $user = factory(User::class)->make();
-        $this->mockSocialiteCallback($user->email, $user->name, $this->faker->uuid);
+        $this->mockSocialite($user->email, $user->name, $this->faker->uuid);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -170,7 +168,7 @@ class ProviderTest extends TestCase
         Auth::login($user);
 
         $provider_user_id = $this->faker->uuid;
-        $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -193,7 +191,7 @@ class ProviderTest extends TestCase
         Auth::login($user);
 
         $provider_user_id = $this->faker->uuid;
-        $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response
@@ -215,7 +213,7 @@ class ProviderTest extends TestCase
         Auth::login($user);
 
         $provider_user_id = $this->faker->uuid;
-        $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -237,7 +235,7 @@ class ProviderTest extends TestCase
         $user = factory(User::class)->make();
         $provider_user_id = $this->faker->uuid;
 
-        $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -260,7 +258,7 @@ class ProviderTest extends TestCase
         Auth::login($user);
 
         $provider_user_id = $this->faker->uuid;
-        $this->mockSocialiteCallback($user->email, $user->name, $provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $provider_user_id);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
@@ -270,31 +268,5 @@ class ProviderTest extends TestCase
                 $event->socialAccount->provider_user_id === $provider_user_id &&
                 $event->providerUser->getId() === $provider_user_id;
         });
-    }
-
-    private function mockSocialiteCallback(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $provider_user_id = 'amazing-id')
-    {
-        // Mock a user which the provider will return
-        $providerUser = Mockery::mock('Laravel\Socialite\Contracts\User');
-
-        $providerUser
-            ->shouldReceive('getEmail')
-            ->andReturn($email)
-            ->shouldReceive('getName')
-            ->andReturn($name)
-            ->shouldReceive('getId')
-            ->andReturn($provider_user_id);
-
-        // Mock a provider which Socialite will return
-        $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');
-        $provider
-            ->shouldReceive('user')
-            ->andReturn($providerUser)
-            ->shouldReceive('redirect')
-            ->andReturn('Redirecting...');
-
-        // Mock Socialite
-        Socialite::shouldReceive('driver')
-            ->andReturn($provider);
     }
 }
