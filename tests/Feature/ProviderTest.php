@@ -90,6 +90,19 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
+    public function test_session_has_remember_if_it_was_present_in_login_url()
+    {
+        $user = factory(User::class)->create();
+        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialiteCallback($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}?remember");
+
+        $response->assertSessionHas('remember', true);
+    }
+
     public function test_it_logs_in_a_user_while_automatically_create_users_is_on()
     {
         $this->enableUserCreation();

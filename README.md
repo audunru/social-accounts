@@ -175,6 +175,14 @@ For users who are not signed in, simply add a link to `/social-accounts/login/go
 <a href="/social-accounts/login/google">Sign in with Google</a>
 ```
 
+## Remember Me
+
+Add "remember" to the login URL to keep the user signed in:
+
+```html
+<a href="/social-accounts/login/google?remember">Sign in with Google</a>
+```
+
 ## API
 
 The JSON API, which by default is accessible at `/social-accounts`, allows authenticated users to retrieve their social accounts and remove them.

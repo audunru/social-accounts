@@ -17,22 +17,15 @@ use audunru\SocialAccounts\Strategies\FindOrCreateUser;
 class ProviderController extends Controller
 {
     /**
-     * The provider name.
+     * The HTTP request instance.
      *
-     * @var string
+     * @var \Illuminate\Http\Request
      */
-    private $provider;
-
-    /**
-     * The provided user.
-     *
-     * @var object
-     */
-    private $providerUser;
+    protected $request;
 
     public function __construct(Request $request)
     {
-        $this->provider = $request->provider;
+        $this->request = $request;
     }
 
     /**
@@ -45,7 +38,11 @@ class ProviderController extends Controller
         $this->configureRedirectForProvider();
         $this->applySettingsToProvider($socialite);
 
-        return $socialite::driver($this->provider)->redirect();
+        if ($this->request->has('remember')) {
+            $this->request->session()->put('remember', true);
+        }
+
+        return $socialite::driver($this->request->provider)->redirect();
     }
 
     /**
@@ -55,15 +52,16 @@ class ProviderController extends Controller
      */
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
-        $this->providerUser = $socialite::driver($this->provider)->user();
+        $this->providerUser = $socialite::driver($this->request->provider)->user();
 
         abort_if(Gate::has(config('social-accounts.gates.login-with-provider')) &&
             Gate::denies('login-with-provider', $this->providerUser), 403);
 
-        $user = $this->getUserStrategy()->handle($this->provider, $this->providerUser);
+        $user = $this->getUserStrategy()->handle($this->request->provider, $this->providerUser);
 
         if ($user) {
-            Auth::login($user);
+            $remember = $this->request->session()->pull('remember', false);
+            Auth::login($user, $remember);
         } else {
             abort(401);
         }
@@ -82,11 +80,11 @@ class ProviderController extends Controller
 
     protected function getAccountStrategy(): Strategy
     {
-        if (config('social-accounts.models.user')::findBySocialAccount($this->provider, $this->providerUser->getId())) {
+        if (config('social-accounts.models.user')::findBySocialAccount($this->request->provider, $this->providerUser->getId())) {
             return new FindUser();
         }
 
-        abort_if(Auth::user()->hasProvider($this->provider), 409, "You already have a social login with this provider: {$this->provider}.");
+        abort_if(Auth::user()->hasProvider($this->request->provider), 409, "You already have a social login with this provider: {$this->request->provider}.");
         abort_if(Gate::has(config('social-accounts.gates.add-social-account')) &&
             Gate::denies('add-social-account', $this->providerUser), 403, 'You are not allowed to add social logins.');
 
@@ -106,7 +104,7 @@ class ProviderController extends Controller
     {
         collect(SocialAccounts::getProviderSettings())
             ->filter(function (array $settings) {
-                return $settings['provider'] === $this->provider;
+                return $settings['provider'] === $this->request->provider;
             })
             ->each(function (array $settings) use ($socialite) {
                 extract($settings);
@@ -116,9 +114,9 @@ class ProviderController extends Controller
 
     private function configureRedirectForProvider(): void
     {
-        $key = "services.{$this->provider}.redirect";
+        $key = "services.{$this->request->provider}.redirect";
         if (! Config::has($key)) {
-            Config::set($key, route("social-accounts.callback.{$this->provider}"));
+            Config::set($key, route("social-accounts.callback.{$this->request->provider}"));
         }
     }
 }
