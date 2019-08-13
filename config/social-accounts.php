@@ -6,6 +6,12 @@ return [
      */
     'route_prefix' => 'social-accounts',
     /*
+     * If someone logs in succesfully with a provider, but they don't have a Laravel user already, should we create one?
+     *
+     * By default, users will have to sign up first, and only while they are signed in can they add social accounts to log in with.
+     */
+    'automatically_create_users' => false,
+    /*
      * Enable the providers you want, and then configure credentials for each of them in config/services.php according to the Socialite documentation.
      */
     'providers' => [
@@ -69,10 +75,4 @@ return [
          */
         'primary_key' => 'id',
     ],
-    /*
-     * If someone logs in succesfully with a provider, but they don't have a Laravel user already, should we create one?
-     *
-     * By default, users will have to sign up first, and only while they are signed in can they add social accounts to log in with.
-     */
-    'automatically_create_users' => false,
 ];
