@@ -23,7 +23,7 @@ class RouteRegistrar
     /**
      * Create a new route registrar instance.
      *
-     * @param Router $router
+     * @param \Illuminate\Contracts\Routing\Registrar $router
      */
     public function __construct(Router $router)
     {

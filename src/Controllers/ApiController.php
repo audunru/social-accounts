@@ -11,6 +11,9 @@ use audunru\SocialAccounts\Resources\SocialAccount as SocialAccountResource;
 
 class ApiController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     */
     public function __construct()
     {
         $this->authorizeResource(SocialAccount::class);
@@ -19,7 +22,7 @@ class ApiController extends Controller
     /**
      * Display the current user's social accounts.
      *
-     * @return AnonymousResourceCollection
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(): AnonymousResourceCollection
     {
@@ -43,7 +46,7 @@ class ApiController extends Controller
      *
      * @param SocialAccount $socialAccount
      *
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(SocialAccount $socialAccount): JsonResponse
     {

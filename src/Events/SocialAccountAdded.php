@@ -14,7 +14,7 @@ class SocialAccountAdded
     /**
      * The user which the social account was added to.
      *
-     * @var User
+     * @var \Illuminate\Database\Eloquent\Model
      */
     public $user;
 
@@ -35,9 +35,9 @@ class SocialAccountAdded
     /**
      * Create a new event instance.
      *
-     * @param User          $user
-     * @param SocialAccount $socialAccount
-     * @param ProviderUser  $providerUser
+     * @param \Illuminate\Database\Eloquent\Model $user
+     * @param SocialAccount                       $socialAccount
+     * @param \Laravel\Socialite\Contracts\User   $providerUser
      */
     public function __construct(User $user, SocialAccount $socialAccount, ProviderUser $providerUser)
     {

@@ -50,6 +50,17 @@ class ApiTest extends TestCase
             ->assertJsonStructure(['data' => [$this->socialAccountStructure]]);
     }
 
+    public function test_it_gets_social_accounts_but_there_are_none()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')->json('GET', "/{$this->prefix}");
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => []]);
+    }
+
     public function test_it_gets_social_accounts_from_a_different_endpoint()
     {
         config(['social-accounts.route_prefix' => 'awesome-path']);

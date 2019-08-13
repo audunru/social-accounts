@@ -10,6 +10,8 @@ trait HasSocialAccounts
 {
     /**
      * Retrieve related social accounts.
+     *
+     * @return HasMany
      */
     public function socialAccounts(): HasMany
     {
@@ -38,7 +40,7 @@ trait HasSocialAccounts
      * @param string $provider
      * @param string $provider_user_id
      *
-     * @return self|null
+     * @return \Illuminate\Database\Eloquent\Model|null
      */
     public static function findBySocialAccount(string $provider, string $provider_user_id): ?self
     {

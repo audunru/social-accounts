@@ -9,7 +9,7 @@ use audunru\SocialAccounts\Policies\SocialAccountPolicy;
 
 class SocialAccountsServiceProvider extends ServiceProvider
 {
-    /*
+    /**
      * The policy mappings for the application.
      *
      * @var array

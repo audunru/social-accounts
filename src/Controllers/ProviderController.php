@@ -23,6 +23,11 @@ class ProviderController extends Controller
      */
     protected $request;
 
+    /**
+     * Create a new controller instance.
+     *
+     * @param \Illuminate\Http\Request $request
+     */
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -31,7 +36,9 @@ class ProviderController extends Controller
     /**
      * Redirect the user to the authentication page.
      *
-     * @return RedirectResponse
+     * @param Socialite $socialite
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function redirectToProvider(Socialite $socialite): RedirectResponse
     {
@@ -48,7 +55,9 @@ class ProviderController extends Controller
     /**
      * Handle the returned info from the external partner, and then login or create a new user depending on the circumstances.
      *
-     * @return RedirectResponse
+     * @param Socialite $socialite
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
@@ -69,6 +78,11 @@ class ProviderController extends Controller
         return redirect()->intended();
     }
 
+    /**
+     * Decide what to do if the user is logged in or not.
+     *
+     * @return Strategy
+     */
     protected function getUserStrategy(): Strategy
     {
         if (Auth::check()) {
@@ -78,6 +92,11 @@ class ProviderController extends Controller
         return $this->getLoginStrategy();
     }
 
+    /**
+     * Determines what to do if the user is logged in.
+     *
+     * @return Strategy
+     */
     protected function getAccountStrategy(): Strategy
     {
         if (config('social-accounts.models.user')::findBySocialAccount($this->request->provider, $this->providerUser->getId())) {
@@ -91,6 +110,11 @@ class ProviderController extends Controller
         return new AddSocialAccount();
     }
 
+    /**
+     * Determines what to do if the user is not logged in.
+     *
+     * @return Strategy
+     */
     protected function getLoginStrategy(): Strategy
     {
         if (config('social-accounts.automatically_create_users')) {
@@ -100,6 +124,11 @@ class ProviderController extends Controller
         return new FindUser();
     }
 
+    /**
+     * Get the configured settings for the current provider and apply them to the Socalite driver.
+     *
+     * @param Socialite $socialite
+     */
     private function applySettingsToProvider(Socialite $socialite): void
     {
         collect(SocialAccounts::getProviderSettings())
@@ -112,6 +141,9 @@ class ProviderController extends Controller
             });
     }
 
+    /**
+     * Automatically configure a redirect URL for the current provider.
+     */
     private function configureRedirectForProvider(): void
     {
         $key = "services.{$this->request->provider}.redirect";
