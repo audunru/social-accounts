@@ -23,8 +23,6 @@ class ApiController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        abort_unless(Auth::check(), 401);
-
         return SocialAccountResource::collection(Auth::user()->socialAccounts);
     }
 
@@ -37,8 +35,6 @@ class ApiController extends Controller
      */
     public function show(SocialAccount $socialAccount): SocialAccountResource
     {
-        abort_unless(Auth::check(), 401);
-
         return new SocialAccountResource($socialAccount);
     }
 
@@ -51,7 +47,6 @@ class ApiController extends Controller
      */
     public function destroy(SocialAccount $socialAccount): JsonResponse
     {
-        abort_unless(Auth::check(), 401);
         abort_unless($socialAccount->delete(), 500);
 
         return response()->json([

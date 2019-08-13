@@ -81,7 +81,7 @@ class RouteRegistrar
      */
     public function forApi()
     {
-        $this->router->group(['middleware' => ['api']], function ($router) {
+        $this->router->group(['middleware' => ['api', 'auth:api']], function ($router) {
             $router->apiResource($this->prefix, 'ApiController')
                 ->only([
                     'index', 'show', 'destroy',
