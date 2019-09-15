@@ -11,6 +11,18 @@ class SocialAccountPolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can view any social accounts.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $user
+     *
+     * @return mixed
+     */
+    public function viewAny(User $user): bool
+    {
+        return true;
+    }
+
+    /**
      * Determine whether the user can view the social account.
      *
      * @param \Illuminate\Database\Eloquent\Model $user
