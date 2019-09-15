@@ -21,6 +21,6 @@ $factory->define(User::class, function (Faker $faker) {
         'email'             => $faker->unique()->safeEmail,
         'email_verified_at' => Carbon::now(),
         'password'          => $faker->password,
-        'remember_token'    => str_random(10),
+        'remember_token'    => substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyz', 5)), 0, 10),
     ];
 });
