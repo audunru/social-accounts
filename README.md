@@ -301,6 +301,7 @@ class AddUserAvatar
 # Alternatives
 
 [laravel-social-auth](https://packagist.org/packages/mad-web/laravel-social-auth)
+
 [Easy Socialite](https://github.com/MiloudiMohamed/easy-socialite)
 
 # Development
