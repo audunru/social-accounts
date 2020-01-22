@@ -10,9 +10,6 @@ interface Strategy
     /**
      * Handle authentication of the provided user after succesful authorization with the provider.
      *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
-     *
      * @return User|null
      */
     public function handle(string $provider, ProviderUser $providerUser): ?User;

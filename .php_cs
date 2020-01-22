@@ -18,9 +18,7 @@ return PhpCsFixer\Config::create()
         'array_indentation' => true,
         'linebreak_after_opening_tag' => true,
         'not_operator_with_successor_space' => true,
-        'ordered_imports' => [
-            'sort_algorithm' => 'length'
-        ],
+        'ordered_imports' => true,
         'phpdoc_order' => true,
     ])
     ->setFinder($finder)

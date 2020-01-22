@@ -2,11 +2,11 @@
 
 namespace audunru\SocialAccounts\Tests\Feature;
 
+use audunru\SocialAccounts\Models\SocialAccount;
+use audunru\SocialAccounts\Tests\Models\User;
+use audunru\SocialAccounts\Tests\TestCase;
 use Mockery;
 use SocialAccounts;
-use audunru\SocialAccounts\Tests\TestCase;
-use audunru\SocialAccounts\Tests\Models\User;
-use audunru\SocialAccounts\Models\SocialAccount;
 
 class ApiTest extends TestCase
 {

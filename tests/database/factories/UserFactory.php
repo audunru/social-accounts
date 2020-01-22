@@ -1,8 +1,8 @@
 <?php
 
+use audunru\SocialAccounts\Tests\Models\User;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
-use audunru\SocialAccounts\Tests\Models\User;
 
 /*
 |--------------------------------------------------------------------------

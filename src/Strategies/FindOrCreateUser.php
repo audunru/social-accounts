@@ -3,9 +3,9 @@
 namespace audunru\SocialAccounts\Strategies;
 
 use audunru\SocialAccounts\Interfaces\Strategy;
+use audunru\SocialAccounts\Traits\FindsAndCreatesUsers;
 use Illuminate\Database\Eloquent\Model as User;
 use Laravel\Socialite\Contracts\User as ProviderUser;
-use audunru\SocialAccounts\Traits\FindsAndCreatesUsers;
 
 class FindOrCreateUser implements Strategy
 {
@@ -13,9 +13,6 @@ class FindOrCreateUser implements Strategy
 
     /**
      * Find a user, or create a new one.
-     *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
      *
      * @return \Illuminate\Database\Eloquent\Model
      */

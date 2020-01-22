@@ -2,17 +2,17 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
-use Socialite;
-use SocialAccounts;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Config;
 use audunru\SocialAccounts\Interfaces\Strategy;
-use audunru\SocialAccounts\Strategies\FindUser;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
 use audunru\SocialAccounts\Strategies\FindOrCreateUser;
+use audunru\SocialAccounts\Strategies\FindUser;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Gate;
+use SocialAccounts;
+use Socialite;
 
 class ProviderController extends Controller
 {
@@ -25,8 +25,6 @@ class ProviderController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @param \Illuminate\Http\Request $request
      */
     public function __construct(Request $request)
     {
@@ -35,8 +33,6 @@ class ProviderController extends Controller
 
     /**
      * Redirect the user to the authentication page.
-     *
-     * @param Socialite $socialite
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -54,8 +50,6 @@ class ProviderController extends Controller
 
     /**
      * Handle the returned info from the external partner, and then login or create a new user depending on the circumstances.
-     *
-     * @param Socialite $socialite
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -126,8 +120,6 @@ class ProviderController extends Controller
 
     /**
      * Get the configured settings for the current provider and apply them to the Socalite driver.
-     *
-     * @param Socialite $socialite
      */
     private function applySettingsToProvider(Socialite $socialite): void
     {

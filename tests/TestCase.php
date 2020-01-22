@@ -2,17 +2,17 @@
 
 namespace audunru\SocialAccounts\Tests;
 
-use Mockery;
+use audunru\SocialAccounts\Facades\SocialAccounts;
+use audunru\SocialAccounts\SocialAccountsServiceProvider;
+use audunru\SocialAccounts\Tests\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
-use Laravel\Socialite\Facades\Socialite;
-use audunru\SocialAccounts\Tests\Models\User;
-use Orchestra\Database\ConsoleServiceProvider;
-use Laravel\Socialite\SocialiteServiceProvider;
-use Orchestra\Testbench\TestCase as BaseTestCase;
-use audunru\SocialAccounts\Facades\SocialAccounts;
 use Laravel\Socialite\Contracts\User as ProviderUser;
-use audunru\SocialAccounts\SocialAccountsServiceProvider;
+use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\SocialiteServiceProvider;
+use Mockery;
+use Orchestra\Database\ConsoleServiceProvider;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {

@@ -9,9 +9,6 @@ trait MakesSocialAccounts
     /**
      * Make a new social account that can be added to a user.
      *
-     * @param string $provider
-     * @param string $provider_user_id
-     *
      * @return SocialAccount
      */
     private function makeSocialAccount(string $provider, string $provider_user_id): SocialAccount

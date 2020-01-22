@@ -2,10 +2,10 @@
 
 namespace audunru\SocialAccounts;
 
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\ServiceProvider;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Policies\SocialAccountPolicy;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class SocialAccountsServiceProvider extends ServiceProvider
 {

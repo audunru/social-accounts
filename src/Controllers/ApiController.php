@@ -2,12 +2,12 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
-use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use audunru\SocialAccounts\Models\SocialAccount;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use audunru\SocialAccounts\Resources\SocialAccount as SocialAccountResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class ApiController extends Controller
 {
@@ -32,8 +32,6 @@ class ApiController extends Controller
     /**
      * Display the specified social account.
      *
-     * @param SocialAccount $socialAccount
-     *
      * @return SocialAccountResource
      */
     public function show(SocialAccount $socialAccount): SocialAccountResource
@@ -43,8 +41,6 @@ class ApiController extends Controller
 
     /**
      * Remove the specified social account from storage.
-     *
-     * @param SocialAccount $socialAccount
      *
      * @return \Illuminate\Http\JsonResponse
      */

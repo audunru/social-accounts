@@ -17,7 +17,6 @@ class SocialAccounts
      * Binds the SocialAccounts routes into the controller.
      *
      * @param callable|null $callback
-     * @param array         $options
      */
     public static function routes($callback = null, array $options = [])
     {
@@ -36,9 +35,7 @@ class SocialAccounts
     /**
      * Register settings for a provider.
      *
-     * @param string $provider
-     * @param string $methodName
-     * @param array  $parameters
+     * @param array $parameters
      */
     public static function registerProviderSettings(string $provider, string $methodName, array $parameters = null): void
     {

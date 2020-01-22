@@ -2,8 +2,8 @@
 
 namespace audunru\SocialAccounts\Tests\Feature;
 
-use Illuminate\Support\Facades\Schema;
 use audunru\SocialAccounts\Tests\TestCase;
+use Illuminate\Support\Facades\Schema;
 
 class MigrationTest extends TestCase
 {

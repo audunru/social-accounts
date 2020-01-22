@@ -2,8 +2,8 @@
 
 namespace audunru\SocialAccounts\Traits;
 
-use Illuminate\Database\Eloquent\Model as User;
 use audunru\SocialAccounts\Events\SocialUserCreated;
+use Illuminate\Database\Eloquent\Model as User;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 trait FindsAndCreatesUsers
@@ -12,9 +12,6 @@ trait FindsAndCreatesUsers
 
     /**
      * Find a user with a social account.
-     *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
@@ -25,9 +22,6 @@ trait FindsAndCreatesUsers
 
     /**
      * Create a new user with a social account.
-     *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -47,9 +41,6 @@ trait FindsAndCreatesUsers
 
     /**
      * Find a user, or create a new one.
-     *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
      *
      * @return \Illuminate\Database\Eloquent\Model
      */

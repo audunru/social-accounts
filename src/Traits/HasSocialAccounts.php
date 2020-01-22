@@ -2,8 +2,8 @@
 
 namespace audunru\SocialAccounts\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use audunru\SocialAccounts\Models\SocialAccount;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasSocialAccounts
@@ -25,8 +25,6 @@ trait HasSocialAccounts
     /**
      * Add social account to model.
      *
-     * @param SocialAccount $socialAccount
-     *
      * @return SocialAccount
      */
     public function addSocialAccount(SocialAccount $socialAccount): SocialAccount
@@ -36,9 +34,6 @@ trait HasSocialAccounts
 
     /**
      * Retrieve a user with social account matching the parameters.
-     *
-     * @param string $provider
-     * @param string $provider_user_id
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
@@ -52,8 +47,6 @@ trait HasSocialAccounts
 
     /**
      * Check if user already has social account with this provider.
-     *
-     * @param string $provider
      *
      * @return bool
      */
