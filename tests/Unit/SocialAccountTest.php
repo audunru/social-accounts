@@ -2,9 +2,9 @@
 
 namespace audunru\SocialAccounts\Tests\Unit;
 
-use audunru\SocialAccounts\Tests\TestCase;
-use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Models\SocialAccount;
+use audunru\SocialAccounts\Tests\Models\User;
+use audunru\SocialAccounts\Tests\TestCase;
 
 class SocialAccountTest extends TestCase
 {

@@ -2,15 +2,15 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Event;
+use audunru\SocialAccounts\Events\SocialAccountAdded;
+use audunru\SocialAccounts\Events\SocialUserCreated;
+use audunru\SocialAccounts\Models\SocialAccount;
+use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use audunru\SocialAccounts\Tests\Models\User;
-use audunru\SocialAccounts\Models\SocialAccount;
-use audunru\SocialAccounts\Events\SocialUserCreated;
-use audunru\SocialAccounts\Events\SocialAccountAdded;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 class ProviderTest extends TestCase
