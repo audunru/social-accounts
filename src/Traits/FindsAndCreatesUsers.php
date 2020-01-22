@@ -2,8 +2,8 @@
 
 namespace audunru\SocialAccounts\Traits;
 
-use Illuminate\Database\Eloquent\Model as User;
 use audunru\SocialAccounts\Events\SocialUserCreated;
+use Illuminate\Database\Eloquent\Model as User;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 trait FindsAndCreatesUsers

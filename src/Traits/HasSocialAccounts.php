@@ -2,8 +2,8 @@
 
 namespace audunru\SocialAccounts\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use audunru\SocialAccounts\Models\SocialAccount;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasSocialAccounts

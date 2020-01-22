@@ -2,17 +2,17 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
-use Socialite;
-use SocialAccounts;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Config;
 use audunru\SocialAccounts\Interfaces\Strategy;
-use audunru\SocialAccounts\Strategies\FindUser;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
 use audunru\SocialAccounts\Strategies\FindOrCreateUser;
+use audunru\SocialAccounts\Strategies\FindUser;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Gate;
+use SocialAccounts;
+use Socialite;
 
 class ProviderController extends Controller
 {
