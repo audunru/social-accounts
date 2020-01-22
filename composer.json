@@ -16,7 +16,7 @@
   ],
   "require": {
     "php": "^7.1",
-    "doctrine/dbal": "^2.10",
+    "doctrine/dbal": "^2.9",
     "illuminate/auth": "v7.x-dev",
     "illuminate/contracts": "v7.x-dev",
     "illuminate/database": "v7.x-dev",
