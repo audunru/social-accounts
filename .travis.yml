@@ -28,6 +28,8 @@ matrix:
       env: ILLUMINATE_VERSION=^7.0     SOCIALITE_VERSION=^5.0 PHPUNIT_VERSION=^8.5.0 TESTBENCH_VERSION=^5.0
     - php: 7.1
       env: ILLUMINATE_VERSION=^8.0     SOCIALITE_VERSION=^5.0 PHPUNIT_VERSION=^9.0.0 TESTBENCH_VERSION=^6.0 COVERAGE=true
+    - php: 7.2
+      env: ILLUMINATE_VERSION=^8.0     SOCIALITE_VERSION=^5.0 PHPUNIT_VERSION=^9.0.0 TESTBENCH_VERSION=^6.0 COVERAGE=true
 
 before_install:
   - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
