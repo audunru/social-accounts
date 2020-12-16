@@ -1,6 +1,6 @@
 # Social Accounts for Laravel
 
-[![Build Status](https://travis-ci.org/audunru/social-accounts.svg?branch=master)](https://travis-ci.org/audunru/social-accounts)
+[![Build Status](https://travis-ci.org/audunru/social-accounts.svg?branch=1.0)](https://travis-ci.org/audunru/social-accounts)
 [![Coverage Status](https://coveralls.io/repos/github/audunru/social-accounts/badge.svg?branch=master)](https://coveralls.io/github/audunru/social-accounts?branch=master)
 [![StyleCI](https://github.styleci.io/repos/200706096/shield?branch=master)](https://github.styleci.io/repos/200706096)
 
