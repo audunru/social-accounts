@@ -44,7 +44,7 @@ class RouteTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
         $response->assertStatus(302);
-        $this->assertMatchesRegularExpression('/'.preg_quote('hd=seinfeld.com').'/', $response->getTargetUrl());
+        $this->assertStringContainsString('hd=seinfeld.com', $response->getTargetUrl());
     }
 
     public function test_it_adds_a_scope()
@@ -54,7 +54,7 @@ class RouteTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
         $response->assertStatus(302);
-        $this->assertMatchesRegularExpression('/'.preg_quote('scope=openid+profile+email+amazing-scope').'/', $response->getTargetUrl());
+        $this->assertStringContainsString('scope=openid+profile+email+amazing-scope', $response->getTargetUrl());
     }
 
     public function test_it_overwrites_scopes()
@@ -64,7 +64,7 @@ class RouteTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
         $response->assertStatus(302);
-        $this->assertMatchesRegularExpression('/'.preg_quote('scope=just-this-scope').'/', $response->getTargetUrl());
+        $this->assertStringContainsString('scope=just-this-scope', $response->getTargetUrl());
     }
 
     public function test_redirect_url_is_set_automatically()
@@ -82,6 +82,6 @@ class RouteTest extends TestCase
         $response = $this->get("/$this->prefix/login/{$this->provider}");
 
         $response->assertStatus(302);
-        $this->assertMatchesRegularExpression('/'.preg_quote('forbidden-city-redirect').'/', $response->getTargetUrl());
+        $this->assertStringContainsString('forbidden-city-redirect', $response->getTargetUrl());
     }
 }
