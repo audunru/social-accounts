@@ -14,9 +14,6 @@ class FindOrCreateUser implements Strategy
     /**
      * Find a user, or create a new one.
      *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
-     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function handle(string $provider, ProviderUser $providerUser): User

@@ -32,8 +32,6 @@ class ApiController extends Controller
     /**
      * Display the specified social account.
      *
-     * @param SocialAccount $socialAccount
-     *
      * @return SocialAccountResource
      */
     public function show(SocialAccount $socialAccount): SocialAccountResource
@@ -43,8 +41,6 @@ class ApiController extends Controller
 
     /**
      * Remove the specified social account from storage.
-     *
-     * @param SocialAccount $socialAccount
      *
      * @return \Illuminate\Http\JsonResponse
      */

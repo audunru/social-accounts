@@ -2,7 +2,7 @@
 
 namespace audunru\SocialAccounts\Resources;
 
-use Illuminate\Http\Resources\Json\Resource as JsonResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class SocialAccount extends JsonResource
 {

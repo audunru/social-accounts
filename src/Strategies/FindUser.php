@@ -14,9 +14,6 @@ class FindUser implements Strategy
     /**
      * Find a user with a social account.
      *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
-     *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function handle(string $provider, ProviderUser $providerUser): ?User

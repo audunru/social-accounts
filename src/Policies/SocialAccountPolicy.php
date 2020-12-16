@@ -13,8 +13,6 @@ class SocialAccountPolicy
     /**
      * Determine whether the user can view any social accounts.
      *
-     * @param \Illuminate\Database\Eloquent\Model $user
-     *
      * @return mixed
      */
     public function viewAny(User $user): bool
@@ -25,9 +23,6 @@ class SocialAccountPolicy
     /**
      * Determine whether the user can view the social account.
      *
-     * @param \Illuminate\Database\Eloquent\Model $user
-     * @param SocialAccount                       $socialAccount
-     *
      * @return mixed
      */
     public function view(User $user, SocialAccount $socialAccount): bool
@@ -37,9 +32,6 @@ class SocialAccountPolicy
 
     /**
      * Determine whether the user can delete the social account.
-     *
-     * @param \Illuminate\Database\Eloquent\Model $user
-     * @param SocialAccount                       $socialAccount
      *
      * @return mixed
      */

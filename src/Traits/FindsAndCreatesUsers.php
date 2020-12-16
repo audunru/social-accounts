@@ -13,9 +13,6 @@ trait FindsAndCreatesUsers
     /**
      * Find a user with a social account.
      *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
-     *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     private function findUser(string $provider, ProviderUser $providerUser): ?User
@@ -25,9 +22,6 @@ trait FindsAndCreatesUsers
 
     /**
      * Create a new user with a social account.
-     *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -47,9 +41,6 @@ trait FindsAndCreatesUsers
 
     /**
      * Find a user, or create a new one.
-     *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
      *
      * @return \Illuminate\Database\Eloquent\Model
      */

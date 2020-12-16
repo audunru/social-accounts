@@ -22,8 +22,6 @@ class RouteRegistrar
 
     /**
      * Create a new route registrar instance.
-     *
-     * @param \Illuminate\Contracts\Routing\Registrar $router
      */
     public function __construct(Router $router)
     {
@@ -53,8 +51,6 @@ class RouteRegistrar
 
     /**
      * Register web routes for a provider.
-     *
-     * @param string $provider
      */
     public function forProvider(string $provider)
     {

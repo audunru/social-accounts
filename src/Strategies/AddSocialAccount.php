@@ -16,9 +16,6 @@ class AddSocialAccount implements Strategy
     /**
      * Add social account to user.
      *
-     * @param string                            $provider
-     * @param \Laravel\Socialite\Contracts\User $providerUser
-     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function handle(string $provider, ProviderUser $providerUser): User
