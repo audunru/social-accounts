@@ -26,7 +26,6 @@ before_install:
   - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - cp ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ~/xdebug.ini
   - phpenv config-rm xdebug.ini
-  - composer global require hirak/prestissimo --update-no-dev
   - composer require "illuminate/auth:${ILLUMINATE_VERSION}" "illuminate/contracts:${ILLUMINATE_VERSION}" "illuminate/database:${ILLUMINATE_VERSION}" "illuminate/http:${ILLUMINATE_VERSION}" "illuminate/support:${ILLUMINATE_VERSION}" "laravel/socialite:${SOCIALITE_VERSION}" "orchestra/testbench:${TESTBENCH_VERSION}" "orchestra/database:${TESTBENCH_VERSION}" "phpunit/phpunit:${PHPUNIT_VERSION}" --no-update --prefer-dist
 
 install: travis_retry composer install --no-interaction --prefer-dist
