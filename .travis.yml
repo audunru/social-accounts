@@ -27,7 +27,7 @@ before_install:
   - phpenv config-rm xdebug.ini
   - composer require "illuminate/auth:${ILLUMINATE_VERSION}" "illuminate/contracts:${ILLUMINATE_VERSION}" "illuminate/database:${ILLUMINATE_VERSION}" "illuminate/http:${ILLUMINATE_VERSION}" "illuminate/support:${ILLUMINATE_VERSION}" "laravel/socialite:${SOCIALITE_VERSION}" "orchestra/testbench:${TESTBENCH_VERSION}" "orchestra/database:${TESTBENCH_VERSION}" "phpunit/phpunit:${PHPUNIT_VERSION}" --no-update --prefer-dist
   - |
-    if [ $ILLUMINATE_VERSION == "^8.0"]; then
+    if [[ $ILLUMINATE_VERSION == "^8.0" ]]; then
       composer require "laravel/legacy-factories" --no-interaction --prefer-dist
     fi
 
