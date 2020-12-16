@@ -2,12 +2,12 @@
 
 namespace audunru\SocialAccounts\Strategies;
 
-use Illuminate\Support\Facades\Auth;
-use audunru\SocialAccounts\Interfaces\Strategy;
-use Illuminate\Database\Eloquent\Model as User;
 use audunru\SocialAccounts\Events\SocialAccountAdded;
-use Laravel\Socialite\Contracts\User as ProviderUser;
+use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Traits\MakesSocialAccounts;
+use Illuminate\Database\Eloquent\Model as User;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Contracts\User as ProviderUser;
 
 class AddSocialAccount implements Strategy
 {
