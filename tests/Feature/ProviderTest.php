@@ -75,8 +75,8 @@ class ProviderTest extends TestCase
 
     public function testItLogsInAUser()
     {
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
@@ -90,8 +90,8 @@ class ProviderTest extends TestCase
 
     public function testSessionHasRememberIfItWasPresentInLoginUrl()
     {
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
@@ -105,8 +105,8 @@ class ProviderTest extends TestCase
     {
         $this->enableUserCreation();
 
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
@@ -122,13 +122,13 @@ class ProviderTest extends TestCase
     {
         $this->enableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         $response = $this
             ->actingAs($anotherUser)
@@ -144,7 +144,7 @@ class ProviderTest extends TestCase
     {
         $this->enableUserCreation();
 
-        $user = factory(User::class)->make();
+        $user = User::factory()->make();
         $this->mockSocialite($user->email, $user->name, $this->faker->uuid);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
@@ -163,7 +163,7 @@ class ProviderTest extends TestCase
     {
         $this->enableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $provider_user_id = $this->faker->uuid;
         $this->mockSocialite($user->email, $user->name, $provider_user_id);
@@ -186,7 +186,7 @@ class ProviderTest extends TestCase
     {
         $this->disableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $provider_user_id = $this->faker->uuid;
         $this->mockSocialite($user->email, $user->name, $provider_user_id);
@@ -206,8 +206,8 @@ class ProviderTest extends TestCase
     {
         $this->enableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $provider_user_id = $this->faker->uuid;
@@ -232,7 +232,7 @@ class ProviderTest extends TestCase
 
         $this->enableUserCreation();
 
-        $user = factory(User::class)->make();
+        $user = User::factory()->make();
         $provider_user_id = $this->faker->uuid;
 
         $this->mockSocialite($user->email, $user->name, $provider_user_id);
@@ -253,7 +253,7 @@ class ProviderTest extends TestCase
 
         $this->enableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $provider_user_id = $this->faker->uuid;
         $this

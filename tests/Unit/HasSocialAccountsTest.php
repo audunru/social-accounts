@@ -18,15 +18,15 @@ class HasSocialAccountsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
-        $this->socialAccount = factory(SocialAccount::class)->make();
+        $this->user = User::factory()->create();
+        $this->socialAccount = SocialAccount::factory()->make();
         $this->user->addSocialAccount($this->socialAccount);
     }
 
     public function testItAddsSocialAccount()
     {
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make();
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make();
 
         $data = [
             'provider'         => $socialAccount->provider,

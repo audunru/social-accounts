@@ -21,8 +21,8 @@ class ApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
-        $this->socialAccount = factory(SocialAccount::class)->make();
+        $this->user = User::factory()->create();
+        $this->socialAccount = SocialAccount::factory()->make();
         $this->user->addSocialAccount($this->socialAccount);
         $this->socialAccountStructure = [
             'id',
@@ -52,7 +52,7 @@ class ApiTest extends TestCase
 
     public function testItGetsSocialAccountsButThereAreNone()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->json('GET', "/{$this->prefix}");
 
@@ -115,8 +115,8 @@ class ApiTest extends TestCase
 
     public function testItFailsToGetAnotherUsersSocialAccount()
     {
-        $anotherUser = factory(User::class)->create();
-        $anotherSocialAccount = factory(SocialAccount::class)->make();
+        $anotherUser = User::factory()->create();
+        $anotherSocialAccount = SocialAccount::factory()->make();
         $anotherUser->addSocialAccount($anotherSocialAccount);
 
         $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}/{$anotherSocialAccount->id}");
@@ -128,8 +128,8 @@ class ApiTest extends TestCase
 
     public function testItFailsToDeleteAnotherUsersSocialAccount()
     {
-        $anotherUser = factory(User::class)->create();
-        $anotherSocialAccount = factory(SocialAccount::class)->make();
+        $anotherUser = User::factory()->create();
+        $anotherSocialAccount = SocialAccount::factory()->make();
         $anotherUser->addSocialAccount($anotherSocialAccount);
 
         $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$anotherSocialAccount->id}");
