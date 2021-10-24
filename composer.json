@@ -15,14 +15,13 @@
     }
   ],
   "require": {
-    "php": "^7.2|^8.0",
+    "php": "^8.0",
     "doctrine/dbal": "^2.9",
-    "illuminate/auth": "^6.0|^7.0|^8.0",
-    "illuminate/contracts": "^6.0|^7.0|^8.0",
-    "illuminate/database": "^6.0|^7.0|^8.0",
-    "illuminate/http": "^6.0|^7.0|^8.0",
-    "illuminate/support": "^6.0|^7.0|^8.0",
-    "laravel/legacy-factories": "^1.1",
+    "illuminate/auth": "^8.0",
+    "illuminate/contracts": "^8.0",
+    "illuminate/database": "^8.0",
+    "illuminate/http": "^8.0",
+    "illuminate/support": "^8.0",
     "laravel/socialite": "^5.0",
     "spatie/laravel-package-tools": "^1.9"
   },
@@ -34,7 +33,7 @@
     "orchestra/testbench": "^4.0|^5.0|^6.7",
     "php-coveralls/php-coveralls": "^2.2",
     "phpmd/phpmd": "^2.10",
-    "phpunit/phpunit": "^8.5|^9.0",
+    "phpunit/phpunit": "^9.0",
     "roave/security-advisories": "dev-latest"
   },
   "config": {

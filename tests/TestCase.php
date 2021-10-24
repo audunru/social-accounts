@@ -44,8 +44,6 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // TODO: What here needs to run every test, and what should only run once?
-        $this->withFactories(__DIR__.'/../tests/database/factories');
         $this->loadMigrationsFrom(__DIR__.'/../tests/database/migrations');
         $this->artisan('migrate');
 

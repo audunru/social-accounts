@@ -6,30 +6,16 @@ cache:
     - $HOME/.composer/cache/files
 
 php:
-  - 7.2
-  - 7.3
-  - 7.4
   - 8.0
 
 env:
-  - ILLUMINATE_VERSION=^6.0 SOCIALITE_VERSION=^5.0 PHPUNIT_VERSION=^8.5.0 TESTBENCH_VERSION=^4.0
-  - ILLUMINATE_VERSION=^7.0 SOCIALITE_VERSION=^5.0 PHPUNIT_VERSION=^8.5.0 TESTBENCH_VERSION=^5.0
   - ILLUMINATE_VERSION=^8.0 SOCIALITE_VERSION=^5.0 PHPUNIT_VERSION=^9.0.0 TESTBENCH_VERSION=^6.7 COVERAGE=true
-
-jobs:
-  exclude:
-    - php: 7.2
-      env: ILLUMINATE_VERSION=^8.0 SOCIALITE_VERSION=^5.0 PHPUNIT_VERSION=^9.0.0 TESTBENCH_VERSION=^6.7 COVERAGE=true
 
 before_install:
   - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - cp ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ~/xdebug.ini
   - phpenv config-rm xdebug.ini
   - composer require "illuminate/auth:${ILLUMINATE_VERSION}" "illuminate/contracts:${ILLUMINATE_VERSION}" "illuminate/database:${ILLUMINATE_VERSION}" "illuminate/http:${ILLUMINATE_VERSION}" "illuminate/support:${ILLUMINATE_VERSION}" "laravel/socialite:${SOCIALITE_VERSION}" "orchestra/testbench:${TESTBENCH_VERSION}" "orchestra/database:${TESTBENCH_VERSION}" "phpunit/phpunit:${PHPUNIT_VERSION}" --no-update --prefer-dist
-  - |
-    if [[ $ILLUMINATE_VERSION == "^8.0" ]]; then
-      composer require "laravel/legacy-factories" --no-interaction --prefer-dist
-    fi
 
 install: travis_retry composer install --no-interaction --prefer-dist
 
