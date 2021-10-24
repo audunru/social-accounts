@@ -5,11 +5,13 @@ namespace audunru\SocialAccounts\Tests;
 use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\SocialAccountsServiceProvider;
 use audunru\SocialAccounts\Tests\Models\User;
+use CreateSocialAccountsTable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteServiceProvider;
+use MakeEmailAndPasswordNullable;
 use Mockery;
 use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
@@ -46,6 +48,12 @@ abstract class TestCase extends BaseTestCase
         $this->withFactories(__DIR__.'/../tests/database/factories');
         $this->loadMigrationsFrom(__DIR__.'/../tests/database/migrations');
         $this->artisan('migrate');
+
+        include_once __DIR__.'/../database/migrations/create_social_accounts_table.php.stub';
+        include_once __DIR__.'/../database/migrations/make_email_and_password_nullable.php.stub';
+        (new CreateSocialAccountsTable())->up();
+        (new MakeEmailAndPasswordNullable())->up();
+
         config(['social-accounts.models.user' => User::class]);
         SocialAccounts::routes();
     }
