@@ -7,13 +7,6 @@ use Illuminate\Contracts\Routing\Registrar as Router;
 class RouteRegistrar
 {
     /**
-     * The router implementation.
-     *
-     * @var \Illuminate\Contracts\Routing\Registrar
-     */
-    protected $router;
-
-    /**
      * The route prefix.
      *
      * @var string
@@ -23,17 +16,16 @@ class RouteRegistrar
     /**
      * Create a new route registrar instance.
      */
-    public function __construct(Router $router)
+    public function __construct(protected Router $router)
     {
         $this->router = $router;
-
         $this->prefix = config('social-accounts.route_prefix');
     }
 
     /**
      * Register routes for logging in and retrieving and removing social accounts.
      */
-    public function all()
+    public function all(): void
     {
         $this->forWeb();
         $this->forApi();
@@ -42,7 +34,7 @@ class RouteRegistrar
     /**
      * Register web routes for all enabled providers.
      */
-    public function forWeb()
+    public function forWeb(): void
     {
         collect(config('social-accounts.providers'))->each(function ($provider) {
             $this->forProvider($provider);
@@ -52,7 +44,7 @@ class RouteRegistrar
     /**
      * Register web routes for a provider.
      */
-    public function forProvider(string $provider)
+    public function forProvider(string $provider): void
     {
         $this->router->group(['middleware' => ['web']], function ($router) use ($provider) {
             $router
@@ -75,7 +67,7 @@ class RouteRegistrar
     /**
      * Register API routes.
      */
-    public function forApi()
+    public function forApi(): void
     {
         $this->router->group(['middleware' => ['api', 'auth:api']], function ($router) {
             $router->apiResource($this->prefix, 'ApiController')

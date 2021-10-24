@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
+use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
 use audunru\SocialAccounts\Strategies\FindOrCreateUser;
@@ -11,24 +12,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
-use SocialAccounts;
-use Socialite;
+use Laravel\Socialite\Facades\Socialite;
 
 class ProviderController extends Controller
 {
     /**
-     * The HTTP request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      */
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request = $request;
     }
 
     /**

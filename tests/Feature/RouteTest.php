@@ -2,9 +2,9 @@
 
 namespace audunru\SocialAccounts\Tests\Feature;
 
+use audunru\SocialAccounts\SocialAccounts;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use SocialAccounts;
 
 class RouteTest extends TestCase
 {
