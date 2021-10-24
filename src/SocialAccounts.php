@@ -44,8 +44,6 @@ class SocialAccounts
 
     /**
      * Return settings for all providers.
-     *
-     * @return array
      */
     public static function getProviderSettings(): array
     {

@@ -33,8 +33,6 @@ class ProviderController extends Controller
 
     /**
      * Redirect the user to the authentication page.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function redirectToProvider(Socialite $socialite): RedirectResponse
     {
@@ -50,8 +48,6 @@ class ProviderController extends Controller
 
     /**
      * Handle the returned info from the external partner, and then login or create a new user depending on the circumstances.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
@@ -74,8 +70,6 @@ class ProviderController extends Controller
 
     /**
      * Decide what to do if the user is logged in or not.
-     *
-     * @return Strategy
      */
     protected function getUserStrategy(): Strategy
     {
@@ -88,8 +82,6 @@ class ProviderController extends Controller
 
     /**
      * Determines what to do if the user is logged in.
-     *
-     * @return Strategy
      */
     protected function getAccountStrategy(): Strategy
     {
@@ -106,8 +98,6 @@ class ProviderController extends Controller
 
     /**
      * Determines what to do if the user is not logged in.
-     *
-     * @return Strategy
      */
     protected function getLoginStrategy(): Strategy
     {

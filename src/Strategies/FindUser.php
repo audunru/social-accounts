@@ -13,8 +13,6 @@ class FindUser implements Strategy
 
     /**
      * Find a user with a social account.
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function handle(string $provider, ProviderUser $providerUser): ?User
     {

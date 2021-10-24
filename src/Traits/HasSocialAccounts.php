@@ -10,8 +10,6 @@ trait HasSocialAccounts
 {
     /**
      * Retrieve related social accounts.
-     *
-     * @return HasMany
      */
     public function socialAccounts(): HasMany
     {
@@ -24,8 +22,6 @@ trait HasSocialAccounts
 
     /**
      * Add social account to model.
-     *
-     * @return SocialAccount
      */
     public function addSocialAccount(SocialAccount $socialAccount): SocialAccount
     {
@@ -47,8 +43,6 @@ trait HasSocialAccounts
 
     /**
      * Check if user already has social account with this provider.
-     *
-     * @return bool
      */
     public function hasProvider(string $provider): bool
     {

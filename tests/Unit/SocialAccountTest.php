@@ -22,7 +22,7 @@ class SocialAccountTest extends TestCase
         $this->user->addSocialAccount($this->socialAccount);
     }
 
-    public function test_it_shows_social_account()
+    public function testItShowsSocialAccount()
     {
         $found = SocialAccount::find($this->socialAccount->id);
 
@@ -31,7 +31,7 @@ class SocialAccountTest extends TestCase
         $this->assertEquals($this->socialAccount->provider_user_id, $found->provider_user_id);
     }
 
-    public function test_it_updates_social_account()
+    public function testItUpdatesSocialAccount()
     {
         $updated = factory(SocialAccount::class)->make();
 
@@ -47,7 +47,7 @@ class SocialAccountTest extends TestCase
         $this->assertEquals($data['provider_user_id'], $this->socialAccount->provider_user_id);
     }
 
-    public function test_it_deletes_social_account()
+    public function testItDeletesSocialAccount()
     {
         $delete = $this->socialAccount->delete();
 

@@ -8,8 +8,6 @@ trait MakesSocialAccounts
 {
     /**
      * Make a new social account that can be added to a user.
-     *
-     * @return SocialAccount
      */
     private function makeSocialAccount(string $provider, string $provider_user_id): SocialAccount
     {

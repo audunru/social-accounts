@@ -41,8 +41,6 @@ class SocialAccount extends Model
 
     /**
      * Return the user this social account belongs to.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
