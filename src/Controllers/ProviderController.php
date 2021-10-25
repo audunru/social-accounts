@@ -9,6 +9,7 @@ use audunru\SocialAccounts\Strategies\FindOrCreateUser;
 use audunru\SocialAccounts\Strategies\FindUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
@@ -18,6 +19,8 @@ class ProviderController extends Controller
 {
     /**
      * Create a new controller instance.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(protected Request $request)
     {
@@ -50,12 +53,10 @@ class ProviderController extends Controller
 
         $user = $this->getUserStrategy()->handle($this->request->provider, $this->providerUser);
 
-        if ($user) {
-            $remember = $this->request->session()->pull('remember', false);
-            Auth::login($user, $remember);
-        } else {
-            abort(401);
-        }
+        abort_if(is_null($user), Response::HTTP_UNAUTHORIZED);
+
+        $remember = $this->request->session()->pull('remember', false);
+        Auth::login($user, $remember);
 
         return redirect()->intended();
     }
@@ -102,6 +103,9 @@ class ProviderController extends Controller
 
     /**
      * Get the configured settings for the current provider and apply them to the Socalite driver.
+     *
+     * @SuppressWarnings("unused")
+     * @SuppressWarnings("undefined")
      */
     private function applySettingsToProvider(Socialite $socialite): void
     {
@@ -111,6 +115,7 @@ class ProviderController extends Controller
             })
             ->each(function (array $settings) use ($socialite) {
                 extract($settings);
+
                 call_user_func_array([$socialite::driver($provider), $methodName], [$parameters]);
             });
     }

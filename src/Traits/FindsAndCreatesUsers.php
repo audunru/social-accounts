@@ -40,7 +40,8 @@ trait FindsAndCreatesUsers
      */
     private function findOrCreateUser(string $provider, ProviderUser $providerUser): User
     {
-        if ($user = $this->findUser($provider, $providerUser)) {
+        $user = $this->findUser($provider, $providerUser);
+        if (! is_null($user)) {
             return $user;
         }
 

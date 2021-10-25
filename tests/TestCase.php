@@ -16,6 +16,9 @@ use Mockery;
 use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
+/**
+ * @SuppressWarnings("unused")
+ */
 abstract class TestCase extends BaseTestCase
 {
     protected function getPackageProviders($app)
@@ -99,7 +102,7 @@ abstract class TestCase extends BaseTestCase
         }
     }
 
-    public function mockSocialite(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $provider_user_id = 'amazing-id')
+    public function mockSocialite(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $providerUserId = 'amazing-id')
     {
         // Mock a user which the provider will return
         $providerUser = Mockery::mock('Laravel\Socialite\Contracts\User');
@@ -110,7 +113,7 @@ abstract class TestCase extends BaseTestCase
             ->shouldReceive('getName')
             ->andReturn($name)
             ->shouldReceive('getId')
-            ->andReturn($provider_user_id);
+            ->andReturn($providerUserId);
 
         // Mock a provider which Socialite will return
         $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');

@@ -15,7 +15,7 @@ class SocialAccountPolicy
      *
      * @return mixed
      */
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
         return true;
     }

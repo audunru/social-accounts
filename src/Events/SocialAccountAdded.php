@@ -13,6 +13,8 @@ class SocialAccountAdded
 
     /**
      * Create a new event instance.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(public User $user, public SocialAccount $socialAccount, public ProviderUser $providerUser)
     {

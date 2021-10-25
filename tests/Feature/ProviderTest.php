@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
+/**
+ * @SuppressWarnings("unused")
+ */
 class ProviderTest extends TestCase
 {
     use WithFaker;
@@ -165,8 +168,8 @@ class ProviderTest extends TestCase
 
         $user = User::factory()->create();
 
-        $provider_user_id = $this->faker->uuid;
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $providerUserId = $this->faker->uuid;
+        $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this
             ->actingAs($user)
@@ -178,7 +181,7 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseHas('social_accounts', [
             'provider'         => $this->provider,
-            'provider_user_id' => $provider_user_id,
+            'provider_user_id' => $providerUserId,
         ]);
     }
 
@@ -188,8 +191,8 @@ class ProviderTest extends TestCase
 
         $user = User::factory()->create();
 
-        $provider_user_id = $this->faker->uuid;
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $providerUserId = $this->faker->uuid;
+        $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this
                 ->actingAs($user)
@@ -198,7 +201,7 @@ class ProviderTest extends TestCase
             ->assertStatus(403);
         $this->assertDatabaseMissing('social_accounts', [
             'provider'         => $this->provider,
-            'provider_user_id' => $provider_user_id,
+            'provider_user_id' => $providerUserId,
         ]);
     }
 
@@ -210,8 +213,8 @@ class ProviderTest extends TestCase
         $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
-        $provider_user_id = $this->faker->uuid;
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $providerUserId = $this->faker->uuid;
+        $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this
             ->actingAs($user)
@@ -222,7 +225,7 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseMissing('social_accounts', [
             'provider'         => $this->provider,
-            'provider_user_id' => $provider_user_id,
+            'provider_user_id' => $providerUserId,
         ]);
     }
 
@@ -233,17 +236,17 @@ class ProviderTest extends TestCase
         $this->enableUserCreation();
 
         $user = User::factory()->make();
-        $provider_user_id = $this->faker->uuid;
+        $providerUserId = $this->faker->uuid;
 
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        Event::assertDispatched(SocialUserCreated::class, function ($event) use ($user, $provider_user_id) {
+        Event::assertDispatched(SocialUserCreated::class, function ($event) use ($user, $providerUserId) {
             return $event->user->name === $user->name &&
                 $event->user->email === $user->email &&
-                $event->socialAccount->provider_user_id === $provider_user_id &&
-                $event->providerUser->getId() === $provider_user_id;
+                $event->socialAccount->provider_user_id === $providerUserId &&
+                $event->providerUser->getId() === $providerUserId;
         });
     }
 
@@ -255,18 +258,18 @@ class ProviderTest extends TestCase
 
         $user = User::factory()->create();
 
-        $provider_user_id = $this->faker->uuid;
+        $providerUserId = $this->faker->uuid;
         $this
             ->actingAs($user)
-            ->mockSocialite($user->email, $user->name, $provider_user_id);
+            ->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $provider_user_id) {
+        Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $providerUserId) {
             return $event->user->is($user) &&
                 $event->socialAccount->user_id === $user->id &&
-                $event->socialAccount->provider_user_id === $provider_user_id &&
-                $event->providerUser->getId() === $provider_user_id;
+                $event->socialAccount->provider_user_id === $providerUserId &&
+                $event->providerUser->getId() === $providerUserId;
         });
     }
 }

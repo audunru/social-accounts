@@ -13,7 +13,7 @@ class ApiTest extends TestCase
     protected $prefix = 'social-accounts';
     protected $user;
     protected $socialAccount;
-    protected $socialAccountStructure;
+    protected $structure;
 
     /**
      * Setup the test environment.
@@ -24,7 +24,7 @@ class ApiTest extends TestCase
         $this->user = User::factory()->create();
         $this->socialAccount = SocialAccount::factory()->make();
         $this->user->addSocialAccount($this->socialAccount);
-        $this->socialAccountStructure = [
+        $this->structure = [
             'id',
             'provider',
             'provider_user_id',
@@ -47,7 +47,7 @@ class ApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => [$this->socialAccountStructure]]);
+            ->assertJsonStructure(['data' => [$this->structure]]);
     }
 
     public function testItGetsSocialAccountsButThereAreNone()
@@ -70,7 +70,7 @@ class ApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => [$this->socialAccountStructure]]);
+            ->assertJsonStructure(['data' => [$this->structure]]);
     }
 
     public function testItGetsASocialAccount()
@@ -79,7 +79,7 @@ class ApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => $this->socialAccountStructure])
+            ->assertJsonStructure(['data' => $this->structure])
             ->assertJson(['data' => [
                 'id'               => $this->socialAccount->id,
                 'provider'         => $this->socialAccount->provider,
@@ -96,7 +96,7 @@ class ApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => $this->socialAccountStructure])
+            ->assertJsonStructure(['data' => $this->structure])
             ->assertJson(['data' => [
                 'id'               => $this->socialAccount->id,
                 'provider'         => $this->socialAccount->provider,

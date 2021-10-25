@@ -10,6 +10,7 @@ class SocialAccount extends JsonResource
      * Transform the resource into an array.
      *
      * @param \Illuminate\Http\Request $request
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function toArray($request): array
     {
