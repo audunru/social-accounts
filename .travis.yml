@@ -21,7 +21,7 @@ install: travis_retry composer install --no-interaction --prefer-dist
 
 before_script: phpenv config-add ~/xdebug.ini
 
-script: composer test-with-coverage
+script: composer verify
 
 after_success:
   - |
