@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 class MigrationTest extends TestCase
 {
-    public function test_social_accounts_table_has_correct_columns()
+    public function testSocialAccountsTableHasCorrectColumns()
     {
         $columns = Schema::getColumnListing('social_accounts');
         $this->assertEquals([

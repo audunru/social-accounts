@@ -1,5 +1,4 @@
 /vendor/
 *.cache
-composer.lock
 .env.testing
 build/logs/clover.xml

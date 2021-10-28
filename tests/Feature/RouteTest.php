@@ -2,9 +2,9 @@
 
 namespace audunru\SocialAccounts\Tests\Feature;
 
+use audunru\SocialAccounts\SocialAccounts;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use SocialAccounts;
 
 class RouteTest extends TestCase
 {
@@ -23,13 +23,13 @@ class RouteTest extends TestCase
         config(["services.{$this->provider}.client_secret" => $this->faker->uuid]);
     }
 
-    public function test_disabled_provider_has_no_route()
+    public function testDisabledProviderHasNoRoute()
     {
         $this->get("/{$this->prefix}/login/twitter")
           ->assertStatus(404);
     }
 
-    public function test_it_redirects_from_login_to_provider()
+    public function testItRedirectsFromLoginToProvider()
     {
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
@@ -37,7 +37,7 @@ class RouteTest extends TestCase
         $this->assertStringStartsWith('https://accounts.google.com/o/oauth2/auth', $response->getTargetUrl());
     }
 
-    public function test_it_adds_options_to_redirect()
+    public function testItAddsOptionsToRedirect()
     {
         SocialAccounts::registerProviderSettings('google', 'with', ['hd' => 'seinfeld.com']);
 
@@ -47,7 +47,7 @@ class RouteTest extends TestCase
         $this->assertStringContainsString('hd=seinfeld.com', $response->getTargetUrl());
     }
 
-    public function test_it_adds_a_scope()
+    public function testItAddsAScope()
     {
         SocialAccounts::registerProviderSettings('google', 'scopes', ['amazing-scope']);
 
@@ -57,7 +57,7 @@ class RouteTest extends TestCase
         $this->assertStringContainsString('scope=openid+profile+email+amazing-scope', $response->getTargetUrl());
     }
 
-    public function test_it_overwrites_scopes()
+    public function testItOverwritesScopes()
     {
         SocialAccounts::registerProviderSettings('google', 'setScopes', ['just-this-scope']);
 
@@ -67,7 +67,7 @@ class RouteTest extends TestCase
         $this->assertStringContainsString('scope=just-this-scope', $response->getTargetUrl());
     }
 
-    public function test_redirect_url_is_set_automatically()
+    public function testRedirectUrlIsSetAutomatically()
     {
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
@@ -75,7 +75,7 @@ class RouteTest extends TestCase
         $this->assertTrue(false !== strpos($response->getTargetUrl(), urlencode("/login/{$this->provider}/callback")));
     }
 
-    public function test_redirect_url_can_be_set_manually()
+    public function testRedirectUrlCanBeSetManually()
     {
         config(["services.{$this->provider}.redirect" => '/forbidden-city-redirect']);
 

@@ -10,8 +10,6 @@ trait HasSocialAccounts
 {
     /**
      * Retrieve related social accounts.
-     *
-     * @return HasMany
      */
     public function socialAccounts(): HasMany
     {
@@ -24,8 +22,6 @@ trait HasSocialAccounts
 
     /**
      * Add social account to model.
-     *
-     * @return SocialAccount
      */
     public function addSocialAccount(SocialAccount $socialAccount): SocialAccount
     {
@@ -37,18 +33,16 @@ trait HasSocialAccounts
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    public static function findBySocialAccount(string $provider, string $provider_user_id): ?self
+    public static function findBySocialAccount(string $provider, string $providerUserId): ?self
     {
-        return self::whereHas('socialAccounts', function (Builder $query) use ($provider, $provider_user_id) {
+        return self::whereHas('socialAccounts', function (Builder $query) use ($provider, $providerUserId) {
             $query->where('provider', '=', $provider)
-                ->where('provider_user_id', '=', $provider_user_id);
+                ->where('provider_user_id', '=', $providerUserId);
         })->first();
     }
 
     /**
      * Check if user already has social account with this provider.
-     *
-     * @return bool
      */
     public function hasProvider(string $provider): bool
     {

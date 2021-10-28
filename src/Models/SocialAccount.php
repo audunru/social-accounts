@@ -2,11 +2,16 @@
 
 namespace audunru\SocialAccounts\Models;
 
+use audunru\SocialAccounts\Factories\SocialAccountFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SocialAccount extends Model
 {
+    use HasFactory;
+
     /*
      * The attributes that are mass assignable.
      *
@@ -41,8 +46,6 @@ class SocialAccount extends Model
 
     /**
      * Return the user this social account belongs to.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -51,5 +54,13 @@ class SocialAccount extends Model
             config('social-accounts.column_names.foreign_key'),
             config('social-accounts.column_names.primary_key')
         );
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return SocialAccountFactory::new();
     }
 }

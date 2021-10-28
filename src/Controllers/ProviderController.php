@@ -2,39 +2,32 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
+use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
 use audunru\SocialAccounts\Strategies\FindOrCreateUser;
 use audunru\SocialAccounts\Strategies\FindUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
-use SocialAccounts;
-use Socialite;
+use Laravel\Socialite\Facades\Socialite;
 
 class ProviderController extends Controller
 {
     /**
-     * The HTTP request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request = $request;
     }
 
     /**
      * Redirect the user to the authentication page.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function redirectToProvider(Socialite $socialite): RedirectResponse
     {
@@ -50,8 +43,6 @@ class ProviderController extends Controller
 
     /**
      * Handle the returned info from the external partner, and then login or create a new user depending on the circumstances.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
@@ -62,20 +53,16 @@ class ProviderController extends Controller
 
         $user = $this->getUserStrategy()->handle($this->request->provider, $this->providerUser);
 
-        if ($user) {
-            $remember = $this->request->session()->pull('remember', false);
-            Auth::login($user, $remember);
-        } else {
-            abort(401);
-        }
+        abort_if(is_null($user), Response::HTTP_UNAUTHORIZED);
+
+        $remember = $this->request->session()->pull('remember', false);
+        Auth::login($user, $remember);
 
         return redirect()->intended();
     }
 
     /**
      * Decide what to do if the user is logged in or not.
-     *
-     * @return Strategy
      */
     protected function getUserStrategy(): Strategy
     {
@@ -88,8 +75,6 @@ class ProviderController extends Controller
 
     /**
      * Determines what to do if the user is logged in.
-     *
-     * @return Strategy
      */
     protected function getAccountStrategy(): Strategy
     {
@@ -106,8 +91,6 @@ class ProviderController extends Controller
 
     /**
      * Determines what to do if the user is not logged in.
-     *
-     * @return Strategy
      */
     protected function getLoginStrategy(): Strategy
     {
@@ -120,6 +103,9 @@ class ProviderController extends Controller
 
     /**
      * Get the configured settings for the current provider and apply them to the Socalite driver.
+     *
+     * @SuppressWarnings("unused")
+     * @SuppressWarnings("undefined")
      */
     private function applySettingsToProvider(Socialite $socialite): void
     {
@@ -129,6 +115,7 @@ class ProviderController extends Controller
             })
             ->each(function (array $settings) use ($socialite) {
                 extract($settings);
+
                 call_user_func_array([$socialite::driver($provider), $methodName], [$parameters]);
             });
     }

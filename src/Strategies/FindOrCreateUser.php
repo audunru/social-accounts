@@ -13,8 +13,6 @@ class FindOrCreateUser implements Strategy
 
     /**
      * Find a user, or create a new one.
-     *
-     * @return \Illuminate\Database\Eloquent\Model
      */
     public function handle(string $provider, ProviderUser $providerUser): User
     {

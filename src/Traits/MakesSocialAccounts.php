@@ -8,11 +8,9 @@ trait MakesSocialAccounts
 {
     /**
      * Make a new social account that can be added to a user.
-     *
-     * @return SocialAccount
      */
-    private function makeSocialAccount(string $provider, string $provider_user_id): SocialAccount
+    private function makeSocialAccount(string $provider, string $providerUserId): SocialAccount
     {
-        return new SocialAccount(['provider' => $provider, 'provider_user_id' => $provider_user_id]);
+        return new SocialAccount(['provider' => $provider, 'provider_user_id' => $providerUserId]);
     }
 }

@@ -3,17 +3,17 @@
 namespace audunru\SocialAccounts\Tests\Feature;
 
 use audunru\SocialAccounts\Models\SocialAccount;
+use audunru\SocialAccounts\SocialAccounts;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
 use Mockery;
-use SocialAccounts;
 
 class ApiTest extends TestCase
 {
     protected $prefix = 'social-accounts';
     protected $user;
     protected $socialAccount;
-    protected $socialAccountStructure;
+    protected $structure;
 
     /**
      * Setup the test environment.
@@ -21,10 +21,10 @@ class ApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
-        $this->socialAccount = factory(SocialAccount::class)->make();
+        $this->user = User::factory()->create();
+        $this->socialAccount = SocialAccount::factory()->make();
         $this->user->addSocialAccount($this->socialAccount);
-        $this->socialAccountStructure = [
+        $this->structure = [
             'id',
             'provider',
             'provider_user_id',
@@ -33,7 +33,7 @@ class ApiTest extends TestCase
         ];
     }
 
-    public function test_it_fails_to_get_social_accounts_when_unauthenticated()
+    public function testItFailsToGetSocialAccountsWhenUnauthenticated()
     {
         $response = $this->json('GET', "/{$this->prefix}");
 
@@ -41,18 +41,18 @@ class ApiTest extends TestCase
             ->assertStatus(401);
     }
 
-    public function test_it_gets_social_accounts()
+    public function testItGetsSocialAccounts()
     {
         $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}");
 
         $response
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => [$this->socialAccountStructure]]);
+            ->assertJsonStructure(['data' => [$this->structure]]);
     }
 
-    public function test_it_gets_social_accounts_but_there_are_none()
+    public function testItGetsSocialAccountsButThereAreNone()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->json('GET', "/{$this->prefix}");
 
@@ -61,7 +61,7 @@ class ApiTest extends TestCase
             ->assertJsonStructure(['data' => []]);
     }
 
-    public function test_it_gets_social_accounts_from_a_different_endpoint()
+    public function testItGetsSocialAccountsFromADifferentEndpoint()
     {
         config(['social-accounts.route_prefix' => 'awesome-path']);
         SocialAccounts::routes();
@@ -70,16 +70,16 @@ class ApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => [$this->socialAccountStructure]]);
+            ->assertJsonStructure(['data' => [$this->structure]]);
     }
 
-    public function test_it_gets_a_social_account()
+    public function testItGetsASocialAccount()
     {
         $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}/{$this->socialAccount->id}");
 
         $response
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => $this->socialAccountStructure])
+            ->assertJsonStructure(['data' => $this->structure])
             ->assertJson(['data' => [
                 'id'               => $this->socialAccount->id,
                 'provider'         => $this->socialAccount->provider,
@@ -87,7 +87,7 @@ class ApiTest extends TestCase
             ]]);
     }
 
-    public function test_it_gets_a_social_account_from_a_different_endpoint()
+    public function testItGetsASocialAccountFromADifferentEndpoint()
     {
         config(['social-accounts.route_prefix' => 'awesome-path']);
         SocialAccounts::routes();
@@ -96,7 +96,7 @@ class ApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonStructure(['data' => $this->socialAccountStructure])
+            ->assertJsonStructure(['data' => $this->structure])
             ->assertJson(['data' => [
                 'id'               => $this->socialAccount->id,
                 'provider'         => $this->socialAccount->provider,
@@ -104,7 +104,7 @@ class ApiTest extends TestCase
             ]]);
     }
 
-    public function test_it_deletes_a_social_account()
+    public function testItDeletesASocialAccount()
     {
         $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$this->socialAccount->id}");
 
@@ -113,10 +113,10 @@ class ApiTest extends TestCase
             ->assertJson(['message' => 'Deleted']);
     }
 
-    public function test_it_fails_to_get_another_users_social_account()
+    public function testItFailsToGetAnotherUsersSocialAccount()
     {
-        $anotherUser = factory(User::class)->create();
-        $anotherSocialAccount = factory(SocialAccount::class)->make();
+        $anotherUser = User::factory()->create();
+        $anotherSocialAccount = SocialAccount::factory()->make();
         $anotherUser->addSocialAccount($anotherSocialAccount);
 
         $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}/{$anotherSocialAccount->id}");
@@ -126,10 +126,10 @@ class ApiTest extends TestCase
             ->assertJson(['message' => 'This action is unauthorized.']);
     }
 
-    public function test_it_fails_to_delete_another_users_social_account()
+    public function testItFailsToDeleteAnotherUsersSocialAccount()
     {
-        $anotherUser = factory(User::class)->create();
-        $anotherSocialAccount = factory(SocialAccount::class)->make();
+        $anotherUser = User::factory()->create();
+        $anotherSocialAccount = SocialAccount::factory()->make();
         $anotherUser->addSocialAccount($anotherSocialAccount);
 
         $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$anotherSocialAccount->id}");
@@ -139,7 +139,7 @@ class ApiTest extends TestCase
             ->assertJson(['message' => 'This action is unauthorized.']);
     }
 
-    public function test_it_fails_to_update_a_social_account()
+    public function testItFailsToUpdateASocialAccount()
     {
         $response = $this->actingAs($this->user, 'api')->json('PATCH', "/{$this->prefix}/{$this->socialAccount->id}", [
             'provider' => 'vandelay-industries',
@@ -149,7 +149,7 @@ class ApiTest extends TestCase
             ->assertStatus(405);
     }
 
-    public function test_it_returns_a_server_error_when_existing_account_cant_be_deleted()
+    public function testItReturnsAServerErrorWhenExistingAccountCantBeDeleted()
     {
         $socialAccount = Mockery::mock('audunru\SocialAccounts\Models\SocialAccount');
 

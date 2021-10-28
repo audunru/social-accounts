@@ -5,15 +5,20 @@ namespace audunru\SocialAccounts\Tests;
 use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\SocialAccountsServiceProvider;
 use audunru\SocialAccounts\Tests\Models\User;
+use CreateSocialAccountsTable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteServiceProvider;
+use MakeEmailAndPasswordNullable;
 use Mockery;
 use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
+/**
+ * @SuppressWarnings("unused")
+ */
 abstract class TestCase extends BaseTestCase
 {
     protected function getPackageProviders($app)
@@ -25,6 +30,11 @@ abstract class TestCase extends BaseTestCase
     {
         $app['config']->set('app.debug', 'true' === env('APP_DEBUG'));
         $app['config']->set('app.key', substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyz', 5)), 0, 32));
+        $app['config']->set('auth.guards.api', [
+            'driver'   => 'token',
+            'provider' => 'users',
+            'hash'     => false,
+        ]);
         $app->register(SocialiteServiceProvider::class);
     }
 
@@ -42,10 +52,14 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // TODO: What here needs to run every test, and what should only run once?
-        $this->withFactories(__DIR__.'/../tests/database/factories');
         $this->loadMigrationsFrom(__DIR__.'/../tests/database/migrations');
         $this->artisan('migrate');
+
+        include_once __DIR__.'/../database/migrations/create_social_accounts_table.php.stub';
+        include_once __DIR__.'/../database/migrations/make_email_and_password_nullable.php.stub';
+        (new CreateSocialAccountsTable())->up();
+        (new MakeEmailAndPasswordNullable())->up();
+
         config(['social-accounts.models.user' => User::class]);
         SocialAccounts::routes();
     }
@@ -88,7 +102,7 @@ abstract class TestCase extends BaseTestCase
         }
     }
 
-    public function mockSocialite(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $provider_user_id = 'amazing-id')
+    public function mockSocialite(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $providerUserId = 'amazing-id')
     {
         // Mock a user which the provider will return
         $providerUser = Mockery::mock('Laravel\Socialite\Contracts\User');
@@ -99,7 +113,7 @@ abstract class TestCase extends BaseTestCase
             ->shouldReceive('getName')
             ->andReturn($name)
             ->shouldReceive('getId')
-            ->andReturn($provider_user_id);
+            ->andReturn($providerUserId);
 
         // Mock a provider which Socialite will return
         $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');

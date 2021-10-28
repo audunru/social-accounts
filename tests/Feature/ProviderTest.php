@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
+/**
+ * @SuppressWarnings("unused")
+ */
 class ProviderTest extends TestCase
 {
     use WithFaker;
@@ -21,7 +24,7 @@ class ProviderTest extends TestCase
     protected $prefix = 'social-accounts';
     protected $redirectTo = 'http://localhost';
 
-    public function test_it_fails_to_log_in_when_automatically_create_users_is_false()
+    public function testItFailsToLogInWhenAutomaticallyCreateUsersIsFalse()
     {
         $this->disableUserCreation();
 
@@ -32,7 +35,7 @@ class ProviderTest extends TestCase
         $this->assertFalse(Auth::check());
     }
 
-    public function test_it_fails_to_create_account_when_gate_only_allows_a_certain_email_address()
+    public function testItFailsToCreateAccountWhenGateOnlyAllowsACertainEmailAddress()
     {
         $this->requireLaravelVersion('5.7.0');
         $this->enableUserCreation();
@@ -52,7 +55,7 @@ class ProviderTest extends TestCase
         ]);
     }
 
-    public function test_it_creates_account_when_gate_only_allows_a_certain_email_address()
+    public function testItCreatesAccountWhenGateOnlyAllowsACertainEmailAddress()
     {
         $this->requireLaravelVersion('5.7.0');
 
@@ -73,10 +76,10 @@ class ProviderTest extends TestCase
         ]);
     }
 
-    public function test_it_logs_in_a_user()
+    public function testItLogsInAUser()
     {
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
@@ -88,10 +91,10 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
-    public function test_session_has_remember_if_it_was_present_in_login_url()
+    public function testSessionHasRememberIfItWasPresentInLoginUrl()
     {
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
@@ -101,12 +104,12 @@ class ProviderTest extends TestCase
         $response->assertSessionHas('remember', true);
     }
 
-    public function test_it_logs_in_a_user_while_automatically_create_users_is_on()
+    public function testItLogsInAUserWhileAutomaticallyCreateUsersIsOn()
     {
         $this->enableUserCreation();
 
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
@@ -118,17 +121,17 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
-    public function test_user_is_authenticated_but_logs_in_as_someone_else()
+    public function testUserIsAuthenticatedButLogsInAsSomeoneElse()
     {
         $this->enableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         $response = $this
             ->actingAs($anotherUser)
@@ -140,11 +143,11 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
-    public function test_it_creates_a_user()
+    public function testItCreatesAUser()
     {
         $this->enableUserCreation();
 
-        $user = factory(User::class)->make();
+        $user = User::factory()->make();
         $this->mockSocialite($user->email, $user->name, $this->faker->uuid);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
@@ -159,14 +162,14 @@ class ProviderTest extends TestCase
         ]);
     }
 
-    public function test_it_adds_a_social_account()
+    public function testItAddsASocialAccount()
     {
         $this->enableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $provider_user_id = $this->faker->uuid;
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $providerUserId = $this->faker->uuid;
+        $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this
             ->actingAs($user)
@@ -178,18 +181,18 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseHas('social_accounts', [
             'provider'         => $this->provider,
-            'provider_user_id' => $provider_user_id,
+            'provider_user_id' => $providerUserId,
         ]);
     }
 
-    public function test_it_fails_to_add_social_account_when_it_is_disabled()
+    public function testItFailsToAddSocialAccountWhenItIsDisabled()
     {
         $this->disableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $provider_user_id = $this->faker->uuid;
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $providerUserId = $this->faker->uuid;
+        $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this
                 ->actingAs($user)
@@ -198,20 +201,20 @@ class ProviderTest extends TestCase
             ->assertStatus(403);
         $this->assertDatabaseMissing('social_accounts', [
             'provider'         => $this->provider,
-            'provider_user_id' => $provider_user_id,
+            'provider_user_id' => $providerUserId,
         ]);
     }
 
-    public function test_it_fails_to_add_a_second_social_account_with_the_same_provider()
+    public function testItFailsToAddASecondSocialAccountWithTheSameProvider()
     {
         $this->enableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make(['provider' => $this->provider]);
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
-        $provider_user_id = $this->faker->uuid;
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $providerUserId = $this->faker->uuid;
+        $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this
             ->actingAs($user)
@@ -222,51 +225,51 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseMissing('social_accounts', [
             'provider'         => $this->provider,
-            'provider_user_id' => $provider_user_id,
+            'provider_user_id' => $providerUserId,
         ]);
     }
 
-    public function test_an_event_is_dispatched_when_user_is_created()
+    public function testAnEventIsDispatchedWhenUserIsCreated()
     {
         Event::fake();
 
         $this->enableUserCreation();
 
-        $user = factory(User::class)->make();
-        $provider_user_id = $this->faker->uuid;
+        $user = User::factory()->make();
+        $providerUserId = $this->faker->uuid;
 
-        $this->mockSocialite($user->email, $user->name, $provider_user_id);
+        $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        Event::assertDispatched(SocialUserCreated::class, function ($event) use ($user, $provider_user_id) {
+        Event::assertDispatched(SocialUserCreated::class, function ($event) use ($user, $providerUserId) {
             return $event->user->name === $user->name &&
                 $event->user->email === $user->email &&
-                $event->socialAccount->provider_user_id === $provider_user_id &&
-                $event->providerUser->getId() === $provider_user_id;
+                $event->socialAccount->provider_user_id === $providerUserId &&
+                $event->providerUser->getId() === $providerUserId;
         });
     }
 
-    public function test_an_event_is_dispatched_when_social_account_is_added()
+    public function testAnEventIsDispatchedWhenSocialAccountIsAdded()
     {
         Event::fake();
 
         $this->enableSocialAccountCreation();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $provider_user_id = $this->faker->uuid;
+        $providerUserId = $this->faker->uuid;
         $this
             ->actingAs($user)
-            ->mockSocialite($user->email, $user->name, $provider_user_id);
+            ->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $provider_user_id) {
+        Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $providerUserId) {
             return $event->user->is($user) &&
                 $event->socialAccount->user_id === $user->id &&
-                $event->socialAccount->provider_user_id === $provider_user_id &&
-                $event->providerUser->getId() === $provider_user_id;
+                $event->socialAccount->provider_user_id === $providerUserId &&
+                $event->providerUser->getId() === $providerUserId;
         });
     }
 }

@@ -18,15 +18,15 @@ class HasSocialAccountsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
-        $this->socialAccount = factory(SocialAccount::class)->make();
+        $this->user = User::factory()->create();
+        $this->socialAccount = SocialAccount::factory()->make();
         $this->user->addSocialAccount($this->socialAccount);
     }
 
-    public function test_it_adds_social_account()
+    public function testItAddsSocialAccount()
     {
-        $user = factory(User::class)->create();
-        $socialAccount = factory(SocialAccount::class)->make();
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make();
 
         $data = [
             'provider'         => $socialAccount->provider,
@@ -40,7 +40,7 @@ class HasSocialAccountsTest extends TestCase
         $this->assertEquals($data['provider_user_id'], $created->provider_user_id);
     }
 
-    public function test_user_has_social_accounts()
+    public function testUserHasSocialAccounts()
     {
         $this->assertInstanceOf(Collection::class, $this->user->socialAccounts);
         $this->assertEquals(1, $this->user->socialAccounts->count());
@@ -49,7 +49,7 @@ class HasSocialAccountsTest extends TestCase
         $this->assertEquals($this->socialAccount->provider_user_id, $this->user->socialAccounts()->first()->provider_user_id);
     }
 
-    public function test_it_finds_a_user_by_social_account()
+    public function testItFindsAUserBySocialAccount()
     {
         $user = User::findBySocialAccount($this->socialAccount->provider, $this->socialAccount->provider_user_id);
 
@@ -57,12 +57,12 @@ class HasSocialAccountsTest extends TestCase
         $this->assertEquals($this->user->id, $user->id);
     }
 
-    public function test_user_has_provider()
+    public function testUserHasProvider()
     {
         $this->assertTrue($this->user->hasProvider($this->socialAccount->provider));
     }
 
-    public function test_user_does_not_have_provider()
+    public function testUserDoesNotHaveProvider()
     {
         $this->assertFalse($this->user->hasProvider('a-different-provider'));
     }

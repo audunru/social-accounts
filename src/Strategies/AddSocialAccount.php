@@ -15,8 +15,6 @@ class AddSocialAccount implements Strategy
 
     /**
      * Add social account to user.
-     *
-     * @return \Illuminate\Database\Eloquent\Model
      */
     public function handle(string $provider, ProviderUser $providerUser): User
     {

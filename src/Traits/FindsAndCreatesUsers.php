@@ -12,8 +12,6 @@ trait FindsAndCreatesUsers
 
     /**
      * Find a user with a social account.
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
      */
     private function findUser(string $provider, ProviderUser $providerUser): ?User
     {
@@ -22,8 +20,6 @@ trait FindsAndCreatesUsers
 
     /**
      * Create a new user with a social account.
-     *
-     * @return \Illuminate\Database\Eloquent\Model
      */
     private function createUser(string $provider, ProviderUser $providerUser): User
     {
@@ -41,12 +37,11 @@ trait FindsAndCreatesUsers
 
     /**
      * Find a user, or create a new one.
-     *
-     * @return \Illuminate\Database\Eloquent\Model
      */
     private function findOrCreateUser(string $provider, ProviderUser $providerUser): User
     {
-        if ($user = $this->findUser($provider, $providerUser)) {
+        $user = $this->findUser($provider, $providerUser);
+        if (! is_null($user)) {
             return $user;
         }
 

@@ -5,10 +5,19 @@ namespace audunru\SocialAccounts;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Policies\SocialAccountPolicy;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class SocialAccountsServiceProvider extends ServiceProvider
+class SocialAccountsServiceProvider extends PackageServiceProvider
 {
+    public function configurePackage(Package $package): void
+    {
+        $package
+            ->name('social-accounts')
+            ->hasConfigFile()
+            ->hasMigrations('create_social_accounts_table', 'make_email_and_password_nullable');
+    }
+
     /**
      * The policy mappings for the application.
      *
@@ -18,36 +27,15 @@ class SocialAccountsServiceProvider extends ServiceProvider
         SocialAccount::class => SocialAccountPolicy::class,
     ];
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot()
+    public function bootingPackage()
     {
         $this->registerPolicies();
-
-        if (! $this->app->configurationIsCached()) {
-            $this->mergeConfigFrom(
-                 __DIR__.'/../config/social-accounts.php', 'social-accounts'
-             );
-        }
-
-        if ($this->app->runningInConsole()) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
-            $this->publishes([
-                __DIR__.'/../config/social-accounts.php' => config_path('social-accounts.php'),
-            ], 'config');
-
-            $this->publishes([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'migrations');
-        }
     }
 
     /**
      * Register the facade.
      */
-    public function register()
+    public function packageRegistered()
     {
         $this->app->bind('social-accounts', SocialAccounts::class);
     }
