@@ -27,7 +27,7 @@ class SocialAccountPolicy
      */
     public function view(User $user, SocialAccount $socialAccount): bool
     {
-        return $socialAccount->user->is($user);  // TODO: Perhaps this can be defined only once, as it's the same rule for view and delete.
+        return $socialAccount->user->is($user);
     }
 
     /**
