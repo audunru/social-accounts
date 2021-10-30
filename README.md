@@ -44,7 +44,7 @@ class User extends Authenticatable
 Second, you need to specify which providers you are going to support. Publish the configuration, and open up `config/social-accounts.php` and add them to the array.
 
 ```bash
-php artisan vendor:publish --provider="audunru\SocialAccounts\SocialAccountsServiceProvider" --tag=config
+php artisan vendor:publish --tag=social-accounts-config
 ```
 
 There is an array called "providers" where you can specify the ones you want:
@@ -117,15 +117,8 @@ You can find the configuration and documentation of all options in [config/socia
 
 ## Step 4: Run migrations
 
-Optional: Before running the migrations, you can publish them with this command:
-
 ```bash
-php artisan vendor:publish --provider="audunru\SocialAccounts\SocialAccountsServiceProvider" --tag=migrations
-```
-
-Run migrations with this command:
-
-```bash
+php artisan vendor:publish --tag=social-accounts-migrations
 php artisan migrate
 ```
 
