@@ -13,7 +13,6 @@ use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteServiceProvider;
 use MakeEmailAndPasswordNullable;
 use Mockery;
-use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 /**
@@ -23,7 +22,7 @@ abstract class TestCase extends BaseTestCase
 {
     protected function getPackageProviders($app)
     {
-        return [SocialAccountsServiceProvider::class, ConsoleServiceProvider::class];
+        return [SocialAccountsServiceProvider::class];
     }
 
     protected function getEnvironmentSetUp($app)
