@@ -243,10 +243,10 @@ class ProviderTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         Event::assertDispatched(SocialUserCreated::class, function ($event) use ($user, $providerUserId) {
-            return $event->user->name === $user->name &&
-                $event->user->email === $user->email &&
-                $event->socialAccount->provider_user_id === $providerUserId &&
-                $event->providerUser->getId() === $providerUserId;
+            return $event->user->name === $user->name
+                && $event->user->email === $user->email
+                && $event->socialAccount->provider_user_id === $providerUserId
+                && $event->providerUser->getId() === $providerUserId;
         });
     }
 
@@ -266,10 +266,10 @@ class ProviderTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $providerUserId) {
-            return $event->user->is($user) &&
-                $event->socialAccount->user_id === $user->id &&
-                $event->socialAccount->provider_user_id === $providerUserId &&
-                $event->providerUser->getId() === $providerUserId;
+            return $event->user->is($user)
+                && $event->socialAccount->user_id === $user->id
+                && $event->socialAccount->provider_user_id === $providerUserId
+                && $event->providerUser->getId() === $providerUserId;
         });
     }
 }

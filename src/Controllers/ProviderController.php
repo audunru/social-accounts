@@ -48,8 +48,8 @@ class ProviderController extends Controller
     {
         $this->providerUser = $socialite::driver($this->request->provider)->user();
 
-        abort_if(Gate::has(config('social-accounts.gates.login-with-provider')) &&
-            Gate::denies('login-with-provider', $this->providerUser), 403);
+        abort_if(Gate::has(config('social-accounts.gates.login-with-provider'))
+            && Gate::denies('login-with-provider', $this->providerUser), 403);
 
         $user = $this->getUserStrategy()->handle($this->request->provider, $this->providerUser);
 
@@ -83,8 +83,8 @@ class ProviderController extends Controller
         }
 
         abort_if(Auth::user()->hasProvider($this->request->provider), 409, "You already have a social login with this provider: {$this->request->provider}.");
-        abort_if(Gate::has(config('social-accounts.gates.add-social-account')) &&
-            Gate::denies('add-social-account', $this->providerUser), 403, 'You are not allowed to add social logins.');
+        abort_if(Gate::has(config('social-accounts.gates.add-social-account'))
+            && Gate::denies('add-social-account', $this->providerUser), 403, 'You are not allowed to add social logins.');
 
         return new AddSocialAccount();
     }

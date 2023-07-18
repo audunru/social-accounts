@@ -23,6 +23,12 @@ $config
         'not_operator_with_successor_space' => true,
         'ordered_imports'                   => true,
         'phpdoc_order'                      => true,
+        'increment_style'                   => ['style' => 'post'],
+        'global_namespace_import'           => [
+            'import_classes'   => true,
+            'import_constants' => null,
+            'import_functions' => null,
+        ],
     ])
     ->setFinder($finder);
 
