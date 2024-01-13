@@ -34,8 +34,6 @@ class SocialAccounts
 
     /**
      * Register settings for a provider.
-     *
-     * @param array $parameters
      */
     public static function registerProviderSettings(string $provider, string $methodName, array $parameters = null): void
     {
