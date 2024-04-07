@@ -75,4 +75,14 @@ return [
          */
         'primary_key' => 'id',
     ],
+    'user_id_column' => [
+        /*
+         * Change this if the id column in your users table is not the default type.
+         */
+        'type' => 'bigInteger',
+        /*
+         * Change this if the id column in your users table is not unsigned.
+         */
+        'unsigned' => true,
+    ],
 ];

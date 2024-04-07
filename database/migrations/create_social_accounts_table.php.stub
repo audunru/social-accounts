@@ -14,17 +14,17 @@ class CreateSocialAccountsTable extends Migration
     {
         $tableName = config('social-accounts.table_names.social_accounts');
         $userTableName = config('social-accounts.table_names.users');
+        // The primary key on the User model is usually either an unsigned integer og unsigned bigInteger.
+        // By getting the column type and signedness, we can create a column that can be referenced as a foreign key.
+        $type = config('social-accounts.user_id_column.type');
+        $unsigned = config('social-accounts.user_id_column.unsigned');
         $foreignKey = config('social-accounts.column_names.foreign_key');
         $primaryKey = config('social-accounts.column_names.primary_key');
 
-        Schema::create($tableName, function (Blueprint $table) use ($foreignKey, $primaryKey, $userTableName) {
+        Schema::create($tableName, function (Blueprint $table) use ($foreignKey, $primaryKey, $userTableName, $type, $unsigned) {
             $table->bigIncrements('id');
             $table->string('provider');
             $table->string('provider_user_id');
-            // The primary key on the User model is usually either an unsigned integer og unsigned bigInteger.
-            // By getting the column type and signedness, we can create a column that can be referenced as a foreign key.
-            $type = DB::getDoctrineColumn($userTableName, $primaryKey)->getType()->getName();
-            $unsigned = DB::getDoctrineColumn($userTableName, $primaryKey)->getUnsigned();
             $table->addColumn($type, $foreignKey, compact('unsigned'));
             // Delete entries in this table if user is deleted from the users table
             $table->foreign($foreignKey)->references($primaryKey)->on($userTableName)->onDelete('cascade');
