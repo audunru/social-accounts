@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
         $tableName = config('social-accounts.table_names.users');
 
         Schema::create($tableName, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
