@@ -35,7 +35,7 @@ class SocialAccounts
     /**
      * Register settings for a provider.
      */
-    public static function registerProviderSettings(string $provider, string $methodName, array $parameters = null): void
+    public static function registerProviderSettings(string $provider, string $methodName, ?array $parameters = null): void
     {
         array_push(self::$providerSettings, compact('provider', 'methodName', 'parameters'));
     }
