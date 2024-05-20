@@ -1,5 +1,7 @@
 <?php
 
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+
 $finder = PhpCsFixer\Finder::create()
     ->notPath('vendor')
     ->in(__DIR__)
@@ -11,6 +13,7 @@ $finder = PhpCsFixer\Finder::create()
 $config = new PhpCsFixer\Config();
 
 $config
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setLineEnding("\n")
     ->setCacheFile(__DIR__.'/.php-cs-fixer.cache')
     ->setIndent('    ')
