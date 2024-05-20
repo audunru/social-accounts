@@ -1,24 +1,18 @@
-name: Build Status
+name: Coverage
 
 on:
+  push:
+    branches: [master]
   pull_request:
     branches: [master]
 
 jobs:
-  validate:
+  coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate Pull Request Title
-        uses: amannn/action-semantic-pull-request@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - name: Validate commit messages
-        uses: wagoid/commitlint-github-action@v5
 
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
@@ -30,5 +24,8 @@ jobs:
       - name: Install composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Validate PHP code
-        run: composer verify
+      - name: Test PHP code
+        run: composer test-with-coverage
+
+      - name: Upload coverage results to Coveralls
+        uses: coverallsapp/github-action@v2
