@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.0.1](https://github.com/audunru/social-accounts/compare/v6.0.0...v6.0.1) (2024-05-20)
+
+
+### Miscellaneous Chores
+
+* parallel php-cs-fixer ([814f628](https://github.com/audunru/social-accounts/commit/814f6281f5148e559bcd01336dea3f600e37bc3d))
+* update dependencies ([3c27388](https://github.com/audunru/social-accounts/commit/3c27388d8ee9afc3e88687a7dd15a8f7832bf4a6))
+
 ## [6.0.0](https://github.com/audunru/social-accounts/compare/v5.0.0...v6.0.0) (2024-04-07)
 
 
