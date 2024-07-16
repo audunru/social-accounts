@@ -31,7 +31,7 @@ class ProviderTest extends TestCase
         $this->mockSocialite();
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
-        $response->assertStatus(401);
+        $response->assertUnauthorized();
         $this->assertFalse(Auth::check());
     }
 
@@ -48,7 +48,7 @@ class ProviderTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(403);
+        $response->assertForbidden();
         $this->assertFalse(Auth::check());
         $this->assertDatabaseMissing('users', [
             'email' => 'newman@seinfeld.com',
@@ -69,7 +69,7 @@ class ProviderTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertTrue(Auth::check());
         $this->assertDatabaseHas('users', [
             'email' => 'jerry@seinfeld.com',
@@ -86,7 +86,7 @@ class ProviderTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
         $this->assertEquals($user->id, Auth::id());
     }
@@ -116,7 +116,7 @@ class ProviderTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
         $this->assertEquals($user->id, Auth::id());
     }
@@ -137,7 +137,7 @@ class ProviderTest extends TestCase
             ->actingAs($anotherUser)
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
@@ -152,7 +152,7 @@ class ProviderTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->email, Auth::user()->email);
@@ -175,7 +175,7 @@ class ProviderTest extends TestCase
             ->actingAs($user)
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
@@ -198,7 +198,7 @@ class ProviderTest extends TestCase
                 ->actingAs($user)
                 ->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response
-            ->assertStatus(403);
+            ->assertForbidden();
         $this->assertDatabaseMissing('social_accounts', [
             'provider'         => $this->provider,
             'provider_user_id' => $providerUserId,
@@ -220,7 +220,7 @@ class ProviderTest extends TestCase
             ->actingAs($user)
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(409);
+        $response->assertConflict();
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseMissing('social_accounts', [
