@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.2](https://github.com/audunru/social-accounts/compare/v6.0.1...v6.0.2) (2024-07-16)
+
+
+### Miscellaneous Chores
+
+* update dependencies ([08314dc](https://github.com/audunru/social-accounts/commit/08314dce7a2e1565b4ecbaf20e7036aa982d2009))
+
 ## [6.0.1](https://github.com/audunru/social-accounts/compare/v6.0.0...v6.0.1) (2024-05-20)
 
 
