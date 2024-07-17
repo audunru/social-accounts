@@ -120,7 +120,6 @@ class ProviderController extends Controller
                 return $settings->provider === $this->request->provider;
             })
             ->each(function (ProviderSettingsDto $settings) use ($socialite) {
-
                 call_user_func_array([$socialite::driver($settings->provider), $settings->methodName], [$settings->parameters]);
             });
     }
