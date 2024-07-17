@@ -1,0 +1,14 @@
+includes:
+  - vendor/larastan/larastan/extension.neon
+
+parameters:
+  level: 5
+  paths:
+    - src/
+    - config/
+    - database/migrations/create_social_accounts_table.php.stub
+    - database/migrations/make_email_and_password_nullable.php.stub
+  stubFiles:
+    - stubs/User.stub
+  ignoreErrors:
+    - '#Class App\\User not found#'
