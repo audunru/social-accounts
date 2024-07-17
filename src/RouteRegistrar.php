@@ -36,7 +36,9 @@ class RouteRegistrar
      */
     public function forWeb(): void
     {
-        collect(config('social-accounts.providers'))->each(function ($provider) {
+        /** @var string[] $providers */
+        $providers = config('social-accounts.providers');
+        collect($providers)->each(function ($provider) {
             $this->forProvider($provider);
         });
     }

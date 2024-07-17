@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts;
 
+use audunru\SocialAccounts\DTOs\ProviderSettingsDto;
 use Illuminate\Support\Facades\Route;
 
 class SocialAccounts
@@ -9,16 +10,16 @@ class SocialAccounts
     /**
      * Holds (optional) provider settings.
      *
-     * @var array
+     * @var ProviderSettingsDto[]
      */
-    protected static $providerSettings = [];
+    protected static array $providerSettings = [];
 
     /**
      * Binds the SocialAccounts routes into the controller.
      *
-     * @param callable|null $callback
+     * @param array<string, string> $options
      */
-    public static function routes($callback = null, array $options = [])
+    public static function routes(?callable $callback = null, array $options = []): void
     {
         $callback = $callback ?: function ($router) {
             $router->all();
@@ -34,14 +35,18 @@ class SocialAccounts
 
     /**
      * Register settings for a provider.
+     *
+     * @param array<string,string|int|bool|null>|null $parameters
      */
     public static function registerProviderSettings(string $provider, string $methodName, ?array $parameters = null): void
     {
-        array_push(self::$providerSettings, compact('provider', 'methodName', 'parameters'));
+        array_push(self::$providerSettings, new ProviderSettingsDto($provider, $methodName, $parameters));
     }
 
     /**
      * Return settings for all providers.
+     *
+     * @return ProviderSettingsDto[]
      */
     public static function getProviderSettings(): array
     {

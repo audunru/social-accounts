@@ -18,7 +18,6 @@ class AddSocialAccount implements Strategy
      */
     public function handle(string $provider, ProviderUser $providerUser): Authenticatable
     {
-        /** @var \Illuminate\Contracts\Auth\Authenticatable&\audunru\SocialAccounts\Traits\HasSocialAccounts */
         $user = Auth::user();
         $socialAccount = $this->makeSocialAccount($provider, $providerUser->getId());
         $user->addSocialAccount($socialAccount);

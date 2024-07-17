@@ -5,12 +5,17 @@ namespace audunru\SocialAccounts\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin \audunru\SocialAccounts\Models\SocialAccount
+ */
 class SocialAccount extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @return array<string, string>
      */
     public function toArray(Request $request): array
     {

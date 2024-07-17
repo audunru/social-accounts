@@ -3,13 +3,16 @@
 namespace audunru\SocialAccounts\Models;
 
 use audunru\SocialAccounts\Factories\SocialAccountFactory;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * @template TUserModel of \Illuminate\Database\Eloquent\Model
+ * @property string                      $provider
+ * @property string                      $provider_user_id
+ * @property ?\Illuminate\Support\Carbon $created_at
+ * @property ?\Illuminate\Support\Carbon $updated_at
  */
 class SocialAccount extends Model
 {
@@ -18,8 +21,6 @@ class SocialAccount extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array
      */
     protected $fillable = [
         'provider',
@@ -28,14 +29,15 @@ class SocialAccount extends Model
 
     /**
      * The attributes that should be cast to native types.
-     *
-     * @var array
      */
     protected $casts = [
         'provider'         => 'string',
         'provider_user_id' => 'string',
     ];
 
+    /**
+     * @param array<string, string> $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -45,12 +47,15 @@ class SocialAccount extends Model
     /**
      * Return the user this social account belongs to.
      *
-     * @return BelongsTo<TUserModel, $this>
+     * @return BelongsTo<Model, $this>
      */
     public function user(): BelongsTo
     {
+        /** @var class-string<Model> $userModel */
+        $userModel = config('social-accounts.models.user');
+
         return $this->belongsTo(
-            config('social-accounts.models.user'),
+            $userModel,
             config('social-accounts.column_names.foreign_key'),
             config('social-accounts.column_names.primary_key')
         );
@@ -59,7 +64,7 @@ class SocialAccount extends Model
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): SocialAccountFactory
     {
         return SocialAccountFactory::new();
     }

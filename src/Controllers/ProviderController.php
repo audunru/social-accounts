@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
+use audunru\SocialAccounts\DTOs\ProviderSettingsDto;
 use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
@@ -14,6 +15,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Redirect;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -31,7 +33,7 @@ class ProviderController extends Controller
     /**
      * Redirect the user to the authentication page.
      */
-    public function redirectToProvider(Socialite $socialite): RedirectResponse
+    public function redirectToProvider(Socialite $socialite): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
     {
         $this->configureRedirectForProvider();
         $this->applySettingsToProvider($socialite);
@@ -60,7 +62,7 @@ class ProviderController extends Controller
         $remember = $this->request->session()->pull('remember', false);
         Auth::login($user, $remember);
 
-        return redirect()->intended();
+        return Redirect::intended();
     }
 
     /**
@@ -84,7 +86,6 @@ class ProviderController extends Controller
             return new FindUser();
         }
 
-        /** @var \Illuminate\Contracts\Auth\Authenticatable&\audunru\SocialAccounts\Traits\HasSocialAccounts */
         $user = Auth::user();
 
         abort_if($user->hasProvider($this->request->provider), Response::HTTP_CONFLICT, "You already have a social login with this provider: {$this->request->provider}.");
@@ -115,13 +116,12 @@ class ProviderController extends Controller
     private function applySettingsToProvider(Socialite $socialite): void
     {
         collect(SocialAccounts::getProviderSettings())
-            ->filter(function (array $settings) {
-                return $settings['provider'] === $this->request->provider;
+            ->filter(function (ProviderSettingsDto $settings) {
+                return $settings->provider === $this->request->provider;
             })
-            ->each(function (array $settings) use ($socialite) {
-                extract($settings);
+            ->each(function (ProviderSettingsDto $settings) use ($socialite) {
 
-                call_user_func_array([$socialite::driver($provider), $methodName], [$parameters]);
+                call_user_func_array([$socialite::driver($settings->provider), $settings->methodName], [$settings->parameters]);
             });
     }
 

@@ -7,16 +7,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @template TModel of \audunru\SocialAccounts\Models\SocialAccount
- *
- * @mixin \Illuminate\Database\Eloquent\Model
+ * @mixin \Illuminate\Foundation\Auth\User
  */
 trait HasSocialAccounts
 {
     /**
      * Retrieve related social accounts.
      *
-     * @return HasMany<TModel, $this>
+     * @return HasMany<SocialAccount, $this>
      */
     public function socialAccounts(): HasMany
     {
@@ -29,8 +27,6 @@ trait HasSocialAccounts
 
     /**
      * Add social account to model.
-     *
-     * @return TModel|false
      */
     public function addSocialAccount(SocialAccount $socialAccount): SocialAccount|false
     {

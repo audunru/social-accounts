@@ -4,6 +4,12 @@ namespace audunru\SocialAccounts\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @method static void  routes(callable|null $callback = null, array $options = [])
+ * @method static void  registerProviderSettings(string $provider, string $methodName, ?array $parameters = null)
+ * @method static array getProviderSettings()
+ * @method static void  emptyProviderSettings()
+ */
 class SocialAccounts extends Facade
 {
     /**
