@@ -4,7 +4,7 @@ namespace audunru\SocialAccounts\Policies;
 
 use audunru\SocialAccounts\Models\SocialAccount;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Database\Eloquent\Model as User;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class SocialAccountPolicy
 {
@@ -12,8 +12,6 @@ class SocialAccountPolicy
 
     /**
      * Determine whether the user can view any social accounts.
-     *
-     * @return mixed
      */
     public function viewAny(): bool
     {
@@ -22,20 +20,16 @@ class SocialAccountPolicy
 
     /**
      * Determine whether the user can view the social account.
-     *
-     * @return mixed
      */
-    public function view(User $user, SocialAccount $socialAccount): bool
+    public function view(Authenticatable $user, SocialAccount $socialAccount): bool
     {
         return $socialAccount->user->is($user);
     }
 
     /**
      * Determine whether the user can delete the social account.
-     *
-     * @return mixed
      */
-    public function delete(User $user, SocialAccount $socialAccount): bool
+    public function delete(Authenticatable $user, SocialAccount $socialAccount): bool
     {
         return $socialAccount->user->is($user);
     }

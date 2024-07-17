@@ -2,7 +2,7 @@
 
 namespace audunru\SocialAccounts\Interfaces;
 
-use Illuminate\Database\Eloquent\Model as User;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 interface Strategy
@@ -10,5 +10,5 @@ interface Strategy
     /**
      * Handle authentication of the provided user after succesful authorization with the provider.
      */
-    public function handle(string $provider, ProviderUser $providerUser): ?User;
+    public function handle(string $provider, ProviderUser $providerUser): ?Authenticatable;
 }

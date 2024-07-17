@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SocialAccount extends JsonResource
@@ -9,11 +10,9 @@ class SocialAccount extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'id'               => $this->id,

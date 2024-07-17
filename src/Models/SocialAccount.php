@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @template TUserModel of \Illuminate\Database\Eloquent\Model
+ */
 class SocialAccount extends Model
 {
+    /** @use HasFactory<SocialAccountFactory> */
     use HasFactory;
 
-    /*
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -22,7 +26,7 @@ class SocialAccount extends Model
         'provider_user_id',
     ];
 
-    /*
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
@@ -32,12 +36,6 @@ class SocialAccount extends Model
         'provider_user_id' => 'string',
     ];
 
-    /*
-     * Create a new Eloquent model instance.
-     *
-     * @param  array  $attributes
-     * @return void
-     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -46,6 +44,8 @@ class SocialAccount extends Model
 
     /**
      * Return the user this social account belongs to.
+     *
+     * @return BelongsTo<TUserModel, $this>
      */
     public function user(): BelongsTo
     {

@@ -10,18 +10,20 @@ use audunru\SocialAccounts\Strategies\FindUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Socialite\Contracts\User as ProviderUser;
 use Laravel\Socialite\Facades\Socialite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProviderController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
+    protected ?ProviderUser $providerUser = null;
+
     public function __construct(protected Request $request)
     {
     }
@@ -49,7 +51,7 @@ class ProviderController extends Controller
         $this->providerUser = $socialite::driver($this->request->provider)->user();
 
         abort_if(Gate::has(config('social-accounts.gates.login-with-provider'))
-            && Gate::denies('login-with-provider', $this->providerUser), 403);
+            && Gate::denies('login-with-provider', $this->providerUser), Response::HTTP_FORBIDDEN);
 
         $user = $this->getUserStrategy()->handle($this->request->provider, $this->providerUser);
 
@@ -82,9 +84,12 @@ class ProviderController extends Controller
             return new FindUser();
         }
 
-        abort_if(Auth::user()->hasProvider($this->request->provider), 409, "You already have a social login with this provider: {$this->request->provider}.");
+        /** @var \Illuminate\Contracts\Auth\Authenticatable&\audunru\SocialAccounts\Traits\HasSocialAccounts */
+        $user = Auth::user();
+
+        abort_if($user->hasProvider($this->request->provider), Response::HTTP_CONFLICT, "You already have a social login with this provider: {$this->request->provider}.");
         abort_if(Gate::has(config('social-accounts.gates.add-social-account'))
-            && Gate::denies('add-social-account', $this->providerUser), 403, 'You are not allowed to add social logins.');
+            && Gate::denies('add-social-account', $this->providerUser), Response::HTTP_FORBIDDEN, 'You are not allowed to add social logins.');
 
         return new AddSocialAccount();
     }
