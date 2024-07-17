@@ -5,7 +5,9 @@ namespace audunru\SocialAccounts\Tests\Unit;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class SocialAccountTest extends TestCase
 {
     private $user;

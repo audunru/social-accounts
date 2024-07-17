@@ -7,7 +7,9 @@ use audunru\SocialAccounts\SocialAccounts;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
 use Mockery;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class ApiTest extends TestCase
 {
     protected $prefix = 'social-accounts';
