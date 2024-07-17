@@ -5,14 +5,15 @@ namespace audunru\SocialAccounts\Tests;
 use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\SocialAccountsServiceProvider;
 use audunru\SocialAccounts\Tests\Models\User;
-use CreateSocialAccountsTable;
-use Illuminate\Support\Facades\App;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteServiceProvider;
-use MakeEmailAndPasswordNullable;
 use Mockery;
+
+use function Orchestra\Testbench\package_path;
+
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 /**
@@ -20,6 +21,8 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
  */
 abstract class TestCase extends BaseTestCase
 {
+    use RefreshDatabase;
+
     protected function getPackageProviders($app)
     {
         return [SocialAccountsServiceProvider::class];
@@ -45,19 +48,19 @@ abstract class TestCase extends BaseTestCase
         ];
     }
 
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadMigrationsFrom(
+            package_path('database/migrations')
+        );
+    }
+
     /**
      * Setup the test environment.
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->loadMigrationsFrom(__DIR__.'/../tests/database/migrations');
-        $this->artisan('migrate');
-
-        include_once __DIR__.'/../database/migrations/create_social_accounts_table.php.stub';
-        include_once __DIR__.'/../database/migrations/make_email_and_password_nullable.php.stub';
-        (new CreateSocialAccountsTable())->up();
-        (new MakeEmailAndPasswordNullable())->up();
 
         config(['social-accounts.models.user' => User::class]);
         SocialAccounts::routes();
@@ -72,11 +75,15 @@ abstract class TestCase extends BaseTestCase
     public function enableUserCreation()
     {
         config(['social-accounts.automatically_create_users' => true]);
+
+        $this->artisan('migrate:refresh');
     }
 
     public function disableUserCreation()
     {
         config(['social-accounts.automatically_create_users' => false]);
+
+        $this->artisan('migrate:refresh');
     }
 
     public function enableSocialAccountCreation()
@@ -91,14 +98,6 @@ abstract class TestCase extends BaseTestCase
         Gate::define('add-social-account', function (User $user, ProviderUser $providerUser) {
             return false;
         });
-    }
-
-    public function requireLaravelVersion(string $version)
-    {
-        $laravelVersion = App::version();
-        if (! version_compare($laravelVersion, $version, '>=')) {
-            $this->markTestSkipped("Test requires at least Laravel {$version}, but current version is {$laravelVersion}");
-        }
     }
 
     public function mockSocialite(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $providerUserId = 'amazing-id')

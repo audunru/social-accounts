@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
+use audunru\SocialAccounts\DTOs\ProviderSettingsDto;
 use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
@@ -10,18 +11,21 @@ use audunru\SocialAccounts\Strategies\FindUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Redirect;
+use Laravel\Socialite\Contracts\User as ProviderUser;
 use Laravel\Socialite\Facades\Socialite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProviderController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
+    protected ?ProviderUser $providerUser = null;
+
     public function __construct(protected Request $request)
     {
     }
@@ -29,7 +33,7 @@ class ProviderController extends Controller
     /**
      * Redirect the user to the authentication page.
      */
-    public function redirectToProvider(Socialite $socialite): RedirectResponse
+    public function redirectToProvider(Socialite $socialite): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
     {
         $this->configureRedirectForProvider();
         $this->applySettingsToProvider($socialite);
@@ -49,7 +53,7 @@ class ProviderController extends Controller
         $this->providerUser = $socialite::driver($this->request->provider)->user();
 
         abort_if(Gate::has(config('social-accounts.gates.login-with-provider'))
-            && Gate::denies('login-with-provider', $this->providerUser), 403);
+            && Gate::denies('login-with-provider', $this->providerUser), Response::HTTP_FORBIDDEN);
 
         $user = $this->getUserStrategy()->handle($this->request->provider, $this->providerUser);
 
@@ -58,7 +62,7 @@ class ProviderController extends Controller
         $remember = $this->request->session()->pull('remember', false);
         Auth::login($user, $remember);
 
-        return redirect()->intended();
+        return Redirect::intended();
     }
 
     /**
@@ -82,9 +86,11 @@ class ProviderController extends Controller
             return new FindUser();
         }
 
-        abort_if(Auth::user()->hasProvider($this->request->provider), 409, "You already have a social login with this provider: {$this->request->provider}.");
+        $user = Auth::user();
+
+        abort_if($user->hasProvider($this->request->provider), Response::HTTP_CONFLICT, "You already have a social login with this provider: {$this->request->provider}.");
         abort_if(Gate::has(config('social-accounts.gates.add-social-account'))
-            && Gate::denies('add-social-account', $this->providerUser), 403, 'You are not allowed to add social logins.');
+            && Gate::denies('add-social-account', $this->providerUser), Response::HTTP_FORBIDDEN, 'You are not allowed to add social logins.');
 
         return new AddSocialAccount();
     }
@@ -110,13 +116,11 @@ class ProviderController extends Controller
     private function applySettingsToProvider(Socialite $socialite): void
     {
         collect(SocialAccounts::getProviderSettings())
-            ->filter(function (array $settings) {
-                return $settings['provider'] === $this->request->provider;
+            ->filter(function (ProviderSettingsDto $settings) {
+                return $settings->provider === $this->request->provider;
             })
-            ->each(function (array $settings) use ($socialite) {
-                extract($settings);
-
-                call_user_func_array([$socialite::driver($provider), $methodName], [$parameters]);
+            ->each(function (ProviderSettingsDto $settings) use ($socialite) {
+                call_user_func_array([$socialite::driver($settings->provider), $settings->methodName], [$settings->parameters]);
             });
     }
 

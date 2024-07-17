@@ -1,0 +1,13 @@
+includes:
+  - vendor/larastan/larastan/extension.neon
+
+parameters:
+  level: 6
+  paths:
+    - src/
+    - config/
+    - database/
+  stubFiles:
+    - stubs/User.stub
+  ignoreErrors:
+    - '#Class App\\User not found#'

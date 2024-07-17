@@ -7,7 +7,9 @@ use audunru\SocialAccounts\SocialAccounts;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
 use Mockery;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class ApiTest extends TestCase
 {
     protected $prefix = 'social-accounts';
@@ -38,7 +40,7 @@ class ApiTest extends TestCase
         $response = $this->json('GET', "/{$this->prefix}");
 
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testItGetsSocialAccounts()
@@ -46,7 +48,7 @@ class ApiTest extends TestCase
         $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}");
 
         $response
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonStructure(['data' => [$this->structure]]);
     }
 
@@ -57,7 +59,7 @@ class ApiTest extends TestCase
         $response = $this->actingAs($user, 'api')->json('GET', "/{$this->prefix}");
 
         $response
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonStructure(['data' => []]);
     }
 
@@ -69,7 +71,7 @@ class ApiTest extends TestCase
         $response = $this->actingAs($this->user, 'api')->json('GET', '/awesome-path');
 
         $response
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonStructure(['data' => [$this->structure]]);
     }
 
@@ -78,7 +80,7 @@ class ApiTest extends TestCase
         $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}/{$this->socialAccount->id}");
 
         $response
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonStructure(['data' => $this->structure])
             ->assertJson(['data' => [
                 'id'               => $this->socialAccount->id,
@@ -95,7 +97,7 @@ class ApiTest extends TestCase
         $response = $this->actingAs($this->user, 'api')->json('GET', "/awesome-path/{$this->socialAccount->id}");
 
         $response
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonStructure(['data' => $this->structure])
             ->assertJson(['data' => [
                 'id'               => $this->socialAccount->id,
@@ -109,7 +111,7 @@ class ApiTest extends TestCase
         $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$this->socialAccount->id}");
 
         $response
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['message' => 'Deleted']);
     }
 
@@ -122,7 +124,7 @@ class ApiTest extends TestCase
         $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}/{$anotherSocialAccount->id}");
 
         $response
-            ->assertStatus(403)
+            ->assertForbidden()
             ->assertJson(['message' => 'This action is unauthorized.']);
     }
 
@@ -135,7 +137,7 @@ class ApiTest extends TestCase
         $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$anotherSocialAccount->id}");
 
         $response
-            ->assertStatus(403)
+            ->assertForbidden()
             ->assertJson(['message' => 'This action is unauthorized.']);
     }
 
@@ -146,7 +148,7 @@ class ApiTest extends TestCase
         ]);
 
         $response
-            ->assertStatus(405);
+            ->assertMethodNotAllowed();
     }
 
     public function testItReturnsAServerErrorWhenExistingAccountCantBeDeleted()
@@ -162,6 +164,6 @@ class ApiTest extends TestCase
         $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$this->socialAccount->id}");
 
         $response
-            ->assertStatus(500);
+            ->assertInternalServerError();
     }
 }

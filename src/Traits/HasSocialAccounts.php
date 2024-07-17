@@ -6,10 +6,15 @@ use audunru\SocialAccounts\Models\SocialAccount;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin \Illuminate\Foundation\Auth\User
+ */
 trait HasSocialAccounts
 {
     /**
      * Retrieve related social accounts.
+     *
+     * @return HasMany<SocialAccount, $this>
      */
     public function socialAccounts(): HasMany
     {
@@ -23,7 +28,7 @@ trait HasSocialAccounts
     /**
      * Add social account to model.
      */
-    public function addSocialAccount(SocialAccount $socialAccount): SocialAccount
+    public function addSocialAccount(SocialAccount $socialAccount): SocialAccount|false
     {
         return $this->socialAccounts()->save($socialAccount);
     }
@@ -31,7 +36,7 @@ trait HasSocialAccounts
     /**
      * Retrieve a user with social account matching the parameters.
      *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return $this|null
      */
     public static function findBySocialAccount(string $provider, string $providerUserId): ?self
     {

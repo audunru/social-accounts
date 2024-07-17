@@ -26,14 +26,14 @@ class RouteTest extends TestCase
     public function testDisabledProviderHasNoRoute()
     {
         $this->get("/{$this->prefix}/login/twitter")
-          ->assertStatus(404);
+          ->assertNotFound();
     }
 
     public function testItRedirectsFromLoginToProvider()
     {
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertStringStartsWith('https://accounts.google.com/o/oauth2/auth', $response->getTargetUrl());
     }
 
@@ -43,7 +43,7 @@ class RouteTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertStringContainsString('hd=seinfeld.com', $response->getTargetUrl());
     }
 
@@ -53,7 +53,7 @@ class RouteTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertStringContainsString('scope=openid+profile+email+amazing-scope', $response->getTargetUrl());
     }
 
@@ -63,7 +63,7 @@ class RouteTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertStringContainsString('scope=just-this-scope', $response->getTargetUrl());
     }
 
@@ -71,7 +71,7 @@ class RouteTest extends TestCase
     {
         $response = $this->get("/{$this->prefix}/login/{$this->provider}");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertTrue(false !== strpos($response->getTargetUrl(), urlencode("/login/{$this->provider}/callback")));
     }
 
@@ -81,7 +81,7 @@ class RouteTest extends TestCase
 
         $response = $this->get("/$this->prefix/login/{$this->provider}");
 
-        $response->assertStatus(302);
+        $response->assertFound();
         $this->assertStringContainsString('forbidden-city-redirect', $response->getTargetUrl());
     }
 }

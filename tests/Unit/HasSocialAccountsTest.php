@@ -6,7 +6,9 @@ use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Database\Eloquent\Collection;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class HasSocialAccountsTest extends TestCase
 {
     private $user;

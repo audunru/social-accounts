@@ -4,7 +4,6 @@ namespace audunru\SocialAccounts\Tests\Models;
 
 use audunru\SocialAccounts\Tests\Factories\UserFactory;
 use audunru\SocialAccounts\Traits\HasSocialAccounts;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -31,7 +30,7 @@ class User extends Authenticatable
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): UserFactory
     {
         return UserFactory::new();
     }
