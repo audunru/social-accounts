@@ -29,7 +29,6 @@ trait FindsAndCreatesUsers
             'name'     => $providerUser->getName(),
         ]);
 
-
         $socialAccount = $this->makeSocialAccount($provider, $providerUser->getId());
         $user->addSocialAccount($socialAccount);
 
