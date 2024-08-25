@@ -7,6 +7,7 @@ use audunru\SocialAccounts\Events\SocialUserCreated;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
@@ -229,7 +230,7 @@ class ProviderTest extends TestCase
         ]);
     }
 
-    public function testAnEventIsDispatchedWhenUserIsCreated()
+    public function testEventsAreDispatchedWhenUserIsCreated()
     {
         Event::fake();
 
@@ -242,6 +243,10 @@ class ProviderTest extends TestCase
 
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
+        Event::assertDispatched(Registered::class, function ($event) use ($user) {
+            return $event->user->name === $user->name
+                && $event->user->email === $user->email;
+        });
         Event::assertDispatched(SocialUserCreated::class, function ($event) use ($user, $providerUserId) {
             return $event->user->name === $user->name
                 && $event->user->email === $user->email
