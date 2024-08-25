@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.1.1](https://github.com/audunru/social-accounts/compare/v6.1.0...v6.1.1) (2024-08-25)
+
+
+### Bug Fixes
+
+* dispatch registered event after socialusercreated ([821b191](https://github.com/audunru/social-accounts/commit/821b191619ff442cd6d4c7df404471020e9f699b))
+
 ## [6.1.0](https://github.com/audunru/social-accounts/compare/v6.0.1...v6.1.0) (2024-08-25)
 
 
