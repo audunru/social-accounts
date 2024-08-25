@@ -29,12 +29,12 @@ trait FindsAndCreatesUsers
             'name'     => $providerUser->getName(),
         ]);
 
-        event(new Registered($user));
 
         $socialAccount = $this->makeSocialAccount($provider, $providerUser->getId());
         $user->addSocialAccount($socialAccount);
 
         event(new SocialUserCreated($user, $socialAccount, $providerUser));
+        event(new Registered($user));
 
         return $user;
     }
