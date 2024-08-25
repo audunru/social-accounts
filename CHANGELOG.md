@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.1.0](https://github.com/audunru/social-accounts/compare/v6.0.1...v6.1.0) (2024-08-25)
+
+
+### Features
+
+* dispatch registered event when user is created ([#22](https://github.com/audunru/social-accounts/issues/22)) ([4bb57e0](https://github.com/audunru/social-accounts/commit/4bb57e0f310015029af8966ed2c47d39d7849883))
+
+
+### Miscellaneous Chores
+
+* update dependencies ([08314dc](https://github.com/audunru/social-accounts/commit/08314dce7a2e1565b4ecbaf20e7036aa982d2009))
+
 ## [6.0.1](https://github.com/audunru/social-accounts/compare/v6.0.0...v6.0.1) (2024-05-20)
 
 
