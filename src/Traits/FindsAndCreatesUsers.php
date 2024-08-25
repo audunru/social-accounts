@@ -3,6 +3,7 @@
 namespace audunru\SocialAccounts\Traits;
 
 use audunru\SocialAccounts\Events\SocialUserCreated;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model as User;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
@@ -27,6 +28,9 @@ trait FindsAndCreatesUsers
             'email'    => $providerUser->getEmail(),
             'name'     => $providerUser->getName(),
         ]);
+
+        event(new Registered($user));
+
         $socialAccount = $this->makeSocialAccount($provider, $providerUser->getId());
         $user->addSocialAccount($socialAccount);
 
