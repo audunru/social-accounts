@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.1.2](https://github.com/audunru/social-accounts/compare/v6.1.1...v6.1.2) (2025-02-01)
+
+
+### Miscellaneous Chores
+
+* dependabot config ([2961efb](https://github.com/audunru/social-accounts/commit/2961efbe1201cdad61a64263205a42e7362e424a))
+
 ## [6.1.1](https://github.com/audunru/social-accounts/compare/v6.1.0...v6.1.1) (2024-08-25)
 
 
