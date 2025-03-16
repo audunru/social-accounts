@@ -1,8 +1,8 @@
 # Social Accounts for Laravel
 
 [![Build Status](https://github.com/audunru/social-accounts/actions/workflows/validate.yml/badge.svg)](https://github.com/audunru/social-accounts/actions/workflows/validate.yml)
-[![Coverage Status](https://coveralls.io/repos/github/audunru/social-accounts/badge.svg?branch=master)](https://coveralls.io/github/audunru/social-accounts?branch=master)
-[![StyleCI](https://github.styleci.io/repos/200706096/shield?branch=master)](https://github.styleci.io/repos/200706096)
+[![Coverage Status](https://coveralls.io/repos/github/audunru/social-accounts/badge.svg?branch=main)](https://coveralls.io/github/audunru/social-accounts?branch=main)
+[![StyleCI](https://github.styleci.io/repos/200706096/shield?branch=main)](https://github.styleci.io/repos/200706096)
 
 Add social login (Google, Facebook, and others) to your Laravel app.
 
