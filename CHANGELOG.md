@@ -1,5 +1,21 @@
 # Changelog
 
+## [7.0.0](https://github.com/audunru/social-accounts/compare/v6.1.2...v7.0.0) (2025-03-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* laravel 12 support ([#44](https://github.com/audunru/social-accounts/issues/44))
+
+### Features
+
+* laravel 12 support ([#44](https://github.com/audunru/social-accounts/issues/44)) ([e127b25](https://github.com/audunru/social-accounts/commit/e127b25dbcad49aa0385e8f9effb67eb6f1703f5))
+
+
+### Miscellaneous Chores
+
+* rename master branch to main ([1ab9b38](https://github.com/audunru/social-accounts/commit/1ab9b38fd959311177ec273191e44692ef2394e1))
+
 ## [6.1.2](https://github.com/audunru/social-accounts/compare/v6.1.1...v6.1.2) (2025-02-01)
 
 
