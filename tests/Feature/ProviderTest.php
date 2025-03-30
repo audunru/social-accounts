@@ -38,7 +38,6 @@ class ProviderTest extends TestCase
 
     public function testItFailsToCreateAccountWhenGateOnlyAllowsACertainEmailAddress()
     {
-        $this->requireLaravelVersion('5.7.0');
         $this->enableUserCreation();
 
         Gate::define('login-with-provider', function (?User $user, ProviderUser $providerUser) {
@@ -58,8 +57,6 @@ class ProviderTest extends TestCase
 
     public function testItCreatesAccountWhenGateOnlyAllowsACertainEmailAddress()
     {
-        $this->requireLaravelVersion('5.7.0');
-
         $this->enableUserCreation();
 
         Gate::define('login-with-provider', function (?User $user, ProviderUser $providerUser) {

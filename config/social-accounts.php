@@ -2,9 +2,14 @@
 
 return [
     /*
-     * Routes start with a prefix.
+     * Web routes start with a prefix.
      */
     'route_prefix' => 'social-accounts',
+
+    /*
+     * API endpoint path.
+     */
+    'api_path' => 'social-accounts',
 
     /*
      * Web middleware.

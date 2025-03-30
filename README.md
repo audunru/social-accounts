@@ -72,45 +72,6 @@ Third, you need to add credentials for your supported social login providers to 
 ],
 ```
 
-Fourth, you should call the `SocialAccounts::routes` method within the boot method of your AuthServiceProvider. This method will register the routes necessary to login with your configured providers. It will also register the API routes necessary for a user to retrieve their social accounts and remove them.
-
-```php
-<?php
-
-namespace App\Providers;
-
-use audunru\SocialAccounts\SocialAccounts;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
-class AuthServiceProvider extends ServiceProvider
-{
-    /**
-     * Register any authentication / authorization services.
-     */
-    public function boot()
-    {
-        $this->registerPolicies();
-
-        SocialAccounts::routes();
-    }
-}
-```
-
-Optional: You can add web and API routes in separate steps.
-
-```php
-SocialAccounts::routes(
-    function ($router) {
-        $router->forWeb();
-    }
-);
-SocialAccounts::routes(
-    function ($router) {
-        $router->forApi();
-    }
-);
-```
-
 ## Step 3: Configuration and customization
 
 You can find the configuration and documentation of all options in [config/social-accounts.php](config/social-accounts.php).
@@ -202,7 +163,7 @@ SocialAccounts::registerProviderSettings('google', 'with', ['hd' => 'seinfeld.co
 
 ## Gates
 
-You can use [gates](https://laravel.com/docs/5.8/authorization#gates) to allow or deny certain actions. Gates should be defined within the boot method of your AuthServiceProvider.
+You can use [gates](https://laravel.com/docs/5.8/authorization#gates) to allow or deny certain actions. Gates should be defined within the boot method of your AppServiceProvider.
 
 ```php
 <?php
@@ -212,16 +173,15 @@ namespace App\Providers;
 use App\User;
 use audunru\SocialAccounts\SocialAccounts;
 use Laravel\Socialite\Contracts\User as ProviderUser;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any authentication / authorization services.
      */
     public function boot()
     {
-        $this->registerPolicies();
         /*
          * If your company uses G Suite and you want to ensure that only employees can log in, you can define a "login-with-provider" gate.
          *
@@ -248,7 +208,6 @@ class AuthServiceProvider extends ServiceProvider
              */
             return $user->isAdmin();
         });
-        SocialAccounts::routes();
     }
 }
 
@@ -290,12 +249,6 @@ class AddUserAvatar
     }
 }
 ```
-
-# Alternatives
-
-[laravel-social-auth](https://packagist.org/packages/mad-web/laravel-social-auth)
-
-[Easy Socialite](https://github.com/MiloudiMohamed/easy-socialite)
 
 # Development
 

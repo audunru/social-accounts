@@ -2,8 +2,6 @@
 
 namespace audunru\SocialAccounts;
 
-use Illuminate\Support\Facades\Route;
-
 class SocialAccounts
 {
     /**
@@ -12,25 +10,6 @@ class SocialAccounts
      * @var array
      */
     protected static $providerSettings = [];
-
-    /**
-     * Binds the SocialAccounts routes into the controller.
-     *
-     * @param callable|null $callback
-     */
-    public static function routes($callback = null, array $options = [])
-    {
-        $callback = $callback ?: function ($router) {
-            $router->all();
-        };
-        $defaultOptions = [
-            'namespace' => '\audunru\SocialAccounts\Controllers',
-        ];
-        $options = array_merge($defaultOptions, $options);
-        Route::group($options, function ($router) use ($callback) {
-            $callback(new RouteRegistrar($router));
-        });
-    }
 
     /**
      * Register settings for a provider.
