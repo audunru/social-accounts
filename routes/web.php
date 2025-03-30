@@ -3,11 +3,11 @@
 use audunru\SocialAccounts\Controllers\ProviderController;
 use Illuminate\Support\Facades\Route;
 
-if (! config('social-accounts.web_routes_enabled')) {
+if (! config('social-accounts.web_routes_enabled', true)) {
     return;
 }
 
-$providers = config('social-accounts.providers');
+$providers = config('social-accounts.providers', []);
 $prefix = config('social-accounts.route_prefix', 'social-accounts');
 $middleware = config('social-accounts.web_middleware', ['web']);
 
