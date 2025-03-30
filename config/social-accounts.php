@@ -12,9 +12,19 @@ return [
     'api_path' => 'social-accounts',
 
     /*
+     * Enable automatic registration of web routes (used for authentication).
+     */
+    'web_routes_enabled' => true,
+
+    /*
      * Web middleware.
      */
     'web_middleware' => ['web'],
+
+    /*
+     * Enable automatic registration of API routes (used for retrieving social accounts).
+     */
+    'api_routes_enabled' => true,
 
     /*
      * API middleware.
