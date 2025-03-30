@@ -34,6 +34,7 @@ abstract class TestCase extends BaseTestCase
             'provider' => 'users',
             'hash'     => false,
         ]);
+        $app['config']->set('social-accounts.api_middleware', ['api', 'auth:api']);
         $app->register(SocialiteServiceProvider::class);
     }
 

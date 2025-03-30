@@ -2,24 +2,41 @@
 
 namespace audunru\SocialAccounts;
 
-use Illuminate\Contracts\Routing\Registrar as Router;
+use Illuminate\Contracts\Routing\Registrar;
+use Illuminate\Routing\Router;
 
 class RouteRegistrar
 {
     /**
-     * The route prefix.
-     *
-     * @var string
+     * The enabled providers.
      */
-    protected $prefix;
+    private array $providers;
+
+    /**
+     * The route prefix.
+     */
+    private string $prefix;
+
+    /**
+     * Web middleware.
+     */
+    private array $webMiddleware;
+
+    /**
+     * API middleware.
+     */
+    private array $apiMiddleware;
 
     /**
      * Create a new route registrar instance.
      */
-    public function __construct(protected Router $router)
+    public function __construct(protected Registrar $router)
     {
         $this->router = $router;
-        $this->prefix = config('social-accounts.route_prefix');
+        $this->providers = config('social-accounts.providers');
+        $this->prefix = config('social-accounts.route_prefix', 'social-accounts');
+        $this->webMiddleware = config('social-accounts.web_middleware', ['web']);
+        $this->apiMiddleware = config('social-accounts.api_middleware', ['api']);
     }
 
     /**
@@ -36,7 +53,7 @@ class RouteRegistrar
      */
     public function forWeb(): void
     {
-        collect(config('social-accounts.providers'))->each(function ($provider) {
+        collect($this->providers)->each(function (string $provider) {
             $this->forProvider($provider);
         });
     }
@@ -46,7 +63,7 @@ class RouteRegistrar
      */
     public function forProvider(string $provider): void
     {
-        $this->router->group(['middleware' => ['web']], function ($router) use ($provider) {
+        $this->router->group(['middleware' => $this->webMiddleware], function (Router $router) use ($provider) {
             $router
                 ->prefix($this->prefix)
                 ->get("login/{$provider}", [
@@ -69,7 +86,7 @@ class RouteRegistrar
      */
     public function forApi(): void
     {
-        $this->router->group(['middleware' => ['api', 'auth:api']], function ($router) {
+        $this->router->group(['middleware' => $this->apiMiddleware], function (Router $router) {
             $router->apiResource($this->prefix, 'ApiController')
                 ->only([
                     'index', 'show', 'destroy',
