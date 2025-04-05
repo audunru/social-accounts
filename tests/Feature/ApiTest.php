@@ -3,14 +3,13 @@
 namespace audunru\SocialAccounts\Tests\Feature;
 
 use audunru\SocialAccounts\Models\SocialAccount;
-use audunru\SocialAccounts\SocialAccounts;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
 use Mockery;
 
 class ApiTest extends TestCase
 {
-    protected $prefix = 'social-accounts';
+    protected $apiPath = 'social-accounts';
     protected $user;
     protected $socialAccount;
     protected $structure;
@@ -35,7 +34,7 @@ class ApiTest extends TestCase
 
     public function testItFailsToGetSocialAccountsWhenUnauthenticated()
     {
-        $response = $this->json('GET', "/{$this->prefix}");
+        $response = $this->json('GET', "/{$this->apiPath}");
 
         $response
             ->assertStatus(401);
@@ -43,7 +42,7 @@ class ApiTest extends TestCase
 
     public function testItGetsSocialAccounts()
     {
-        $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}");
+        $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->apiPath}");
 
         $response
             ->assertStatus(200)
@@ -54,45 +53,16 @@ class ApiTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->json('GET', "/{$this->prefix}");
+        $response = $this->actingAs($user, 'api')->json('GET', "/{$this->apiPath}");
 
         $response
             ->assertStatus(200)
             ->assertJsonStructure(['data' => []]);
     }
 
-    public function testItGetsSocialAccountsFromADifferentEndpoint()
-    {
-        config(['social-accounts.route_prefix' => 'awesome-path']);
-        SocialAccounts::routes();
-
-        $response = $this->actingAs($this->user, 'api')->json('GET', '/awesome-path');
-
-        $response
-            ->assertStatus(200)
-            ->assertJsonStructure(['data' => [$this->structure]]);
-    }
-
     public function testItGetsASocialAccount()
     {
-        $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}/{$this->socialAccount->id}");
-
-        $response
-            ->assertStatus(200)
-            ->assertJsonStructure(['data' => $this->structure])
-            ->assertJson(['data' => [
-                'id'               => $this->socialAccount->id,
-                'provider'         => $this->socialAccount->provider,
-                'provider_user_id' => $this->socialAccount->provider_user_id,
-            ]]);
-    }
-
-    public function testItGetsASocialAccountFromADifferentEndpoint()
-    {
-        config(['social-accounts.route_prefix' => 'awesome-path']);
-        SocialAccounts::routes();
-
-        $response = $this->actingAs($this->user, 'api')->json('GET', "/awesome-path/{$this->socialAccount->id}");
+        $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->apiPath}/{$this->socialAccount->id}");
 
         $response
             ->assertStatus(200)
@@ -106,7 +76,7 @@ class ApiTest extends TestCase
 
     public function testItDeletesASocialAccount()
     {
-        $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$this->socialAccount->id}");
+        $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->apiPath}/{$this->socialAccount->id}");
 
         $response
             ->assertStatus(200)
@@ -119,7 +89,7 @@ class ApiTest extends TestCase
         $anotherSocialAccount = SocialAccount::factory()->make();
         $anotherUser->addSocialAccount($anotherSocialAccount);
 
-        $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->prefix}/{$anotherSocialAccount->id}");
+        $response = $this->actingAs($this->user, 'api')->json('GET', "/{$this->apiPath}/{$anotherSocialAccount->id}");
 
         $response
             ->assertStatus(403)
@@ -132,7 +102,7 @@ class ApiTest extends TestCase
         $anotherSocialAccount = SocialAccount::factory()->make();
         $anotherUser->addSocialAccount($anotherSocialAccount);
 
-        $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$anotherSocialAccount->id}");
+        $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->apiPath}/{$anotherSocialAccount->id}");
 
         $response
             ->assertStatus(403)
@@ -141,7 +111,7 @@ class ApiTest extends TestCase
 
     public function testItFailsToUpdateASocialAccount()
     {
-        $response = $this->actingAs($this->user, 'api')->json('PATCH', "/{$this->prefix}/{$this->socialAccount->id}", [
+        $response = $this->actingAs($this->user, 'api')->json('PATCH', "/{$this->apiPath}/{$this->socialAccount->id}", [
             'provider' => 'vandelay-industries',
         ]);
 
@@ -159,7 +129,7 @@ class ApiTest extends TestCase
 
         $this->app->instance('audunru\SocialAccounts\Models\SocialAccount', $socialAccount);
 
-        $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->prefix}/{$this->socialAccount->id}");
+        $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->apiPath}/{$this->socialAccount->id}");
 
         $response
             ->assertStatus(500);

@@ -15,6 +15,7 @@ class SocialAccountsServiceProvider extends PackageServiceProvider
         $package
             ->name('social-accounts')
             ->hasConfigFile()
+            ->hasRoutes('web', 'api')
             ->hasMigrations('create_social_accounts_table', 'make_email_and_password_nullable');
     }
 
@@ -27,7 +28,7 @@ class SocialAccountsServiceProvider extends PackageServiceProvider
         SocialAccount::class => SocialAccountPolicy::class,
     ];
 
-    public function bootingPackage()
+    public function bootingPackage(): void
     {
         $this->registerPolicies();
     }
@@ -35,7 +36,7 @@ class SocialAccountsServiceProvider extends PackageServiceProvider
     /**
      * Register the facade.
      */
-    public function packageRegistered()
+    public function packageRegistered(): void
     {
         $this->app->bind('social-accounts', SocialAccounts::class);
     }
@@ -43,7 +44,7 @@ class SocialAccountsServiceProvider extends PackageServiceProvider
     /**
      * Register the application's policies.
      */
-    public function registerPolicies()
+    public function registerPolicies(): void
     {
         foreach ($this->policies as $key => $value) {
             Gate::policy($key, $value);

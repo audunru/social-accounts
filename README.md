@@ -12,6 +12,10 @@ Your users can add one or more social logins to their account. It's up to you if
 
 The package also has a JSON API so you can display which social accounts a user has logged in with, and allow them to remove them.
 
+# Upgrading from earlier versions
+
+Notable changes are documented in the [migration guide](MIGRATE.md).
+
 # Installation
 
 ## Step 1: Install with Composer
@@ -22,7 +26,7 @@ composer require audunru/social-accounts
 
 ## Step 2: Make changes to your code
 
-First, you must add the `HasSocialAccounts` trait to your `User` model:
+Add the `HasSocialAccounts` trait to your `User` model:
 
 ```php
 use audunru\SocialAccounts\Traits\HasSocialAccounts;
@@ -72,45 +76,6 @@ Third, you need to add credentials for your supported social login providers to 
 ],
 ```
 
-Fourth, you should call the `SocialAccounts::routes` method within the boot method of your AuthServiceProvider. This method will register the routes necessary to login with your configured providers. It will also register the API routes necessary for a user to retrieve their social accounts and remove them.
-
-```php
-<?php
-
-namespace App\Providers;
-
-use audunru\SocialAccounts\SocialAccounts;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
-class AuthServiceProvider extends ServiceProvider
-{
-    /**
-     * Register any authentication / authorization services.
-     */
-    public function boot()
-    {
-        $this->registerPolicies();
-
-        SocialAccounts::routes();
-    }
-}
-```
-
-Optional: You can add web and API routes in separate steps.
-
-```php
-SocialAccounts::routes(
-    function ($router) {
-        $router->forWeb();
-    }
-);
-SocialAccounts::routes(
-    function ($router) {
-        $router->forApi();
-    }
-);
-```
-
 ## Step 3: Configuration and customization
 
 You can find the configuration and documentation of all options in [config/social-accounts.php](config/social-accounts.php).
@@ -138,7 +103,7 @@ If you want to allow your existing users to log in with Google, add a link to `/
 @endauth
 ```
 
-After clicking on this link, the user will be redirected to Google, where they must authorize the request. Afterwards they will be returned to your app. Then, a new `SocialAccount` will be added as related model of the `User`.
+After clicking on this link, the user will be redirected to Google, where they must authorize the request. Afterwards they will be returned to your app. Then, a new `SocialAccount` model will be added as related model of the `User`.
 
 ## Signing up users
 
@@ -198,11 +163,11 @@ For example, you can use this to limit the domains a Google user can choose to s
 SocialAccounts::registerProviderSettings('google', 'with', ['hd' => 'seinfeld.com']);
 ```
 
-[See Socialite's documentation for more info on Optional Parameters, Access Scopes and Stateless Authentication](https://laravel.com/docs/5.8/socialite#optional-parameters)
+[See Socialite's documentation for more info on Optional Parameters, Access Scopes and Stateless Authentication](https://laravel.com/docs/master/socialite#optional-parameters)
 
 ## Gates
 
-You can use [gates](https://laravel.com/docs/5.8/authorization#gates) to allow or deny certain actions. Gates should be defined within the boot method of your AuthServiceProvider.
+You can use [gates](https://laravel.com/docs/master/authorization#gates) to allow or deny certain actions. Gates should be defined within the boot method of your AppServiceProvider.
 
 ```php
 <?php
@@ -212,16 +177,15 @@ namespace App\Providers;
 use App\User;
 use audunru\SocialAccounts\SocialAccounts;
 use Laravel\Socialite\Contracts\User as ProviderUser;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any authentication / authorization services.
      */
     public function boot()
     {
-        $this->registerPolicies();
         /*
          * If your company uses G Suite and you want to ensure that only employees can log in, you can define a "login-with-provider" gate.
          *
@@ -248,7 +212,6 @@ class AuthServiceProvider extends ServiceProvider
              */
             return $user->isAdmin();
         });
-        SocialAccounts::routes();
     }
 }
 
@@ -260,7 +223,7 @@ When a user is created after authenticating with a provider, a `SocialUserCreate
 
 When a social account is added to an existing user, a `SocialAccountAdded` event is dispatched. The event receives the User, SocialAccount and ProviderUser model.
 
-For instance, you could listen for an event and grab more [details about the user](https://laravel.com/docs/5.8/socialite#retrieving-user-details).
+For instance, you could listen for an event and grab more [details about the user](https://laravel.com/docs/master/socialite#retrieving-user-details).
 
 ```php
 <?php
@@ -290,12 +253,6 @@ class AddUserAvatar
     }
 }
 ```
-
-# Alternatives
-
-[laravel-social-auth](https://packagist.org/packages/mad-web/laravel-social-auth)
-
-[Easy Socialite](https://github.com/MiloudiMohamed/easy-socialite)
 
 # Development
 
