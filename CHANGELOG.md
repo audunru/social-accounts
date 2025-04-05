@@ -1,5 +1,16 @@
 # Changelog
 
+## [8.0.0](https://github.com/audunru/social-accounts/compare/v7.0.0...v8.0.0) (2025-04-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* laravel sanctum support ([#46](https://github.com/audunru/social-accounts/issues/46))
+
+### Features
+
+* laravel sanctum support ([#46](https://github.com/audunru/social-accounts/issues/46)) ([412166d](https://github.com/audunru/social-accounts/commit/412166d117f5cad817d96cc3c2e578a63b20f905))
+
 ## [7.0.0](https://github.com/audunru/social-accounts/compare/v6.1.2...v7.0.0) (2025-03-16)
 
 
