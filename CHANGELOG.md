@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.1.0](https://github.com/audunru/social-accounts/compare/v8.0.0...v8.1.0) (2025-09-22)
+
+
+### Features
+
+* redirect to intended url after login ([#65](https://github.com/audunru/social-accounts/issues/65)) ([260de0e](https://github.com/audunru/social-accounts/commit/260de0e10cb1c6cf95e0421df5c9afaec9b00351))
+
 ## [8.0.0](https://github.com/audunru/social-accounts/compare/v7.0.0...v8.0.0) (2025-04-05)
 
 
