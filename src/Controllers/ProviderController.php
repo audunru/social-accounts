@@ -13,6 +13,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class ProviderController extends Controller
@@ -36,6 +38,18 @@ class ProviderController extends Controller
 
         if ($this->request->has('remember')) {
             $this->request->session()->put('remember', true);
+        }
+
+        if ($this->request->has('redirect')) {
+            $redirect = $this->request->get('redirect');
+
+            // Only allow relative paths to avoid open redirect vulnerabilities (e.g. //evil.com or http://evil.com)
+            if (is_string($redirect)
+                && Str::startsWith($redirect, '/')
+                && ! Str::startsWith($redirect, '//')
+            ) {
+                Redirect::setIntendedUrl($redirect);
+            }
         }
 
         return $socialite::driver($this->request->provider)->redirect();

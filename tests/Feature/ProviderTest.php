@@ -102,6 +102,32 @@ class ProviderTest extends TestCase
         $response->assertSessionHas('remember', true);
     }
 
+    public function testSessionHasIntendedUrlIfItWasPresentInLoginUrl()
+    {
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}?redirect=/custom-url");
+
+        $response->assertSessionHas('url.intended', '/custom-url');
+    }
+
+    public function testRedirectUrlThatStartsWithDoubleSlashIsNotStored()
+    {
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}?redirect=//evil.com");
+
+        $response->assertSessionMissing('url.intended');
+    }
+
     public function testItLogsInAUserWhileAutomaticallyCreateUsersIsOn()
     {
         $this->enableUserCreation();
