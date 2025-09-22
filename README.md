@@ -141,6 +141,18 @@ Add "remember" to the login URL to keep the user signed in:
 <a href="/social-accounts/login/google?remember">Sign in with Google</a>
 ```
 
+## Redirect after login
+
+Add "redirect=/some-url" to the login URL to redirect the user after login:
+
+```html
+<a href="/social-accounts/login/google?redirect=/some-url"
+  >Sign in with Google</a
+>
+```
+
+Only relative URLs are supported.
+
 ## API
 
 The JSON API, which by default is accessible at `/social-accounts`, allows authenticated users to retrieve their social accounts and remove them.
