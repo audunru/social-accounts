@@ -1,3 +1,10 @@
+## [8.1.2](https://github.com/audunru/social-accounts/compare/v8.1.1...v8.1.2) (2025-11-15)
+
+
+### Bug Fixes
+
+* force semantic release ([521a33a](https://github.com/audunru/social-accounts/commit/521a33aecc1bed170058171d32a23b67d2d39f55))
+
 # Changelog
 
 ## [8.1.0](https://github.com/audunru/social-accounts/compare/v8.0.0...v8.1.0) (2025-09-22)
