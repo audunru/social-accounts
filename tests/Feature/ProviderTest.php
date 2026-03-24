@@ -22,10 +22,12 @@ class ProviderTest extends TestCase
     use WithFaker;
 
     protected $provider = 'google';
+
     protected $prefix = 'social-accounts';
+
     protected $redirectTo = 'http://localhost';
 
-    public function testItFailsToLogInWhenAutomaticallyCreateUsersIsFalse()
+    public function test_it_fails_to_log_in_when_automatically_create_users_is_false()
     {
         $this->disableUserCreation();
 
@@ -36,12 +38,12 @@ class ProviderTest extends TestCase
         $this->assertFalse(Auth::check());
     }
 
-    public function testItFailsToCreateAccountWhenGateOnlyAllowsACertainEmailAddress()
+    public function test_it_fails_to_create_account_when_gate_only_allows_a_certain_email_address()
     {
         $this->enableUserCreation();
 
         Gate::define('login-with-provider', function (?User $user, ProviderUser $providerUser) {
-            return 'jerry@seinfeld.com' === $providerUser->getEmail();
+            return $providerUser->getEmail() === 'jerry@seinfeld.com';
         });
 
         $this->mockSocialite('newman@seinfeld.com');
@@ -55,12 +57,12 @@ class ProviderTest extends TestCase
         ]);
     }
 
-    public function testItCreatesAccountWhenGateOnlyAllowsACertainEmailAddress()
+    public function test_it_creates_account_when_gate_only_allows_a_certain_email_address()
     {
         $this->enableUserCreation();
 
         Gate::define('login-with-provider', function (?User $user, ProviderUser $providerUser) {
-            return 'jerry@seinfeld.com' === $providerUser->getEmail();
+            return $providerUser->getEmail() === 'jerry@seinfeld.com';
         });
 
         $this->mockSocialite('jerry@seinfeld.com');
@@ -74,7 +76,7 @@ class ProviderTest extends TestCase
         ]);
     }
 
-    public function testItLogsInAUser()
+    public function test_it_logs_in_a_user()
     {
         $user = User::factory()->create();
         $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
@@ -89,7 +91,7 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
-    public function testSessionHasRememberIfItWasPresentInLoginUrl()
+    public function test_session_has_remember_if_it_was_present_in_login_url()
     {
         $user = User::factory()->create();
         $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
@@ -102,7 +104,7 @@ class ProviderTest extends TestCase
         $response->assertSessionHas('remember', true);
     }
 
-    public function testSessionHasIntendedUrlIfItWasPresentInLoginUrl()
+    public function test_session_has_intended_url_if_it_was_present_in_login_url()
     {
         $user = User::factory()->create();
         $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
@@ -115,7 +117,7 @@ class ProviderTest extends TestCase
         $response->assertSessionHas('url.intended', '/custom-url');
     }
 
-    public function testRedirectUrlThatStartsWithDoubleSlashIsNotStored()
+    public function test_redirect_url_that_starts_with_double_slash_is_not_stored()
     {
         $user = User::factory()->create();
         $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
@@ -128,7 +130,7 @@ class ProviderTest extends TestCase
         $response->assertSessionMissing('url.intended');
     }
 
-    public function testItLogsInAUserWhileAutomaticallyCreateUsersIsOn()
+    public function test_it_logs_in_a_user_while_automatically_create_users_is_on()
     {
         $this->enableUserCreation();
 
@@ -145,7 +147,7 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
-    public function testUserIsAuthenticatedButLogsInAsSomeoneElse()
+    public function test_user_is_authenticated_but_logs_in_as_someone_else()
     {
         $this->enableSocialAccountCreation();
 
@@ -167,7 +169,7 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
-    public function testItCreatesAUser()
+    public function test_it_creates_a_user()
     {
         $this->enableUserCreation();
 
@@ -182,11 +184,11 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->email, Auth::user()->email);
         $this->assertDatabaseHas('users', [
             'email' => $user->email,
-            'name'  => $user->name,
+            'name' => $user->name,
         ]);
     }
 
-    public function testItAddsASocialAccount()
+    public function test_it_adds_a_social_account()
     {
         $this->enableSocialAccountCreation();
 
@@ -204,12 +206,12 @@ class ProviderTest extends TestCase
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseHas('social_accounts', [
-            'provider'         => $this->provider,
+            'provider' => $this->provider,
             'provider_user_id' => $providerUserId,
         ]);
     }
 
-    public function testItFailsToAddSocialAccountWhenItIsDisabled()
+    public function test_it_fails_to_add_social_account_when_it_is_disabled()
     {
         $this->disableSocialAccountCreation();
 
@@ -219,17 +221,17 @@ class ProviderTest extends TestCase
         $this->mockSocialite($user->email, $user->name, $providerUserId);
 
         $response = $this
-                ->actingAs($user)
-                ->get("/{$this->prefix}/login/{$this->provider}/callback");
+            ->actingAs($user)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response
             ->assertStatus(403);
         $this->assertDatabaseMissing('social_accounts', [
-            'provider'         => $this->provider,
+            'provider' => $this->provider,
             'provider_user_id' => $providerUserId,
         ]);
     }
 
-    public function testItFailsToAddASecondSocialAccountWithTheSameProvider()
+    public function test_it_fails_to_add_a_second_social_account_with_the_same_provider()
     {
         $this->enableSocialAccountCreation();
 
@@ -248,12 +250,12 @@ class ProviderTest extends TestCase
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseMissing('social_accounts', [
-            'provider'         => $this->provider,
+            'provider' => $this->provider,
             'provider_user_id' => $providerUserId,
         ]);
     }
 
-    public function testEventsAreDispatchedWhenUserIsCreated()
+    public function test_events_are_dispatched_when_user_is_created()
     {
         Event::fake();
 
@@ -278,7 +280,7 @@ class ProviderTest extends TestCase
         });
     }
 
-    public function testAnEventIsDispatchedWhenSocialAccountIsAdded()
+    public function test_an_event_is_dispatched_when_social_account_is_added()
     {
         Event::fake();
 

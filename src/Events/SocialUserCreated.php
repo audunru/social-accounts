@@ -2,6 +2,4 @@
 
 namespace audunru\SocialAccounts\Events;
 
-class SocialUserCreated extends SocialAccountAdded
-{
-}
+class SocialUserCreated extends SocialAccountAdded {}

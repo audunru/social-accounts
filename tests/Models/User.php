@@ -10,8 +10,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasSocialAccounts;
     use HasFactory;
+    use HasSocialAccounts;
 
     /**
      * The attributes that are mass assignable.

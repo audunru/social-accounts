@@ -16,7 +16,5 @@ class SocialAccountAdded
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(public User $user, public SocialAccount $socialAccount, public ProviderUser $providerUser)
-    {
-    }
+    public function __construct(public User $user, public SocialAccount $socialAccount, public ProviderUser $providerUser) {}
 }

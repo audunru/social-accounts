@@ -1,5 +1,8 @@
 <?php
 
+use App\User;
+use audunru\SocialAccounts\Models\SocialAccount;
+
 return [
     /*
      * Web routes start with a prefix.
@@ -77,12 +80,12 @@ return [
         /*
          * When using the "HasSocialAccounts" trait from this package, we need to know which Eloquent model should be used to retrieve your social accounts.
          */
-        'social_account' => audunru\SocialAccounts\Models\SocialAccount::class,
+        'social_account' => SocialAccount::class,
 
         /*
          * When using the "HasSocialAccounts" trait from this package, we need to know which Eloquent model the social accounts belong to.
          */
-        'user' => App\User::class,
+        'user' => User::class,
     ],
     'table_names' => [
         /*

@@ -4,6 +4,7 @@ namespace audunru\SocialAccounts\Traits;
 
 use audunru\SocialAccounts\Models\SocialAccount;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasSocialAccounts
@@ -31,7 +32,7 @@ trait HasSocialAccounts
     /**
      * Retrieve a user with social account matching the parameters.
      *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return Model|null
      */
     public static function findBySocialAccount(string $provider, string $providerUserId): ?self
     {

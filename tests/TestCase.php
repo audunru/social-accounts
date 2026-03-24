@@ -37,9 +37,9 @@ abstract class TestCase extends BaseTestCase
     {
         tap($app['config'], function (Repository $config) {
             $config->set('auth.guards.api', [
-                'driver'   => 'token',
+                'driver' => 'token',
                 'provider' => 'users',
-                'hash'     => false,
+                'hash' => false,
             ]);
             $config->set('social-accounts.api_middleware', ['api', 'auth:api']);
             $config->set('social-accounts.automatically_create_users', true);
@@ -56,8 +56,8 @@ abstract class TestCase extends BaseTestCase
 
         include_once __DIR__.'/../database/migrations/create_social_accounts_table.php.stub';
         include_once __DIR__.'/../database/migrations/make_email_and_password_nullable.php.stub';
-        (new CreateSocialAccountsTable())->up();
-        (new MakeEmailAndPasswordNullable())->up();
+        (new CreateSocialAccountsTable)->up();
+        (new MakeEmailAndPasswordNullable)->up();
 
         SocialAccounts::emptyProviderSettings();
     }
