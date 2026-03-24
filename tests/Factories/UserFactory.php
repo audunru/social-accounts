@@ -23,11 +23,11 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name'              => $this->faker->name,
-            'email'             => $this->faker->unique()->safeEmail,
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => Carbon::now(),
-            'password'          => $this->faker->password,
-            'remember_token'    => substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyz', 5)), 0, 10),
+            'password' => $this->faker->password,
+            'remember_token' => substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyz', 5)), 0, 10),
         ];
     }
 }

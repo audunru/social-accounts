@@ -23,7 +23,7 @@ class SocialAccountFactory extends Factory
     public function definition()
     {
         return [
-            'provider'         => Arr::random(['facebook', 'twitter', 'linkedin', 'google', 'github', 'gitlab', 'bitbucket']),
+            'provider' => Arr::random(['facebook', 'twitter', 'linkedin', 'google', 'github', 'gitlab', 'bitbucket']),
             'provider_user_id' => $this->faker->uuid,
         ];
     }

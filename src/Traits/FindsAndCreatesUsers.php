@@ -25,8 +25,8 @@ trait FindsAndCreatesUsers
     private function createUser(string $provider, ProviderUser $providerUser): User
     {
         $user = config('social-accounts.models.user')::create([
-            'email'    => $providerUser->getEmail(),
-            'name'     => $providerUser->getName(),
+            'email' => $providerUser->getEmail(),
+            'name' => $providerUser->getName(),
         ]);
 
         $socialAccount = $this->makeSocialAccount($provider, $providerUser->getId());

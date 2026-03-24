@@ -27,9 +27,7 @@ class ProviderController extends Controller
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(protected Request $request)
-    {
-    }
+    public function __construct(protected Request $request) {}
 
     /**
      * Redirect the user to the authentication page.
@@ -96,14 +94,14 @@ class ProviderController extends Controller
     protected function getAccountStrategy(): Strategy
     {
         if (config('social-accounts.models.user')::findBySocialAccount($this->request->provider, $this->providerUser->getId())) {
-            return new FindUser();
+            return new FindUser;
         }
 
         abort_if(Auth::user()->hasProvider($this->request->provider), 409, "You already have a social login with this provider: {$this->request->provider}.");
         abort_if(Gate::has(config('social-accounts.gates.add-social-account'))
             && Gate::denies('add-social-account', $this->providerUser), 403, 'You are not allowed to add social logins.');
 
-        return new AddSocialAccount();
+        return new AddSocialAccount;
     }
 
     /**
@@ -112,10 +110,10 @@ class ProviderController extends Controller
     protected function getLoginStrategy(): Strategy
     {
         if (config('social-accounts.automatically_create_users')) {
-            return new FindOrCreateUser();
+            return new FindOrCreateUser;
         }
 
-        return new FindUser();
+        return new FindUser;
     }
 
     /**

@@ -9,6 +9,7 @@ use audunru\SocialAccounts\Tests\TestCase;
 class SocialAccountTest extends TestCase
 {
     private $user;
+
     private $socialAccount;
 
     /**
@@ -22,7 +23,7 @@ class SocialAccountTest extends TestCase
         $this->user->addSocialAccount($this->socialAccount);
     }
 
-    public function testItShowsSocialAccount()
+    public function test_it_shows_social_account()
     {
         $found = SocialAccount::find($this->socialAccount->id);
 
@@ -31,12 +32,12 @@ class SocialAccountTest extends TestCase
         $this->assertEquals($this->socialAccount->provider_user_id, $found->provider_user_id);
     }
 
-    public function testItUpdatesSocialAccount()
+    public function test_it_updates_social_account()
     {
         $updated = SocialAccount::factory()->make();
 
         $data = [
-            'provider'         => $updated->provider,
+            'provider' => $updated->provider,
             'provider_user_id' => $updated->provider_user_id,
         ];
 
@@ -47,7 +48,7 @@ class SocialAccountTest extends TestCase
         $this->assertEquals($data['provider_user_id'], $this->socialAccount->provider_user_id);
     }
 
-    public function testItDeletesSocialAccount()
+    public function test_it_deletes_social_account()
     {
         $delete = $this->socialAccount->delete();
 

@@ -15,7 +15,7 @@ class ApiTestWithCustomPath extends ApiTest
         parent::defineEnvironment($app);
     }
 
-    public function testItGetsSocialAccountsFromADifferentEndpoint()
+    public function test_it_gets_social_accounts_from_a_different_endpoint()
     {
         $response = $this->actingAs($this->user, 'api')->json('GET', '/awesome-path');
 
@@ -24,7 +24,7 @@ class ApiTestWithCustomPath extends ApiTest
             ->assertJsonStructure(['data' => [$this->structure]]);
     }
 
-    public function testItGetsASocialAccountFromADifferentEndpoint()
+    public function test_it_gets_a_social_account_from_a_different_endpoint()
     {
         $response = $this->actingAs($this->user, 'api')->json('GET', "/awesome-path/{$this->socialAccount->id}");
 
@@ -32,8 +32,8 @@ class ApiTestWithCustomPath extends ApiTest
             ->assertStatus(200)
             ->assertJsonStructure(['data' => $this->structure])
             ->assertJson(['data' => [
-                'id'               => $this->socialAccount->id,
-                'provider'         => $this->socialAccount->provider,
+                'id' => $this->socialAccount->id,
+                'provider' => $this->socialAccount->provider,
                 'provider_user_id' => $this->socialAccount->provider_user_id,
             ]]);
     }
