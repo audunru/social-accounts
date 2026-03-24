@@ -1,3 +1,15 @@
+# [9.0.0](https://github.com/audunru/social-accounts/compare/v8.1.2...v9.0.0) (2026-03-24)
+
+
+### Features
+
+* laravel 13 support ([#89](https://github.com/audunru/social-accounts/issues/89)) ([cfeb0b6](https://github.com/audunru/social-accounts/commit/cfeb0b64be827fc57cc612ec8d7692cfa5cf398c))
+
+
+### BREAKING CHANGES
+
+* Laravel 13 is now the minimum required version, which also means PHP 8.3 is required
+
 ## [8.1.2](https://github.com/audunru/social-accounts/compare/v8.1.1...v8.1.2) (2025-11-15)
 
 
