@@ -2,3 +2,4 @@
 *.cache
 .env.testing
 build/logs/clover.xml
+composer.lock
