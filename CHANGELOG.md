@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/audunru/social-accounts/compare/v9.0.0...v9.1.0) (2026-05-25)
+
+
+### Features
+
+* add Trivy security scan workflow ([#95](https://github.com/audunru/social-accounts/issues/95)) ([6f3345c](https://github.com/audunru/social-accounts/commit/6f3345c33920c285f3b68dc4080fbbf366ccd6f6))
+
 # [9.0.0](https://github.com/audunru/social-accounts/compare/v8.1.2...v9.0.0) (2026-03-24)
 
 
