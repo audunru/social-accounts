@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Contracts\User as ProviderUser;
+use Laravel\Socialite\Facades\Socialite;
 
 /**
  * @SuppressWarnings("unused")
@@ -301,5 +302,48 @@ class ProviderTest extends TestCase
                 && $event->socialAccount->provider_user_id === $providerUserId
                 && $event->providerUser->getId() === $providerUserId;
         });
+    }
+
+    public function test_it_redirects_when_provider_returns_an_error()
+    {
+        $this->enableUserCreation();
+
+        Socialite::shouldReceive('driver')->never();
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback?error=access_denied&state=abc");
+
+        $response->assertStatus(302);
+        $this->assertEquals($this->redirectTo, $response->getTargetUrl());
+        $this->assertFalse(Auth::check());
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    public function test_it_redirects_to_intended_url_when_provider_returns_an_error()
+    {
+        Socialite::shouldReceive('driver')->never();
+
+        $response = $this
+            ->withSession(['url.intended' => '/custom-url'])
+            ->get("/{$this->prefix}/login/{$this->provider}/callback?error=access_denied&state=abc");
+
+        $response->assertRedirect('/custom-url');
+    }
+
+    public function test_authenticated_user_is_redirected_when_provider_returns_an_error()
+    {
+        $this->enableSocialAccountCreation();
+
+        $user = User::factory()->create();
+
+        Socialite::shouldReceive('driver')->never();
+
+        $response = $this
+            ->actingAs($user)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback?error=access_denied&state=abc");
+
+        $response->assertStatus(302);
+        $this->assertEquals($this->redirectTo, $response->getTargetUrl());
+        $this->assertEquals($user->id, Auth::id());
+        $this->assertDatabaseCount('social_accounts', 0);
     }
 }
