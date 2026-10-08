@@ -1,3 +1,10 @@
+## [9.1.1](https://github.com/audunru/social-accounts/compare/v9.1.0...v9.1.1) (2026-10-08)
+
+
+### Bug Fixes
+
+* redirect to intended url when provider callback returns an error ([#114](https://github.com/audunru/social-accounts/issues/114)) ([18245a0](https://github.com/audunru/social-accounts/commit/18245a0306ebaf9be4a6fc31767c305d7af07748))
+
 # [9.1.0](https://github.com/audunru/social-accounts/compare/v9.0.0...v9.1.0) (2026-05-25)
 
 
