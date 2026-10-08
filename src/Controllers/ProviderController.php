@@ -61,6 +61,11 @@ class ProviderController extends Controller
      */
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
+        // The provider returns an error instead of a code when the user denies access
+        if ($this->request->has('error')) {
+            return redirect()->intended();
+        }
+
         $this->providerUser = $socialite::driver($this->request->provider)->user();
 
         abort_if(Gate::has(config('social-accounts.gates.login-with-provider'))
