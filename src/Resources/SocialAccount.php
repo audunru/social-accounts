@@ -5,6 +5,9 @@ namespace audunru\SocialAccounts\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin \audunru\SocialAccounts\Models\SocialAccount
+ */
 class SocialAccount extends JsonResource
 {
     /**
