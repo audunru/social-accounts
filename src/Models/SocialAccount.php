@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property string $provider
+ * @property string $provider_user_id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class SocialAccount extends Model
 {
     use HasFactory;
