@@ -1,3 +1,10 @@
+## [9.1.3](https://github.com/audunru/social-accounts/compare/v9.1.2...v9.1.3) (2026-10-11)
+
+
+### Bug Fixes
+
+* add type information to the SocialAccount resource and model ([#118](https://github.com/audunru/social-accounts/issues/118)) ([30cf16e](https://github.com/audunru/social-accounts/commit/30cf16e288f2e0d1c73680333e2e2218c5dc310a)), closes [#117](https://github.com/audunru/social-accounts/issues/117)
+
 ## [9.1.2](https://github.com/audunru/social-accounts/compare/v9.1.1...v9.1.2) (2026-10-11)
 
 
