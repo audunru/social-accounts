@@ -63,7 +63,7 @@ class ProviderController extends Controller
     {
         // The provider returns an error instead of a code when the user denies access
         if ($this->request->has('error')) {
-            return redirect()->intended();
+            return redirect()->intended()->enforceSameOrigin(url('/'));
         }
 
         $this->providerUser = $socialite::driver($this->request->provider)->user();
@@ -78,7 +78,7 @@ class ProviderController extends Controller
         $remember = $this->request->session()->pull('remember', false);
         Auth::login($user, $remember);
 
-        return redirect()->intended();
+        return redirect()->intended()->enforceSameOrigin(url('/'));
     }
 
     /**

@@ -131,6 +131,58 @@ class ProviderTest extends TestCase
         $response->assertSessionMissing('url.intended');
     }
 
+    public function test_redirect_url_that_starts_with_slash_and_backslash_stays_on_same_host()
+    {
+        $this->enableUserCreation();
+
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $this->get("/{$this->prefix}/login/{$this->provider}?redirect=/%5Cevil.com");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $this->assertEquals("{$this->redirectTo}/\\evil.com", $response->getTargetUrl());
+    }
+
+    public function test_it_does_not_redirect_to_intended_url_on_another_host()
+    {
+        $this->enableUserCreation();
+
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        foreach (['//evil.com', 'https://evil.com/path'] as $intendedUrl) {
+            $response = $this
+                ->withSession(['url.intended' => $intendedUrl])
+                ->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+            $this->assertEquals($this->redirectTo, $response->getTargetUrl());
+        }
+    }
+
+    public function test_it_redirects_to_absolute_intended_url_on_same_host()
+    {
+        $this->enableUserCreation();
+
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $response = $this
+            ->withSession(['url.intended' => "{$this->redirectTo}/custom-url"])
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $this->assertEquals("{$this->redirectTo}/custom-url", $response->getTargetUrl());
+    }
+
     public function test_it_logs_in_a_user_while_automatically_create_users_is_on()
     {
         $this->enableUserCreation();
@@ -327,6 +379,17 @@ class ProviderTest extends TestCase
             ->get("/{$this->prefix}/login/{$this->provider}/callback?error=access_denied&state=abc");
 
         $response->assertRedirect('/custom-url');
+    }
+
+    public function test_it_does_not_redirect_to_intended_url_on_another_host_when_provider_returns_an_error()
+    {
+        Socialite::shouldReceive('driver')->never();
+
+        $response = $this
+            ->withSession(['url.intended' => '//evil.com'])
+            ->get("/{$this->prefix}/login/{$this->provider}/callback?error=access_denied&state=abc");
+
+        $this->assertEquals($this->redirectTo, $response->getTargetUrl());
     }
 
     public function test_authenticated_user_is_redirected_when_provider_returns_an_error()
