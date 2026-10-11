@@ -1,3 +1,10 @@
+## [9.1.2](https://github.com/audunru/social-accounts/compare/v9.1.1...v9.1.2) (2026-10-11)
+
+
+### Bug Fixes
+
+* only redirect to same-origin urls after provider callback ([#116](https://github.com/audunru/social-accounts/issues/116)) ([254cdc3](https://github.com/audunru/social-accounts/commit/254cdc341a1ba9c8a972ffccc569cc35a566e7bb)), closes [#115](https://github.com/audunru/social-accounts/issues/115)
+
 ## [9.1.1](https://github.com/audunru/social-accounts/compare/v9.1.0...v9.1.1) (2026-10-08)
 
 
