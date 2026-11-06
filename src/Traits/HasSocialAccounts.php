@@ -47,9 +47,6 @@ trait HasSocialAccounts
      */
     public function hasProvider(string $provider): bool
     {
-        return $this->whereHas('socialAccounts', function (Builder $query) use ($provider) {
-            $query->where('provider', '=', $provider)
-                ->where('user_id', '=', $this->id);
-        })->get()->isNotEmpty();
+        return $this->socialAccounts()->where('provider', $provider)->exists();
     }
 }
