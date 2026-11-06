@@ -1,3 +1,10 @@
+## [9.1.4](https://github.com/audunru/social-accounts/compare/v9.1.3...v9.1.4) (2026-11-06)
+
+
+### Bug Fixes
+
+* use column_names config in hasProvider() ([#126](https://github.com/audunru/social-accounts/issues/126)) ([6b46e55](https://github.com/audunru/social-accounts/commit/6b46e555fe99b0057dafb8116b9b26c6f3ed1cae))
+
 ## [9.1.3](https://github.com/audunru/social-accounts/compare/v9.1.2...v9.1.3) (2026-10-11)
 
 
