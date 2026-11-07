@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use audunru\SocialAccounts\Events\SocialAccountAdded;
 use audunru\SocialAccounts\Events\SocialUserCreated;
+use audunru\SocialAccounts\Events\SocialUserLoggedIn;
+use audunru\SocialAccounts\Exceptions\SocialAccountBelongsToAnotherUser;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
@@ -200,8 +202,10 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
     }
 
-    public function test_user_is_authenticated_but_logs_in_as_someone_else()
+    public function test_it_fails_when_social_account_belongs_to_another_user()
     {
+        Event::fake();
+
         $this->enableSocialAccountCreation();
 
         $user = User::factory()->create();
@@ -216,10 +220,90 @@ class ProviderTest extends TestCase
             ->actingAs($anotherUser)
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
+        $response->assertStatus(409);
+        $this->assertInstanceOf(SocialAccountBelongsToAnotherUser::class, $response->exception);
+        $this->assertEquals($anotherUser->id, Auth::id());
+        $this->assertEquals(0, $anotherUser->socialAccounts()->count());
+        Event::assertNotDispatched(SocialUserLoggedIn::class);
+        Event::assertNotDispatched(SocialAccountAdded::class);
+    }
+
+    public function test_it_fails_when_social_account_belongs_to_another_user_and_both_have_no_password()
+    {
+        Event::fake();
+
+        $this->enableSocialAccountCreation();
+
+        $user = User::factory()->create(['password' => null]);
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $anotherUser = User::factory()->create(['password' => null]);
+
+        $response = $this
+            ->actingAs($anotherUser)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(409);
+        $this->assertInstanceOf(SocialAccountBelongsToAnotherUser::class, $response->exception);
+        $this->assertEquals($anotherUser->id, Auth::id());
+        $this->assertEquals(0, $anotherUser->socialAccounts()->count());
+        Event::assertNotDispatched(SocialUserLoggedIn::class);
+        Event::assertNotDispatched(SocialAccountAdded::class);
+    }
+
+    public function test_it_fails_when_social_account_belongs_to_another_user_and_user_already_has_the_provider()
+    {
+        Event::fake();
+
+        $this->enableSocialAccountCreation();
+
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $anotherUser = User::factory()->create();
+        $anotherUser->addSocialAccount(SocialAccount::factory()->make(['provider' => $this->provider]));
+
+        $response = $this
+            ->actingAs($anotherUser)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(409);
+        $this->assertInstanceOf(SocialAccountBelongsToAnotherUser::class, $response->exception);
+        $this->assertEquals($anotherUser->id, Auth::id());
+        $this->assertEquals(1, $anotherUser->socialAccounts()->count());
+        Event::assertNotDispatched(SocialUserLoggedIn::class);
+        Event::assertNotDispatched(SocialAccountAdded::class);
+    }
+
+    public function test_authenticated_user_logs_in_with_own_social_account()
+    {
+        Event::fake();
+
+        $this->enableSocialAccountCreation();
+
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $response = $this
+            ->actingAs($user)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
+
         $response->assertStatus(302);
         $this->assertEquals($this->redirectTo, $response->getTargetUrl());
-        $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
+        Event::assertDispatched(SocialUserLoggedIn::class, function ($event) use ($user) {
+            return $event->user->is($user);
+        });
+        Event::assertNotDispatched(SocialAccountAdded::class);
     }
 
     public function test_it_creates_a_user()

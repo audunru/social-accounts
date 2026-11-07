@@ -112,7 +112,7 @@ class SocialUserLoggedInTest extends TestCase
         });
     }
 
-    public function test_logged_in_event_is_dispatched_when_authenticated_user_logs_in_as_someone_else()
+    public function test_logged_in_event_is_not_dispatched_when_social_account_belongs_to_another_user()
     {
         Event::fake([SocialUserLoggedIn::class]);
 
@@ -130,12 +130,8 @@ class SocialUserLoggedInTest extends TestCase
             ->actingAs($anotherUser)
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
-        $response->assertStatus(302);
-        Event::assertDispatched(SocialUserLoggedIn::class, function ($event) use ($user, $socialAccount) {
-            return $event->user->is($user)
-                && $event->provider === $this->provider
-                && $event->providerUser->getId() === $socialAccount->provider_user_id;
-        });
+        $response->assertStatus(409);
+        Event::assertNotDispatched(SocialUserLoggedIn::class);
     }
 
     public function test_logged_in_event_is_dispatched_when_social_account_is_added()
@@ -277,11 +273,7 @@ class SocialUserLoggedInTest extends TestCase
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
-        $anotherUser = User::factory()->create();
-
-        $response = $this
-            ->actingAs($anotherUser)
-            ->get("/{$this->prefix}/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(302);
         $response->assertSessionHas('logged_in_as', $user->id);

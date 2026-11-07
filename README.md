@@ -104,6 +104,19 @@ If you want to allow your existing users to log in with Google, add a link to `/
 
 After clicking on this link, the user will be redirected to Google, where they must authorize the request. Afterwards they will be returned to your app. Then, a new `SocialAccount` model will be added as related model of the `User`.
 
+If the provider account already belongs to another user, the callback throws `audunru\SocialAccounts\Exceptions\SocialAccountBelongsToAnotherUser` (HTTP 409). The logged-in user does not change, and no social account is added. You can render the exception in `bootstrap/app.php`, for example:
+
+```php
+use audunru\SocialAccounts\Exceptions\SocialAccountBelongsToAnotherUser;
+use Illuminate\Foundation\Configuration\Exceptions;
+
+->withExceptions(function (Exceptions $exceptions) {
+    $exceptions->render(function (SocialAccountBelongsToAnotherUser $e) {
+        return redirect()->intended('/')->with('error', 'This social login belongs to another user.');
+    });
+})
+```
+
 ## Signing up users
 
 If you want to allow users to sign up with this package, you must first publish the configuration file and then set `automatically_create_users` to `true`.
