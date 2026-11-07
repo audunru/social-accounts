@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
+use audunru\SocialAccounts\Events\SocialUserLoggedIn;
 use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
@@ -77,6 +78,8 @@ class ProviderController extends Controller
 
         $remember = $this->request->session()->pull('remember', false);
         Auth::login($user, $remember);
+
+        event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
 
         return redirect()->intended()->enforceSameOrigin(url('/'));
     }

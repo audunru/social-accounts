@@ -234,6 +234,8 @@ When a user is created after authenticating with a provider, a `SocialUserCreate
 
 When a social account is added to an existing user, a `SocialAccountAdded` event is dispatched. The event receives the User, SocialAccount and ProviderUser model.
 
+After each successful login with a provider, a `SocialUserLoggedIn` event is dispatched. The event receives the User, the provider name and the ProviderUser model. It is dispatched also when the user was already logged in, and also when a user is created or a social account is added in the same request. It is not dispatched when the callback fails (the provider returns an error, or the response is 401, 403 or 409). Use it to record the time of the last provider login, for example when a user must authenticate with the provider again before a sensitive action. The event is dispatched after `Auth::login()`, so a listener can write to the session.
+
 For instance, you could listen for an event and grab more [details about the user](https://laravel.com/docs/master/socialite#retrieving-user-details).
 
 ```php
