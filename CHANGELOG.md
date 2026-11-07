@@ -1,3 +1,10 @@
+# [9.2.0](https://github.com/audunru/social-accounts/compare/v9.1.4...v9.2.0) (2026-11-07)
+
+
+### Features
+
+* dispatch SocialUserLoggedIn event after a successful provider login ([#129](https://github.com/audunru/social-accounts/issues/129)) ([b3f2453](https://github.com/audunru/social-accounts/commit/b3f24539b633ce2bde5596ca2314b6ace1c2467c))
+
 ## [9.1.4](https://github.com/audunru/social-accounts/compare/v9.1.3...v9.1.4) (2026-11-06)
 
 
