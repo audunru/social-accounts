@@ -7,6 +7,7 @@ use audunru\SocialAccounts\Exceptions\EmailAlreadyRegistered;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model as User;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
@@ -27,6 +28,10 @@ trait FindsAndCreatesUsers
      */
     private function createUser(string $provider, ProviderUser $providerUser): User
     {
+        // Before the email check, so that a denied request does not show if the email exists
+        $gate = config('social-accounts.gates.create-user-with-provider', 'create-user-with-provider');
+        abort_if(Gate::has($gate) && Gate::denies($gate, $providerUser), 403, 'You are not allowed to sign up with this provider.');
+
         $model = config('social-accounts.models.user');
         $email = $providerUser->getEmail();
 
