@@ -3,6 +3,7 @@
 namespace audunru\SocialAccounts\Controllers;
 
 use audunru\SocialAccounts\Events\SocialUserLoggedIn;
+use audunru\SocialAccounts\Exceptions\SocialAccountBelongsToAnotherUser;
 use audunru\SocialAccounts\Facades\SocialAccounts;
 use audunru\SocialAccounts\Interfaces\Strategy;
 use audunru\SocialAccounts\Strategies\AddSocialAccount;
@@ -101,7 +102,11 @@ class ProviderController extends Controller
      */
     protected function getAccountStrategy(): Strategy
     {
-        if (config('social-accounts.models.user')::findBySocialAccount($this->request->provider, $this->providerUser->getId())) {
+        $foundUser = config('social-accounts.models.user')::findBySocialAccount($this->request->provider, $this->providerUser->getId());
+
+        if ($foundUser) {
+            throw_unless($foundUser->is(Auth::user()), SocialAccountBelongsToAnotherUser::class);
+
             return new FindUser;
         }
 
