@@ -109,6 +109,25 @@ class CreateUserTest extends TestCase
         Event::assertNotDispatched(SocialUserLoggedIn::class);
     }
 
+    public function test_it_throws_the_original_exception_when_a_user_without_email_violates_another_unique_index()
+    {
+        $this->enableUserCreation();
+
+        $existingUser = User::factory()->create();
+
+        User::creating(function (User $user) use ($existingUser) {
+            $user->id = $existingUser->id;
+        });
+
+        $this->mockSocialite(null, 'User', $this->faker->uuid);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(500);
+        $this->assertInstanceOf(UniqueConstraintViolationException::class, $response->exception);
+        $this->assertDatabaseCount('users', 1);
+    }
+
     public function test_it_creates_a_user_without_email_when_another_user_has_no_email()
     {
         $this->enableUserCreation();
