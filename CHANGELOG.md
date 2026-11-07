@@ -1,3 +1,10 @@
+# [10.1.0](https://github.com/audunru/social-accounts/compare/v10.0.0...v10.1.0) (2026-11-07)
+
+
+### Features
+
+* check the provider email before automatic user creation ([#134](https://github.com/audunru/social-accounts/issues/134)) ([970caa8](https://github.com/audunru/social-accounts/commit/970caa88226db785f56331f339842ba9e8818b4f))
+
 # [10.0.0](https://github.com/audunru/social-accounts/compare/v9.2.1...v10.0.0) (2026-11-07)
 
 
