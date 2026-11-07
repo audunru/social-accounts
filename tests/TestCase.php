@@ -92,7 +92,7 @@ abstract class TestCase extends BaseTestCase
         });
     }
 
-    protected function mockSocialite(string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $providerUserId = 'amazing-id')
+    protected function mockSocialite(?string $email = 'art@vandelayindustries.com', string $name = 'Art Vandelay', string $providerUserId = 'amazing-id')
     {
         // Mock a user which the provider will return
         $providerUser = Mockery::mock('Laravel\Socialite\Contracts\User');

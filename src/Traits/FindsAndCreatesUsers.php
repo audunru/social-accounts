@@ -3,8 +3,11 @@
 namespace audunru\SocialAccounts\Traits;
 
 use audunru\SocialAccounts\Events\SocialUserCreated;
+use audunru\SocialAccounts\Exceptions\EmailAlreadyRegistered;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model as User;
+use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 trait FindsAndCreatesUsers
@@ -24,10 +27,24 @@ trait FindsAndCreatesUsers
      */
     private function createUser(string $provider, ProviderUser $providerUser): User
     {
-        $user = config('social-accounts.models.user')::create([
-            'email' => $providerUser->getEmail(),
-            'name' => $providerUser->getName(),
-        ]);
+        $model = config('social-accounts.models.user');
+        $email = $providerUser->getEmail();
+
+        // No global scopes: the unique index also has soft-deleted users.
+        // SQLite lower() changes only ASCII letters.
+        throw_if(! is_null($email) && $model::withoutGlobalScopes()->whereRaw('lower(email) = ?', [Str::lower($email)])->exists(), EmailAlreadyRegistered::class);
+
+        try {
+            $user = $model::create([
+                'email' => $email,
+                'name' => $providerUser->getName(),
+            ]);
+        } catch (UniqueConstraintViolationException $e) {
+            // Another request created the same email after the check (same method as createOrFirst()).
+            throw_if(! is_null($email), new EmailAlreadyRegistered($e));
+
+            throw $e;
+        }
 
         $socialAccount = $this->makeSocialAccount($provider, $providerUser->getId());
         $user->addSocialAccount($socialAccount);
