@@ -1,3 +1,10 @@
+## [9.2.1](https://github.com/audunru/social-accounts/compare/v9.2.0...v9.2.1) (2026-11-07)
+
+
+### Bug Fixes
+
+* stop the provider callback from logging in another user ([#131](https://github.com/audunru/social-accounts/issues/131)) ([1aa4447](https://github.com/audunru/social-accounts/commit/1aa4447cb06e209134324667fb98d6e0b211b922))
+
 # [9.2.0](https://github.com/audunru/social-accounts/compare/v9.1.4...v9.2.0) (2026-11-07)
 
 
