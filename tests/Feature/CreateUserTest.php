@@ -101,7 +101,8 @@ class CreateUserTest extends TestCase
         $this->assertInstanceOf(EmailAlreadyRegistered::class, $response->exception);
         $this->assertInstanceOf(UniqueConstraintViolationException::class, $response->exception->getPrevious());
         $this->assertFalse(Auth::check());
-        $this->assertDatabaseCount('users', 1);
+        // RefreshDatabase opens a transaction, so the rollback to the savepoint also removes the row of the listener
+        $this->assertDatabaseCount('users', 0);
         $this->assertDatabaseCount('social_accounts', 0);
         Event::assertNotDispatched(SocialUserCreated::class);
         Event::assertNotDispatched(Registered::class);

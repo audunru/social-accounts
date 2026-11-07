@@ -40,10 +40,11 @@ trait FindsAndCreatesUsers
         throw_if(! is_null($email) && $model::withoutGlobalScopes()->whereRaw('lower(email) = ?', [Str::lower($email)])->exists(), EmailAlreadyRegistered::class);
 
         try {
-            $user = $model::create([
+            // A savepoint in an open transaction, because Postgres aborts the transaction when the insert fails
+            $user = $model::query()->withSavepointIfNeeded(fn () => $model::create([
                 'email' => $email,
                 'name' => $providerUser->getName(),
-            ]);
+            ]));
         } catch (UniqueConstraintViolationException $e) {
             // Another request created the same email after the check (same method as createOrFirst()).
             throw_if(! is_null($email), new EmailAlreadyRegistered($e));
