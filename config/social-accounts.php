@@ -75,6 +75,13 @@ return [
          * The gate receives the current user as its first argument, and a ProviderUser instance as its second.
          */
         'add-social-account' => 'add-social-account',
+
+        /*
+         * The "create-user-with-provider" gate check is run only before a new user is created, when "automatically_create_users" is true.
+         *
+         * The gate receives "null" as its first argument (the user is not logged in), and a ProviderUser instance as its second.
+         */
+        'create-user-with-provider' => 'create-user-with-provider',
     ],
     'models' => [
         /*

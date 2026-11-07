@@ -3,8 +3,12 @@
 namespace audunru\SocialAccounts\Traits;
 
 use audunru\SocialAccounts\Events\SocialUserCreated;
+use audunru\SocialAccounts\Exceptions\EmailAlreadyRegistered;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model as User;
+use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 trait FindsAndCreatesUsers
@@ -24,10 +28,29 @@ trait FindsAndCreatesUsers
      */
     private function createUser(string $provider, ProviderUser $providerUser): User
     {
-        $user = config('social-accounts.models.user')::create([
-            'email' => $providerUser->getEmail(),
-            'name' => $providerUser->getName(),
-        ]);
+        // Before the email check, so that a denied request does not show if the email exists
+        $gate = config('social-accounts.gates.create-user-with-provider', 'create-user-with-provider');
+        abort_if(Gate::has($gate) && Gate::denies($gate, $providerUser), 403, 'You are not allowed to sign up with this provider.');
+
+        $model = config('social-accounts.models.user');
+        $email = $providerUser->getEmail();
+
+        // No global scopes: the unique index also has soft-deleted users.
+        // SQLite lower() changes only ASCII letters.
+        throw_if(! is_null($email) && $model::withoutGlobalScopes()->whereRaw('lower(email) = ?', [Str::lower($email)])->exists(), EmailAlreadyRegistered::class);
+
+        try {
+            // A savepoint in an open transaction, because Postgres aborts the transaction when the insert fails
+            $user = $model::query()->withSavepointIfNeeded(fn () => $model::create([
+                'email' => $email,
+                'name' => $providerUser->getName(),
+            ]));
+        } catch (UniqueConstraintViolationException $e) {
+            // Another request created the same email after the check (same method as createOrFirst()).
+            throw_if(! is_null($email), new EmailAlreadyRegistered($e));
+
+            throw $e;
+        }
 
         $socialAccount = $this->makeSocialAccount($provider, $providerUser->getId());
         $user->addSocialAccount($socialAccount);
