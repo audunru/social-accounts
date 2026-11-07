@@ -1,3 +1,10 @@
+# [10.2.0](https://github.com/audunru/social-accounts/compare/v10.1.0...v10.2.0) (2026-11-07)
+
+
+### Features
+
+* throw UserCreationDenied when the create-user gate denies ([#136](https://github.com/audunru/social-accounts/issues/136)) ([b6c40bf](https://github.com/audunru/social-accounts/commit/b6c40bfd1694b6e9214d319ed25fce518a4e34d2))
+
 # [10.1.0](https://github.com/audunru/social-accounts/compare/v10.0.0...v10.1.0) (2026-11-07)
 
 
