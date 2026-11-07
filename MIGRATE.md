@@ -4,6 +4,8 @@
 
 In earlier versions, when a logged-in user authenticated with a provider account that belonged to another user, the callback logged in the other user. Now the callback throws `audunru\SocialAccounts\Exceptions\SocialAccountBelongsToAnotherUser` (HTTP 409), and the logged-in user does not change.
 
+Version 9.2.1 also has this change. It was released as a patch by mistake.
+
 If your app used this to switch accounts, log the user out before they log in with the provider. To show a message to the user, render the exception. See [Adding social login to existing users](README.md#adding-social-login-to-existing-users) for an example.
 
 # v7 to v8
