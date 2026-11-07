@@ -1,3 +1,17 @@
+# [10.0.0](https://github.com/audunru/social-accounts/compare/v9.2.1...v10.0.0) (2026-11-07)
+
+
+### Documentation
+
+* mark the SocialAccountBelongsToAnotherUser change as breaking ([bc711a4](https://github.com/audunru/social-accounts/commit/bc711a4620b01485df8727417dc95c997cf97846))
+
+
+### BREAKING CHANGES
+
+* When a logged-in user authenticates with a provider account that belongs to
+another user, the callback now throws SocialAccountBelongsToAnotherUser (409) instead of
+logging in the other user.
+
 ## [9.2.1](https://github.com/audunru/social-accounts/compare/v9.2.0...v9.2.1) (2026-11-07)
 
 
