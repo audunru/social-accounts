@@ -30,10 +30,13 @@
     "phpunit/phpunit": "^12.0"
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "policy": {
+      "cooldown": {
+        "period": "7 days"
+      }
+    }
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "autoload": {
     "psr-4": {
       "audunru\\SocialAccounts\\": "src/"
