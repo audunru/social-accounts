@@ -7,6 +7,7 @@ use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Socialite\Contracts\User as ProviderUser;
@@ -260,5 +261,29 @@ class SocialUserLoggedInTest extends TestCase
 
         $response->assertStatus(401);
         Event::assertNotDispatched(SocialUserLoggedIn::class);
+    }
+
+    public function test_listener_can_write_to_the_session_after_login()
+    {
+        Event::listen(SocialUserLoggedIn::class, function () {
+            session()->put('logged_in_as', Auth::id());
+        });
+
+        $this->enableSocialAccountCreation();
+
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $anotherUser = User::factory()->create();
+
+        $response = $this
+            ->actingAs($anotherUser)
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('logged_in_as', $user->id);
     }
 }
