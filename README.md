@@ -137,6 +137,8 @@ Then add a link to `/social-accounts/login/google`:
 <a href="/social-accounts/login/google">Sign up with Google</a>
 ```
 
+The new user gets the email address that the provider returns. Some providers do not verify email addresses, so a person can create a user with the email address of another person. To allow only verified email addresses, define a `create-user-with-provider` gate (see [Gates](#gates)). If a user with the same email address already exists (the comparison ignores case), the callback throws `audunru\SocialAccounts\Exceptions\EmailAlreadyRegistered` (HTTP 409). No user is created, and the provider account is not linked to the existing user. You can render the exception in the same way as `SocialAccountBelongsToAnotherUser` (see [Adding social login to existing users](#adding-social-login-to-existing-users)).
+
 ## Logging in
 
 For users who are not signed in, simply add a link to `/social-accounts/login/google`:
@@ -235,6 +237,19 @@ class AppServiceProvider extends ServiceProvider
              * In this case, only administrators would be allowed to add social accounts.
              */
             return $user->isAdmin();
+        });
+        /*
+         * If "automatically_create_users" is true, you can define a "create-user-with-provider" gate. It runs only before a new user is created.
+         *
+         * If you don't define this gate, any ProviderUser that is not linked to a user can sign up.
+         */
+        Gate::define('create-user-with-provider', function (?User $user, ProviderUser $providerUser) {
+            /*
+             * $providerUser->user['email_verified'] tells if Google verified the email address.
+             *
+             * The first argument is always null, because the user is not logged in. It must be nullable, else the gate denies the request.
+             */
+            return $providerUser->user['email_verified'] ?? false;
         });
     }
 }
