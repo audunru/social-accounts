@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use audunru\SocialAccounts\Exceptions\EmailAlreadyRegistered;
+use audunru\SocialAccounts\Exceptions\UserCreationDenied;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
@@ -32,6 +33,7 @@ class CreateUserGateTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(403);
+        $this->assertInstanceOf(UserCreationDenied::class, $response->exception);
         $this->assertFalse(Auth::check());
         $this->assertDatabaseCount('users', 0);
         $this->assertDatabaseCount('social_accounts', 0);
@@ -80,6 +82,7 @@ class CreateUserGateTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(403);
+        $this->assertInstanceOf(UserCreationDenied::class, $response->exception);
         $this->assertNotInstanceOf(EmailAlreadyRegistered::class, $response->exception);
     }
 
@@ -97,6 +100,7 @@ class CreateUserGateTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(403);
+        $this->assertInstanceOf(UserCreationDenied::class, $response->exception);
         $this->assertDatabaseCount('users', 0);
     }
 

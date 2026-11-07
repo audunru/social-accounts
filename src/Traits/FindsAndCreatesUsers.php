@@ -4,6 +4,7 @@ namespace audunru\SocialAccounts\Traits;
 
 use audunru\SocialAccounts\Events\SocialUserCreated;
 use audunru\SocialAccounts\Exceptions\EmailAlreadyRegistered;
+use audunru\SocialAccounts\Exceptions\UserCreationDenied;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model as User;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -30,7 +31,7 @@ trait FindsAndCreatesUsers
     {
         // Before the email check, so that a denied request does not show if the email exists
         $gate = config('social-accounts.gates.create-user-with-provider', 'create-user-with-provider');
-        abort_if(Gate::has($gate) && Gate::denies($gate, $providerUser), 403, 'You are not allowed to sign up with this provider.');
+        throw_if(Gate::has($gate) && Gate::denies($gate, $providerUser), UserCreationDenied::class);
 
         $model = config('social-accounts.models.user');
         $email = $providerUser->getEmail();
