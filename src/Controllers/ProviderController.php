@@ -79,12 +79,16 @@ class ProviderController extends Controller
         abort_if(is_null($user), Response::HTTP_UNAUTHORIZED);
 
         $remember = $this->request->session()->pull('remember', false);
+
+        // A new link shows only that this session controls the new provider account, not a login with an account
+        // that the user already had, so the user is not logged in again and only SocialAccountAdded is dispatched
+        if ($strategy instanceof AddSocialAccount) {
+            return redirect()->intended()->enforceSameOrigin(url('/'));
+        }
+
         Auth::login($user, $remember);
 
-        // A new link is not proof that the user logged in with the provider, so only SocialAccountAdded is dispatched
-        if (! $strategy instanceof AddSocialAccount) {
-            event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
-        }
+        event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
 
         return redirect()->intended()->enforceSameOrigin(url('/'));
     }

@@ -1,3 +1,13 @@
+# v10 to v11
+
+## No login events when a social account is added
+
+In earlier versions, when a logged-in user added a new social account, the callback called `Auth::login()` again and dispatched `SocialUserLoggedIn`. Thus Laravel's `Login` event was also dispatched, and with `?remember` a remember cookie was set.
+
+Now the callback does not call `Auth::login()` and does not dispatch `SocialUserLoggedIn` when a social account is added. Only `SocialAccountAdded` is dispatched. The user stays logged in.
+
+If a listener for `SocialUserLoggedIn` or `Login` must also run when a social account is added, listen for `SocialAccountAdded` too.
+
 # v9 to v10
 
 ## Logged-in users can no longer log in as another user
