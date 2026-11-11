@@ -44,7 +44,7 @@ class ApiController extends Controller
 
         abort_unless($socialAccount->delete(), 500);
 
-        event(new SocialAccountRemoved($user, $socialAccount));
+        event(new SocialAccountRemoved($user, $socialAccount->provider, $socialAccount->provider_user_id));
 
         return response()->json([
             'message' => 'Deleted',

@@ -25,7 +25,29 @@ class SocialAccountRemovedTest extends TestCase
         $response->assertStatus(200);
         Event::assertDispatched(SocialAccountRemoved::class, function ($event) use ($user, $socialAccount) {
             return $event->user->is($user)
-                && $event->socialAccount->is($socialAccount);
+                && $event->provider === $socialAccount->provider
+                && $event->providerUserId === $socialAccount->provider_user_id;
+        });
+    }
+
+    public function test_removed_event_can_be_serialized_for_a_queued_listener()
+    {
+        Event::fake([SocialAccountRemoved::class]);
+
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make();
+        $user->addSocialAccount($socialAccount);
+
+        $this->actingAs($user, 'api')->json('DELETE', "/{$this->apiPath}/{$socialAccount->id}");
+
+        Event::assertDispatched(SocialAccountRemoved::class, function ($event) use ($user, $socialAccount) {
+            $serialized = serialize($event);
+            $restored = unserialize($serialized);
+
+            return ! str_contains($serialized, $user->password)
+                && $restored->user->is($user)
+                && $restored->provider === $socialAccount->provider
+                && $restored->providerUserId === $socialAccount->provider_user_id;
         });
     }
 
