@@ -112,7 +112,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 
 ->withExceptions(function (Exceptions $exceptions) {
     $exceptions->render(function (SocialAccountBelongsToAnotherUser $e) {
-        return redirect()->intended('/')->with('error', 'This social login belongs to another user.');
+        return redirect('/')->with('error', 'This social login belongs to another user.');
     });
 })
 ```
@@ -165,7 +165,7 @@ Add "redirect=/some-url" to the login URL to redirect the user after login:
 >
 ```
 
-Only relative URLs are supported.
+Only relative URLs are supported. The redirect applies only to this login. If the callback fails, the package removes it.
 
 ## API
 

@@ -63,9 +63,12 @@ class ProviderController extends Controller
      */
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
+        // Remove the intended URL before any check can abort, so that a later login does not use it
+        $intended = $this->request->session()->pull('url.intended', '/');
+
         // The provider returns an error instead of a code when the user denies access
         if ($this->request->has('error')) {
-            return redirect()->intended()->enforceSameOrigin(url('/'));
+            return redirect()->to($intended)->enforceSameOrigin(url('/'));
         }
 
         $this->providerUser = $socialite::driver($this->request->provider)->user();
@@ -88,7 +91,7 @@ class ProviderController extends Controller
             event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
         }
 
-        return redirect()->intended()->enforceSameOrigin(url('/'));
+        return redirect()->to($intended)->enforceSameOrigin(url('/'));
     }
 
     /**
