@@ -5,7 +5,6 @@ namespace audunru\SocialAccounts\Tests\Feature;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
-use Mockery;
 
 class ApiTest extends TestCase
 {
@@ -124,17 +123,12 @@ class ApiTest extends TestCase
 
     public function test_it_returns_a_server_error_when_existing_account_cant_be_deleted()
     {
-        $socialAccount = Mockery::mock('audunru\SocialAccounts\Models\SocialAccount');
-
-        $socialAccount
-            ->shouldReceive('delete')
-            ->andReturn(false);
-
-        $this->app->instance('audunru\SocialAccounts\Models\SocialAccount', $socialAccount);
+        SocialAccount::deleting(fn () => false);
 
         $response = $this->actingAs($this->user, 'api')->json('DELETE', "/{$this->apiPath}/{$this->socialAccount->id}");
 
         $response
             ->assertStatus(500);
+        $this->assertModelExists($this->socialAccount);
     }
 }

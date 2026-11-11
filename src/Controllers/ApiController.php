@@ -2,6 +2,7 @@
 
 namespace audunru\SocialAccounts\Controllers;
 
+use audunru\SocialAccounts\Events\SocialAccountRemoved;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Resources\SocialAccount as SocialAccountResource;
 use Illuminate\Http\JsonResponse;
@@ -39,7 +40,11 @@ class ApiController extends Controller
      */
     public function destroy(SocialAccount $socialAccount): JsonResponse
     {
+        $user = $socialAccount->user;
+
         abort_unless($socialAccount->delete(), 500);
+
+        event(new SocialAccountRemoved($user, $socialAccount->provider, $socialAccount->provider_user_id));
 
         return response()->json([
             'message' => 'Deleted',
