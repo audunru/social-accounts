@@ -73,14 +73,18 @@ class ProviderController extends Controller
         abort_if(Gate::has(config('social-accounts.gates.login-with-provider'))
             && Gate::denies('login-with-provider', $this->providerUser), 403);
 
-        $user = $this->getUserStrategy()->handle($this->request->provider, $this->providerUser);
+        $strategy = $this->getUserStrategy();
+        $user = $strategy->handle($this->request->provider, $this->providerUser);
 
         abort_if(is_null($user), Response::HTTP_UNAUTHORIZED);
 
         $remember = $this->request->session()->pull('remember', false);
         Auth::login($user, $remember);
 
-        event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
+        // A new link is not proof that the user logged in with the provider, so only SocialAccountAdded is dispatched
+        if (! $strategy instanceof AddSocialAccount) {
+            event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
+        }
 
         return redirect()->intended()->enforceSameOrigin(url('/'));
     }

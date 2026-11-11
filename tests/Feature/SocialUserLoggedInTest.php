@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use audunru\SocialAccounts\Events\SocialAccountAdded;
 use audunru\SocialAccounts\Events\SocialUserLoggedIn;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
@@ -134,9 +135,9 @@ class SocialUserLoggedInTest extends TestCase
         Event::assertNotDispatched(SocialUserLoggedIn::class);
     }
 
-    public function test_logged_in_event_is_dispatched_when_social_account_is_added()
+    public function test_logged_in_event_is_not_dispatched_when_social_account_is_added()
     {
-        Event::fake([SocialUserLoggedIn::class]);
+        Event::fake([SocialUserLoggedIn::class, SocialAccountAdded::class]);
 
         $this->enableSocialAccountCreation();
 
@@ -150,9 +151,9 @@ class SocialUserLoggedInTest extends TestCase
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(302);
-        Event::assertDispatched(SocialUserLoggedIn::class, function ($event) use ($user, $providerUserId) {
+        Event::assertNotDispatched(SocialUserLoggedIn::class);
+        Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $providerUserId) {
             return $event->user->is($user)
-                && $event->provider === $this->provider
                 && $event->providerUser->getId() === $providerUserId;
         });
     }

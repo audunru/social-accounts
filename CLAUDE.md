@@ -7,7 +7,7 @@ Adds OAuth social login (via Laravel Socialite) to a Laravel app, letting users 
 - **`SocialAccounts` facade** (`src/Facades/SocialAccounts.php`) — backed by `src/SocialAccounts.php`. Used in application boot to register per-provider Socialite method calls via `SocialAccounts::registerProviderSettings(string $provider, string $methodName, ?array $parameters)`.
 - **`HasSocialAccounts` trait** (`src/Traits/HasSocialAccounts.php`) — add to the User model. Provides `socialAccounts()` relation, `addSocialAccount()`, `findBySocialAccount()`, and `hasProvider()`.
 - **`Strategy` interface** (`src/Interfaces/Strategy.php`) — implement to create custom login/link strategies. Three built-in strategies in `src/Strategies/`: `FindUser`, `FindOrCreateUser`, `AddSocialAccount`.
-- **Events**: `SocialAccountAdded` and `SocialUserCreated` (both in `src/Events/`) are fired after a social account is linked or a new user is created. `SocialUserLoggedIn` is fired in `ProviderController::handleProviderCallback()` after `Auth::login()`, on each successful callback.
+- **Events**: `SocialAccountAdded` and `SocialUserCreated` (both in `src/Events/`) are fired after a social account is linked or a new user is created. `SocialUserLoggedIn` is fired in `ProviderController::handleProviderCallback()` after `Auth::login()`, on each successful callback, except when the `AddSocialAccount` strategy links a new account (then only `SocialAccountAdded` is fired).
 
 ## Service Provider
 
