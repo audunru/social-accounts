@@ -177,6 +177,7 @@ class SocialUserLoggedInTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertSessionMissing('remember');
+        $response->assertCookieMissing(Auth::guard()->getRecallerName());
         $this->assertAuthenticatedAs($user);
         Event::assertNotDispatched(Login::class);
     }
