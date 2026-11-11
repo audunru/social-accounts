@@ -7,6 +7,7 @@ use audunru\SocialAccounts\Events\SocialUserLoggedIn;
 use audunru\SocialAccounts\Models\SocialAccount;
 use audunru\SocialAccounts\Tests\Models\User;
 use audunru\SocialAccounts\Tests\TestCase;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
@@ -154,8 +155,30 @@ class SocialUserLoggedInTest extends TestCase
         Event::assertNotDispatched(SocialUserLoggedIn::class);
         Event::assertDispatched(SocialAccountAdded::class, function ($event) use ($user, $providerUserId) {
             return $event->user->is($user)
+                && $event->socialAccount->provider === $this->provider
                 && $event->providerUser->getId() === $providerUserId;
         });
+    }
+
+    public function test_user_is_not_logged_in_again_when_social_account_is_added()
+    {
+        Event::fake([Login::class]);
+
+        $this->enableSocialAccountCreation();
+
+        $user = User::factory()->create();
+
+        $this->mockSocialite($user->email, $user->name, $this->faker->uuid);
+
+        $response = $this
+            ->actingAs($user)
+            ->withSession(['remember' => true])
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $response->assertSessionMissing('remember');
+        $this->assertAuthenticatedAs($user);
+        Event::assertNotDispatched(Login::class);
     }
 
     public function test_logged_in_event_is_not_dispatched_when_provider_returns_an_error()
