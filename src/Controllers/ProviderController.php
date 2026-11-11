@@ -82,13 +82,11 @@ class ProviderController extends Controller
 
         // A new link shows only that this session controls the new provider account, not a login with an account
         // that the user already had, so the user is not logged in again and only SocialAccountAdded is dispatched
-        if ($strategy instanceof AddSocialAccount) {
-            return redirect()->intended()->enforceSameOrigin(url('/'));
+        if (! $strategy instanceof AddSocialAccount) {
+            Auth::login($user, $remember);
+
+            event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
         }
-
-        Auth::login($user, $remember);
-
-        event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
 
         return redirect()->intended()->enforceSameOrigin(url('/'));
     }
