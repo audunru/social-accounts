@@ -32,10 +32,24 @@ class IntendedUrlTest extends TestCase
 
         $response = $this
             ->actingAs(User::factory()->create())
-            ->withSession(['url.intended' => '/custom-url'])
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertRedirect('/custom-url');
         $response->assertSessionMissing('url.intended');
+    }
+
+    public function test_intended_url_that_the_app_set_is_kept_when_the_callback_aborts()
+    {
+        $this->disableUserCreation();
+
+        $this->mockSocialite();
+
+        $response = $this
+            ->withSession(['url.intended' => '/dashboard'])
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(401);
+        $response->assertSessionHas('url.intended', '/dashboard');
     }
 }

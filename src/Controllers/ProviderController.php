@@ -52,6 +52,9 @@ class ProviderController extends Controller
                 && ! Str::startsWith($redirect, '//')
             ) {
                 Redirect::setIntendedUrl($redirect);
+
+                // Remember which intended URL this package set, so that the callback removes only that URL
+                $this->request->session()->put('social-accounts.redirect', $redirect);
             }
         }
 
@@ -63,9 +66,11 @@ class ProviderController extends Controller
      */
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
-        // Keep the intended URL only for this request, so that an exception handler can use it but a later login does not
-        if ($this->request->session()->has('url.intended')) {
-            $this->request->session()->now('url.intended', $this->request->session()->get('url.intended'));
+        // Keep the intended URL from ?redirect only for this request, so that an exception handler can use it but a later
+        // login does not. An intended URL that the app set (e.g. with redirect()->guest()) is not changed.
+        $redirect = $this->request->session()->pull('social-accounts.redirect');
+        if (! is_null($redirect) && $this->request->session()->get('url.intended') === $redirect) {
+            $this->request->session()->now('url.intended', $redirect);
         }
 
         // The provider returns an error instead of a code when the user denies access

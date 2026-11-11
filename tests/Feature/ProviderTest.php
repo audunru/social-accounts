@@ -37,7 +37,7 @@ class ProviderTest extends TestCase
         $this->mockSocialite();
 
         $response = $this
-            ->withSession(['url.intended' => '/custom-url'])
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response->assertStatus(401);
         $response->assertSessionMissing('url.intended');
@@ -55,7 +55,7 @@ class ProviderTest extends TestCase
         $this->mockSocialite('newman@seinfeld.com');
 
         $response = $this
-            ->withSession(['url.intended' => '/custom-url'])
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(403);
@@ -124,6 +124,7 @@ class ProviderTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}?redirect=/custom-url");
 
         $response->assertSessionHas('url.intended', '/custom-url');
+        $response->assertSessionHas('social-accounts.redirect', '/custom-url');
     }
 
     public function test_redirect_url_that_starts_with_double_slash_is_not_stored()
@@ -224,7 +225,7 @@ class ProviderTest extends TestCase
 
         $response = $this
             ->actingAs($anotherUser)
-            ->withSession(['url.intended' => '/custom-url'])
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(409);
@@ -367,7 +368,7 @@ class ProviderTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->withSession(['url.intended' => '/custom-url'])
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response
             ->assertStatus(403);
@@ -391,7 +392,7 @@ class ProviderTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->withSession(['url.intended' => '/custom-url'])
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(409);
