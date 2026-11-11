@@ -1,3 +1,20 @@
+# [11.0.0](https://github.com/audunru/social-accounts/compare/v10.2.0...v11.0.0) (2026-11-11)
+
+
+### Bug Fixes
+
+* do not dispatch SocialUserLoggedIn when a social account is added ([ec83fbc](https://github.com/audunru/social-accounts/commit/ec83fbc2ed8f00287ef36f14390323bffe9616a8))
+* do not log in again when a social account is added ([e06fb27](https://github.com/audunru/social-accounts/commit/e06fb27d8952d378c6fe6c16e7414d96b112f9f8))
+
+
+### BREAKING CHANGES
+
+* when a logged-in user adds a social account, the callback no longer calls
+Auth::login(), so Laravel's Login event is not dispatched and no remember cookie is set.
+Listen for SocialAccountAdded for that case.
+* SocialUserLoggedIn is no longer dispatched when a logged-in user adds a
+social account. Listen for SocialAccountAdded for that case.
+
 # [10.2.0](https://github.com/audunru/social-accounts/compare/v10.1.0...v10.2.0) (2026-11-07)
 
 
