@@ -1,3 +1,10 @@
+# [11.1.0](https://github.com/audunru/social-accounts/compare/v11.0.0...v11.1.0) (2026-11-11)
+
+
+### Features
+
+* dispatch SocialAccountRemoved when a social account is removed ([#142](https://github.com/audunru/social-accounts/issues/142)) ([bedad21](https://github.com/audunru/social-accounts/commit/bedad21786f6f2237ba4601df25b938ebfafd53f))
+
 # [11.0.0](https://github.com/audunru/social-accounts/compare/v10.2.0...v11.0.0) (2026-11-11)
 
 
