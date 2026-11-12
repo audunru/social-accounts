@@ -1,3 +1,10 @@
+## [11.1.1](https://github.com/audunru/social-accounts/compare/v11.1.0...v11.1.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* remove the intended URL when the provider callback aborts ([#143](https://github.com/audunru/social-accounts/issues/143)) ([6c45fdb](https://github.com/audunru/social-accounts/commit/6c45fdb4ae485c27cd42df15b364b7c702769828)), closes [#141](https://github.com/audunru/social-accounts/issues/141)
+
 # [11.1.0](https://github.com/audunru/social-accounts/compare/v11.0.0...v11.1.0) (2026-11-11)
 
 
