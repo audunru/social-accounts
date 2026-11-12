@@ -36,8 +36,11 @@ class ProviderTest extends TestCase
 
         $this->mockSocialite();
 
-        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+        $response = $this
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response->assertStatus(401);
+        $response->assertSessionMissing('url.intended');
         $this->assertFalse(Auth::check());
     }
 
@@ -51,9 +54,12 @@ class ProviderTest extends TestCase
 
         $this->mockSocialite('newman@seinfeld.com');
 
-        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+        $response = $this
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
+            ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(403);
+        $response->assertSessionMissing('url.intended');
         $this->assertFalse(Auth::check());
         $this->assertDatabaseMissing('users', [
             'email' => 'newman@seinfeld.com',
@@ -118,6 +124,7 @@ class ProviderTest extends TestCase
         $response = $this->get("/{$this->prefix}/login/{$this->provider}?redirect=/custom-url");
 
         $response->assertSessionHas('url.intended', '/custom-url');
+        $response->assertSessionHas('social-accounts.redirect', '/custom-url');
     }
 
     public function test_redirect_url_that_starts_with_double_slash_is_not_stored()
@@ -218,9 +225,11 @@ class ProviderTest extends TestCase
 
         $response = $this
             ->actingAs($anotherUser)
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(409);
+        $response->assertSessionMissing('url.intended');
         $this->assertInstanceOf(SocialAccountBelongsToAnotherUser::class, $response->exception);
         $this->assertEquals($anotherUser->id, Auth::id());
         $this->assertEquals(0, $anotherUser->socialAccounts()->count());
@@ -359,9 +368,11 @@ class ProviderTest extends TestCase
 
         $response = $this
             ->actingAs($user)
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
         $response
             ->assertStatus(403);
+        $response->assertSessionMissing('url.intended');
         $this->assertDatabaseMissing('social_accounts', [
             'provider' => $this->provider,
             'provider_user_id' => $providerUserId,
@@ -381,9 +392,11 @@ class ProviderTest extends TestCase
 
         $response = $this
             ->actingAs($user)
+            ->withSession(['url.intended' => '/custom-url', 'social-accounts.redirect' => '/custom-url'])
             ->get("/{$this->prefix}/login/{$this->provider}/callback");
 
         $response->assertStatus(409);
+        $response->assertSessionMissing('url.intended');
         $this->assertTrue(Auth::check());
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseMissing('social_accounts', [
