@@ -1,3 +1,10 @@
+## [11.1.2](https://github.com/audunru/social-accounts/compare/v11.1.1...v11.1.2) (2026-11-13)
+
+
+### Bug Fixes
+
+* reject a redirect that starts with a slash and a backslash or has control characters ([#144](https://github.com/audunru/social-accounts/issues/144)) ([aa55f02](https://github.com/audunru/social-accounts/commit/aa55f02d6ec7470b14d1fc42cfc3dd99d00ec676))
+
 ## [11.1.1](https://github.com/audunru/social-accounts/compare/v11.1.0...v11.1.1) (2026-11-12)
 
 
