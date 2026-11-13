@@ -140,20 +140,32 @@ class ProviderTest extends TestCase
         $response->assertSessionMissing('url.intended');
     }
 
-    public function test_redirect_url_that_starts_with_slash_and_backslash_stays_on_same_host()
+    public function test_redirect_url_that_starts_with_slash_and_backslash_is_not_stored()
     {
-        $this->enableUserCreation();
-
         $user = User::factory()->create();
         $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
         $user->addSocialAccount($socialAccount);
 
         $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
 
-        $this->get("/{$this->prefix}/login/{$this->provider}?redirect=/%5Cevil.com");
-        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}?redirect=/%5Cevil.example");
 
-        $this->assertEquals("{$this->redirectTo}/\\evil.com", $response->getTargetUrl());
+        $response->assertSessionMissing('url.intended');
+        $response->assertSessionMissing('social-accounts.redirect');
+    }
+
+    public function test_redirect_url_that_contains_a_control_character_is_not_stored()
+    {
+        $user = User::factory()->create();
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite($user->email, $user->name, $socialAccount->provider_user_id);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}?redirect=/%09/evil.example");
+
+        $response->assertSessionMissing('url.intended');
+        $response->assertSessionMissing('social-accounts.redirect');
     }
 
     public function test_it_does_not_redirect_to_intended_url_on_another_host()

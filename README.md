@@ -165,7 +165,7 @@ Add "redirect=/some-url" to the login URL to redirect the user after login:
 >
 ```
 
-Only relative URLs are supported. The redirect applies only to this login. If the callback fails, the intended URL is still available to your exception handler, and the package removes it after that request.
+Only relative URLs are supported: the value must start with `/`, but not with `//` or `/\`, and must not contain control characters (for example tabs or newlines). Other values are ignored. The redirect applies only to this login. If the callback fails, the intended URL is still available to your exception handler, and the package removes it after that request.
 
 ## API
 
