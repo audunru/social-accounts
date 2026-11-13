@@ -46,10 +46,12 @@ class ProviderController extends Controller
         if ($this->request->has('redirect')) {
             $redirect = $this->request->get('redirect');
 
-            // Only allow relative paths to avoid open redirect vulnerabilities (e.g. //evil.com or http://evil.com)
+            // Only allow relative paths to avoid open redirect vulnerabilities (e.g. //evil.com, /\evil.com or http://evil.com).
+            // Browsers read \ as / and remove tabs and newlines, so reject control characters too.
             if (is_string($redirect)
                 && Str::startsWith($redirect, '/')
-                && ! Str::startsWith($redirect, '//')
+                && ! Str::startsWith($redirect, ['//', '/\\'])
+                && ! preg_match('/[\x00-\x1F\x7F]/', $redirect)
             ) {
                 Redirect::setIntendedUrl($redirect);
 
