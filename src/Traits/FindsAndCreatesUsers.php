@@ -41,8 +41,8 @@ trait FindsAndCreatesUsers
         }
 
         // No global scopes: the unique index also has soft-deleted users.
-        // SQLite lower() changes only ASCII letters.
-        throw_if(! is_null($email) && $model::withoutGlobalScopes()->whereRaw('lower(email) = ?', [Str::lower($email)])->exists(), EmailAlreadyRegistered::class);
+        // SQLite lower() changes only ASCII letters, so also find the email with the case from the provider.
+        throw_if(! is_null($email) && $model::withoutGlobalScopes()->where(fn ($query) => $query->whereRaw('lower(email) = ?', [Str::lower($email)])->orWhere('email', $providerUser->getEmail()))->exists(), EmailAlreadyRegistered::class);
 
         try {
             // A savepoint in an open transaction, because Postgres aborts the transaction when the insert fails
