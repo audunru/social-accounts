@@ -42,6 +42,13 @@ return [
     'automatically_create_users' => false,
 
     /*
+     * When we create a new user, should the email address from the provider be saved in lower case?
+     *
+     * This has the same function as the "lowercase_usernames" option in Laravel Fortify. If you use Fortify, use the same value in the two options.
+     */
+    'lowercase_emails' => true,
+
+    /*
      * Enable the providers you want, and then configure credentials for each of them in config/services.php according to the Socialite documentation.
      */
     'providers' => [

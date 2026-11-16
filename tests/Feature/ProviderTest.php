@@ -518,4 +518,21 @@ class ProviderTest extends TestCase
         $this->assertEquals($user->id, Auth::id());
         $this->assertDatabaseCount('social_accounts', 0);
     }
+
+    public function test_it_does_not_change_the_email_of_an_existing_user_on_login()
+    {
+        $this->enableUserCreation();
+
+        $user = User::factory()->create(['email' => 'User@Example.com']);
+        $socialAccount = SocialAccount::factory()->make(['provider' => $this->provider]);
+        $user->addSocialAccount($socialAccount);
+
+        $this->mockSocialite('User@Example.com', $user->name, $socialAccount->provider_user_id);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $this->assertEquals($user->id, Auth::id());
+        $this->assertDatabaseHas('users', ['email' => 'User@Example.com']);
+    }
 }

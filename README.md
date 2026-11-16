@@ -139,6 +139,8 @@ Then add a link to `/social-accounts/login/google`:
 
 The new user gets the email address that the provider returns. Some providers do not verify email addresses, so a person can create a user with the email address of another person. To allow only verified email addresses, define a `create-user-with-provider` gate (see [Gates](#gates)). If a user with the same email address already exists (the comparison ignores case), the callback throws `audunru\SocialAccounts\Exceptions\EmailAlreadyRegistered` (HTTP 409). No user is created, and the provider account is not linked to the existing user. You can render the exception in the same way as `SocialAccountBelongsToAnotherUser` (see [Adding social login to existing users](#adding-social-login-to-existing-users)). If the `create-user-with-provider` gate denies, the callback throws `audunru\SocialAccounts\Exceptions\UserCreationDenied` (HTTP 403). You can render this exception in the same way.
 
+By default, the email address of the new user is saved in lower case (`lowercase_emails` in `config/social-accounts.php`). Set the option to `false` to keep the case that the provider returns. If you use Laravel Fortify, use the same value as `lowercase_usernames` in `config/fortify.php`, so that all users have emails in the same format. The option has no effect on existing users.
+
 ## Logging in
 
 For users who are not signed in, simply add a link to `/social-accounts/login/google`:
