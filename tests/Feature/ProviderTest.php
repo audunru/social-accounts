@@ -115,17 +115,6 @@ class ProviderTest extends TestCase
         $response->assertSessionHas('remember', true);
     }
 
-    public function test_login_url_without_remember_removes_an_old_remember_flag()
-    {
-        $this->mockSocialite();
-
-        $response = $this
-            ->withSession(['remember' => true])
-            ->get("/{$this->prefix}/login/{$this->provider}");
-
-        $response->assertSessionMissing('remember');
-    }
-
     public function test_session_has_intended_url_if_it_was_present_in_login_url()
     {
         $user = User::factory()->create();

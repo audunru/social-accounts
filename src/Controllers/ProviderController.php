@@ -40,10 +40,9 @@ class ProviderController extends Controller
         $this->applySettingsToProvider($socialite);
 
         // Set the flag again on each flow, so that an old flag from a failed or abandoned flow is not used
+        $this->request->session()->forget('remember');
         if ($this->request->has('remember')) {
             $this->request->session()->put('remember', true);
-        } else {
-            $this->request->session()->forget('remember');
         }
 
         if ($this->request->has('redirect')) {
@@ -99,7 +98,8 @@ class ProviderController extends Controller
         // A new link shows only that this session controls the new provider account, not a login with an account
         // that the user already had, so the user is not logged in again and only SocialAccountAdded is dispatched
         if (! $strategy instanceof AddSocialAccount) {
-            Auth::login($user, $remember);
+            // Laravel does not accept a remember cookie for a user without a password, so do not set one
+            Auth::login($user, $remember && is_string($user->getAuthPassword()));
 
             event(new SocialUserLoggedIn($user, $this->request->provider, $this->providerUser));
         }
