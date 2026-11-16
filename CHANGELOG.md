@@ -1,3 +1,21 @@
+# [12.0.0](https://github.com/audunru/social-accounts/compare/v11.1.2...v12.0.0) (2026-11-16)
+
+
+### Bug Fixes
+
+* find an existing email with the same case before a user is created ([4818dfc](https://github.com/audunru/social-accounts/commit/4818dfcbe93bc5aed0f66e7b2d8018eb1d7ef979))
+
+
+### Features
+
+* lower case the provider email when a user is created ([1f1cad3](https://github.com/audunru/social-accounts/commit/1f1cad30451654c3bd1ffca6bc08ea5c280a4586)), closes [#133](https://github.com/audunru/social-accounts/issues/133)
+
+
+### BREAKING CHANGES
+
+* new users get the provider email in lower case by default.
+Set social-accounts.lowercase_emails to false to keep the case from the provider.
+
 ## [11.1.2](https://github.com/audunru/social-accounts/compare/v11.1.1...v11.1.2) (2026-11-13)
 
 
