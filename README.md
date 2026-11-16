@@ -157,6 +157,8 @@ Add "remember" to the login URL to keep the user signed in:
 <a href="/social-accounts/login/google?remember">Sign in with Google</a>
 ```
 
+"Remember me" needs a user with a password. Laravel does not accept a remember cookie for a user without a password (for example a user that the package created), so the package logs in such a user without "remember me".
+
 ## Redirect after login
 
 Add "redirect=/some-url" to the login URL to redirect the user after login:
