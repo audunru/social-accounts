@@ -62,6 +62,21 @@ class CreateUserTest extends TestCase
         $this->assertDatabaseCount('users', 1);
     }
 
+    public function test_it_fails_to_create_a_user_when_a_non_ascii_email_is_already_registered_with_the_same_case()
+    {
+        $this->enableUserCreation();
+
+        User::factory()->create(['email' => 'ÄSE@example.com']);
+
+        $this->mockSocialite('ÄSE@example.com', 'Another User', $this->faker->uuid);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(409);
+        $this->assertInstanceOf(EmailAlreadyRegistered::class, $response->exception);
+        $this->assertDatabaseCount('users', 1);
+    }
+
     public function test_it_fails_to_create_a_user_when_email_belongs_to_a_soft_deleted_user()
     {
         $this->enableUserCreation();
