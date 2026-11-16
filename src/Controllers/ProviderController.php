@@ -39,8 +39,11 @@ class ProviderController extends Controller
         $this->configureRedirectForProvider();
         $this->applySettingsToProvider($socialite);
 
+        // Set the flag again on each flow, so that an old flag from a failed or abandoned flow is not used
         if ($this->request->has('remember')) {
             $this->request->session()->put('remember', true);
+        } else {
+            $this->request->session()->forget('remember');
         }
 
         if ($this->request->has('redirect')) {
@@ -68,6 +71,9 @@ class ProviderController extends Controller
      */
     public function handleProviderCallback(Socialite $socialite): RedirectResponse
     {
+        // The remember flag applies only to this callback, so remove it before the first early return
+        $remember = $this->request->session()->pull('remember', false);
+
         // Keep the intended URL from ?redirect only for this request, so that an exception handler can use it but a later
         // login does not. An intended URL that the app set (e.g. with redirect()->guest()) is not changed.
         $redirect = $this->request->session()->pull('social-accounts.redirect');
@@ -89,8 +95,6 @@ class ProviderController extends Controller
         $user = $strategy->handle($this->request->provider, $this->providerUser);
 
         abort_if(is_null($user), Response::HTTP_UNAUTHORIZED);
-
-        $remember = $this->request->session()->pull('remember', false);
 
         // A new link shows only that this session controls the new provider account, not a login with an account
         // that the user already had, so the user is not logged in again and only SocialAccountAdded is dispatched
