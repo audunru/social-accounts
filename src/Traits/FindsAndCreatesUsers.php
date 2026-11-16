@@ -36,6 +36,10 @@ trait FindsAndCreatesUsers
         $model = config('social-accounts.models.user');
         $email = $providerUser->getEmail();
 
+        if (! is_null($email) && config('social-accounts.lowercase_emails', true)) {
+            $email = Str::lower($email);
+        }
+
         // No global scopes: the unique index also has soft-deleted users.
         // SQLite lower() changes only ASCII letters.
         throw_if(! is_null($email) && $model::withoutGlobalScopes()->whereRaw('lower(email) = ?', [Str::lower($email)])->exists(), EmailAlreadyRegistered::class);

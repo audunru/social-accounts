@@ -142,4 +142,81 @@ class CreateUserTest extends TestCase
         $this->assertTrue(Auth::check());
         $this->assertDatabaseCount('users', 2);
     }
+
+    public function test_it_saves_the_email_in_lower_case()
+    {
+        $this->enableUserCreation();
+
+        $this->mockSocialite('User@Example.com', 'User', $this->faker->uuid);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('users', ['email' => 'user@example.com']);
+    }
+
+    public function test_it_saves_non_ascii_letters_in_lower_case()
+    {
+        $this->enableUserCreation();
+
+        $this->mockSocialite('ÆØÅ@Example.com', 'User', $this->faker->uuid);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('users', ['email' => 'æøå@example.com']);
+    }
+
+    public function test_it_keeps_the_email_case_when_lowercase_emails_is_false()
+    {
+        $this->enableUserCreation();
+        config(['social-accounts.lowercase_emails' => false]);
+
+        $this->mockSocialite('User@Example.com', 'User', $this->faker->uuid);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('users', ['email' => 'User@Example.com']);
+    }
+
+    public function test_it_saves_the_email_in_lower_case_when_published_config_has_no_setting()
+    {
+        $this->enableUserCreation();
+        config(['social-accounts' => array_diff_key(config('social-accounts'), ['lowercase_emails' => true])]);
+
+        $this->mockSocialite('User@Example.com', 'User', $this->faker->uuid);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('users', ['email' => 'user@example.com']);
+    }
+
+    public function test_it_creates_a_user_without_email_when_lowercase_emails_is_true()
+    {
+        $this->enableUserCreation();
+
+        $this->mockSocialite(null, 'User', $this->faker->uuid);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseHas('users', ['email' => null]);
+    }
+
+    public function test_the_event_gets_the_original_provider_email()
+    {
+        Event::fake([SocialUserCreated::class]);
+
+        $this->enableUserCreation();
+
+        $this->mockSocialite('User@Example.com', 'User', $this->faker->uuid);
+
+        $response = $this->get("/{$this->prefix}/login/{$this->provider}/callback");
+
+        $response->assertStatus(302);
+        Event::assertDispatched(SocialUserCreated::class, fn (SocialUserCreated $event) => $event->providerUser->getEmail() === 'User@Example.com');
+    }
 }
