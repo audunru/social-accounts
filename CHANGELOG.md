@@ -1,3 +1,18 @@
+# [13.0.0](https://github.com/audunru/social-accounts/compare/v12.0.0...v13.0.0) (2026-11-17)
+
+
+### Bug Fixes
+
+* do not remember a user without a password ([f5a7953](https://github.com/audunru/social-accounts/commit/f5a795387a84276edfc41eda3808f8a286b1cc14))
+* remove the remember flag after a failed or abandoned login ([dc0901b](https://github.com/audunru/social-accounts/commit/dc0901bfe34daae1b7deca05e4d5416ee4768df9))
+* require Laravel 13.39 for the remember check ([1911c62](https://github.com/audunru/social-accounts/commit/1911c623e4fb2102dac0dcc13dc9775e28910228))
+
+
+### BREAKING CHANGES
+
+* laravel/framework ^13.39 is now required. A user without a password is
+logged in without "remember me".
+
 # [12.0.0](https://github.com/audunru/social-accounts/compare/v11.1.2...v12.0.0) (2026-11-16)
 
 
